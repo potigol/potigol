@@ -1,0 +1,6 @@
+# Número primo
+escreva "Digite um número inteiro"
+n = leia_inteiro
+divisores = para i de 1 até n se n mod i == 0 gere i fim
+s = se divisores==[1,n] então "é primo" senão "não é primo" fim
+escreva "{n} {s}"

@@ -1,0 +1,6 @@
+escreva "Digite 10 números em uma mesma linha separados por espaços"
+numeros = leia_inteiros(" ")
+para n em numeros faça
+  s = se n mod 2 == 0 então "Par" senão "Impar" fim
+  escreva "{n} {s}"
+fim

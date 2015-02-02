@@ -1,0 +1,3 @@
+escreva "Digite 10 números"
+numeros = leia_inteiros(10)
+escreva "O sexto número é {numeros[6]}"

@@ -1,0 +1,21 @@
+# Maior diferença entre 6 números
+escreva "Digite 6 números"
+a,b,c,d,f,g = leia_inteiro
+maior = 
+  se      a>=b e a>=c e a>=d e a>=f e a>=g então a
+  senãose b>=c e b>=d e b>=f e b>=g        então b
+  senãose c>=d e c>=f e c>=g               então c
+  senãose d>=f e d>=g                      então d
+  senãose f>=g                             então f
+                                           senão g
+  fim
+menor = 
+  se      a<=b e a<=c e a<=d e a<=f e a<=g então a
+  senãose b<=c e b<=d e b<=f e b<=g        então b
+  senãose c<=d e c<=f e c<=g               então c
+  senãose d<=f e d<=g                      então d
+  senãose f<=g                             então f
+                                           senão g
+  fim
+dif = maior - menor
+escreva "A maior diferença entre os números é: {dif}"

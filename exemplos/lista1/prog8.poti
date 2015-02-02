@@ -1,0 +1,5 @@
+escreva "Digite três notas"
+a, b, c = leia_numero
+media = (a + b + c) / 3
+media_texto = media formato "%.2f"
+escreva "A média é {media_texto}"

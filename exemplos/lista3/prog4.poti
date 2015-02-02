@@ -1,0 +1,4 @@
+escreva "Digite 10 números em uma mesma linha separados por espaços"
+numeros = leia_inteiros(" ")
+maior = numeros.ordene.ultimo
+escreva "O maior número é {maior}"

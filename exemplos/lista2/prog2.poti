@@ -1,0 +1,4 @@
+escreva "Digite dois números"
+a, b = leia_inteiro
+dif = se a>b então a-b senão b-a fim
+escreva "A diferença é {dif}" 

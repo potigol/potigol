@@ -1,0 +1,16 @@
+# função mdc (recursiva)
+
+mdc(a,b: Inteiro): Inteiro 
+  se b==0 então
+    a
+  senãose a>b então
+    mdc(b, a mod b)
+  senão
+    mdc(a, b mod a)
+  fim
+fim
+
+escreva "Digite dois números"
+x,y = leia_inteiro
+resp = mdc(x,y)
+escreva "o mdc de {x} e {y} é {resp}"

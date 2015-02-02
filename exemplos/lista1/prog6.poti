@@ -1,0 +1,3 @@
+escreva "Qual é o seu nome?"
+nome = leia_texto
+escreva "Oi {nome}"

@@ -1,0 +1,9 @@
+escreva "Digite um número inteiro entre 1 e 1000"
+n = leia_inteiro
+imprima "Multiplos de {n}: "
+para i de 1 até 1000 faça
+  se i mod n == 0 então
+    imprima "{i} "
+  fim
+fim
+escreva ""

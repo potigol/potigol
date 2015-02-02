@@ -1,0 +1,15 @@
+# Ordenar três números
+escreva "Digite três números"
+a,b,c = leia_inteiro
+maior = 
+  se a>=b e a>=c então a
+  senãose b>=c então b
+  senão c
+  fim
+menor = 
+  se a<=b e a<=c então a
+  senãose b<=c então b
+  senão c
+  fim
+meio = a+b+c - maior - menor
+escreva "Números em ordem decrescente: {maior}, {meio}, {menor}"

@@ -1,0 +1,11 @@
+# Número primo
+escreva "Digite um número inteiro"
+n = leia_inteiro
+var primo = verdadeiro
+para i de 2 até n div 2 faça
+  se n mod i == 0 então
+    primo := falso
+  fim
+fim
+s = se primo então "é primo" senão "não é primo" fim
+escreva "{n} {s}"

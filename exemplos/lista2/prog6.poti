@@ -1,0 +1,5 @@
+# par ou impar
+escreva "Digite um número"
+a = leia_inteiro
+s = se a mod 2 == 0 então "par" senão "ímpar" fim
+escreva "{a} é {s}" 

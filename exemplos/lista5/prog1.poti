@@ -1,0 +1,14 @@
+# função maior de dois números
+
+# em uma linha
+maior2(a,b: Inteiro) = se a>b então a senão b fim
+
+# mais de uma linha
+maior2a(a,b: Inteiro)
+  se a>b então a senão b fim
+fim
+
+escreva "digite dois números"
+x,y = leia_inteiro
+maior = maior2a(x,y)
+escreva "o maior dos dois números é {maior}"

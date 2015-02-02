@@ -1,0 +1,7 @@
+escreva "Digite duas notas"
+nota1, nota2 = leia_numero
+escreva "Digite dois pesos"
+peso1, peso2 = leia_inteiro
+media = (nota1*peso1+nota2*peso2)/(peso1+peso2)
+media_texto = media formato "%.2f"
+escreva "A média é {media_texto}"

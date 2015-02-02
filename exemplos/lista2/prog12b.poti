@@ -1,0 +1,7 @@
+# Ordenar três números
+escreva "Digite três números"
+var a,b,c = leia_inteiro
+se a<b então a,b := b,a fim
+se b<c então b,c := c,b fim
+se a<b então a,b := b,a fim
+escreva "Números em ordem decrescente: {a}, {b}, {c}"

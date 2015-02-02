@@ -1,0 +1,7 @@
+escreva "Digite dois números"
+n1, n2 = leia_inteiro
+se n1==n2 então
+  escreva "sim"
+senão
+  escreva "não"
+fim
