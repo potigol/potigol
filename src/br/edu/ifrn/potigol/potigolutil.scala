@@ -87,6 +87,7 @@ object potigolutil {
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
+    def ::(a: T) = Lista(a::lista)
   }
 
   object Lista {

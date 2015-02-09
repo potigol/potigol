@@ -49,7 +49,7 @@ public class Principal {
 
 	public static void main(String[] args)  {
 		if (args.length == 0) {
-			System.out.println("Potigol versão 0.9.0 Copyright (C) 2015 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+			System.out.println("Potigol versão 0.9.0 Copyright (C) 2015 by Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
 			return;
 		}
 		System.out.print("Aguarde...");

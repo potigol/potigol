@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2005  Leonardo Lucena
+ *  Copyright (C) 2005 by Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ import br.edu.ifrn.potigol.parser.potigolParser.Valor_simplesContext;
 
 public class Listener extends potigolBaseListener {
 	private int num = 0;
-	private final ParseTreeProperty<String> values = new ParseTreeProperty<>();
+	private final ParseTreeProperty<String> values = new ParseTreeProperty<String>();
 	private String saida = "";
 
 	private String nextVar() {
@@ -231,7 +231,11 @@ public class Listener extends potigolBaseListener {
 	public void exitCons(ConsContext ctx) {
 		String a = getValue(ctx.expr(0));
 		String as = getValue(ctx.expr(1));
-		String s = "(" + a + "::" + as + ")";
+		final String s;
+		if (ctx.getParent().getRuleIndex()==potigolParser.RULE_caso) 
+			s = "Lista(" + a + "::" + as + ")";
+		else 
+			s = "(" + a + "::" + as + ")";
 		setValue(ctx, s);
 	}
 
@@ -464,7 +468,7 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitExpr1(Expr1Context ctx) {
-		List<String> a = new ArrayList<>();
+		List<String> a = new ArrayList<String>();
 		for (ExprContext exp : ctx.expr()) {
 			a.add(getValue(exp));
 		}
