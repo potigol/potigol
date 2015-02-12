@@ -47,22 +47,22 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
 
-	public static void main(String[] args)  {
+	public static void main(String[] args) {
 		if (args.length == 0) {
-			System.out.println("Potigol versão 0.9.0 Copyright (C) 2015 by Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+			System.out
+					.println("Potigol versão 0.9.1 Copyright (C) 2015 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
 			return;
 		}
 		System.out.print("Aguarde...");
 		try {
-		final Listener listener = getListner(args[0]);
-		final String saida = listener.getSaida();
-	//	 System.out.println(saida.trim().length());
-		 if (saida.trim().length()>40) {
-		   Compilador c = new Compilador();
-		   c.executar(saida);
-		 }
-		} catch (IOException e){
-			System.out.println("Erro: Arquivo "+args[0]+" não encontrado.");
+			final Listener listener = getListner(args[0]);
+			final String saida = listener.getSaida();
+			if (saida.trim().length() > 40) {
+				Compilador c = new Compilador();
+				c.executar(saida);
+			}
+		} catch (IOException e) {
+			System.out.println("Erro: Arquivo " + args[0] + " não encontrado.");
 		}
 	}
 

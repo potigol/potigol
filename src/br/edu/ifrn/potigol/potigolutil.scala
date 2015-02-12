@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2005  Leonardo Lucena
+ *  Copyright (C) 2015  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,11 +30,12 @@
  */
 
 package br.edu.ifrn.potigol
-import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.MutableList
+
+import collection.generic.CanBuildFrom
+import collection.mutable.MutableList
 import java.util.IllegalFormatConversionException
-import scala.collection.mutable.{ Seq => MSeq }
-import scala.io.StdIn
+import collection.mutable.{ Seq => MSeq }
+import io.StdIn
 
 object potigolutil {
   // Tipos
@@ -87,6 +88,7 @@ object potigolutil {
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
+    def junte(outra: Lista[T]) = Lista(lista:::outra.lista)
     def ::(a: T) = Lista(a::lista)
   }
 

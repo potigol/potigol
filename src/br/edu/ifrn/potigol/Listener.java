@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2005 by Leonardo Lucena
+ *  Copyright (C) 2015 by Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -232,10 +232,11 @@ public class Listener extends potigolBaseListener {
 		String a = getValue(ctx.expr(0));
 		String as = getValue(ctx.expr(1));
 		final String s;
-		if (ctx.getParent().getRuleIndex()==potigolParser.RULE_caso) 
-			s = "Lista(" + a + "::" + as + ")";
-		else 
-			s = "(" + a + "::" + as + ")";
+		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso)
+			s = "Lista(collection.immutable.::( " + a + ", a$"+as+"$))";
+
+		else
+			s = a + "::" + as;
 		setValue(ctx, s);
 	}
 
@@ -256,6 +257,14 @@ public class Listener extends potigolBaseListener {
 		} else
 			cond = "";
 		String exps = getValue(ctx.exprlist());
+		int p = exp.indexOf("a$");
+		if (p >= 0) {
+			String s = exp.substring(p+2);
+			p = s.indexOf("$");
+			s = s.substring(0, p);
+		//	String s = exp.split("if")[0].split("::")[1].replaceAll(" ", "").substring(2);
+			exps = 		"val " + s + " = Lista(a$"+s+"$);\n" + exps.substring(1) ;
+		}
 		String s = "case " + exp + " " + cond + " =>" + exps;
 		setValue(ctx, s);
 	}
