@@ -105,6 +105,7 @@ expr:
     
 literal:
       ID                                  # id
+    | BS expr (MS expr)* ES               # texto_interpolacao
     | STRING                              # texto
     | INT                                 # inteiro
     | FLOAT                               # real
@@ -150,6 +151,7 @@ tipo2 : tipo (',' tipo)+ ;
 exprlist: inst* ;
 
 // Lexer
+
 ID: (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
 fragment
@@ -166,7 +168,10 @@ FLOAT
 fragment
 DIGIT: '0'..'9' ;
 
-STRING : '"' (ESC | .) *? '"' ;
+STRING : '"' (ESC | ~[{]) *? '"' ;
+BS: '"' ~["]*? '{';
+MS: '}' ~["]*? '{';
+ES: '}' ~[{]*? '"';
 CHAR : '\''.'\'';
 
 BOOLEANO: 'verdadeiro' | 'falso' ;
@@ -174,7 +179,6 @@ BOOLEANO: 'verdadeiro' | 'falso' ;
 fragment
 ESC : '\\"' | '\\\\' ;
 
-COMMENT : '#' .*? '\r'? '\n' -> skip ;
-WS : (' '|'\t'|'\r'|'\n')+ -> skip ;
+COMMENT : '#' .*? '\r'? '\n' -> channel(HIDDEN) ;
+WS : (' '|'\t'|'\r'|'\n')+ -> channel(HIDDEN) ;
 
-NL : '\r\n' | '\n' ;

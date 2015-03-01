@@ -17,14 +17,14 @@
  */
 
 /**
- *   _____      _   _             _ 
+ *   _____      _   _             _
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |        
- *                    |___/         
+ *                     __/ |
+ *                    |___/
  *
  * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
  */
@@ -47,7 +47,7 @@ object potigolutil {
   type Caractere = Char
   type Matriz[T] = List[List[T]]
   type Cubo[T] = List[List[List[T]]]
-  
+
   // valores
   val verdadeiro = true
   val falso = false
@@ -78,18 +78,21 @@ object potigolutil {
     def último = ultimo
     def para_lista: Lista[T] = Lista(lista.toList)
     def mutavel: Vetor[T] = Vetor(lista.to)
+    def mutável: Vetor[T] = Vetor(lista.to)
   }
 
   case class Lista[T](val lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
     def cauda: Lista[T] = Lista(lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
-    def filtre(p: T => Boolean): Lista[T] = Lista(lista.filter(p))
+    def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
-    def junte(outra: Lista[T]) = Lista(lista:::outra.lista)
-    def ::(a: T) = Lista(a::lista)
+    def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
+    def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
+    def junte(outra: Lista[T]) = Lista(lista ::: outra.lista)
+    def ::[A >: T](a: A) = Lista(a :: lista)
   }
 
   object Lista {
@@ -101,7 +104,7 @@ object potigolutil {
     def cauda: Vetor[T] = Vetor(lista.tail)
     def inverta: Vetor[T] = Vetor(lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
-    def filtre(p: T => Boolean): Vetor[T] = Vetor(lista.filter(p))
+    def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
@@ -116,7 +119,7 @@ object potigolutil {
     def para_numero: Double = ("0" + numRE.findPrefixOf(lista).getOrElse("0.0")).toDouble
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
-    def divida(s: Texto = " "): Lista[Texto] = Lista(lista.split(s).toList)
+    def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
     def contem(a: Char) = lista.contains(a)
     def cabeca = lista.head
     def ultimo = lista.last
@@ -194,7 +197,7 @@ object potigolutil {
 }
 
 object Matematica {
-  import potigolutil.{ Inteiro, Real }
+  import potigolutil.{ Inteiro, Real, Colecao }
   def sen(a: Real): Real = Math.sin(a)
   def cos(a: Real): Real = Math.cos(a)
   def tg(a: Real): Real = Math.tan(a)
@@ -207,4 +210,15 @@ object Matematica {
   val PI: Real = Math.PI
   def log(a: Real): Real = Math.log(a)
   def log10(a: Real): Real = Math.log10(a)
+  def aleatório(): Real = Math.random()
+  def aleatorio = aleatório
+  def aleatório(ultimo: Inteiro): Inteiro = aleatório(1, ultimo)
+  def aleatorio(primeiro: Inteiro) = aleatório(primeiro)
+  def aleatório(primeiro: Inteiro, ultimo: Inteiro) = {
+    val faixa = ultimo - primeiro + 1
+    (Math.random() * faixa).toInt + primeiro
+  }
+  def aleatorio(primeiro: Inteiro, ultimo: Inteiro): Inteiro = aleatório(primeiro, ultimo)
+  def aleatório[T](lista: Colecao[T]): T = lista.get(aleatorio(lista.tamanho))
+  def aleatorio[T](lista: Colecao[T]): T = aleatório(lista)
 }

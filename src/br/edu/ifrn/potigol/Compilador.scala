@@ -17,14 +17,14 @@
  */
 
 /**
- *   _____      _   _             _ 
+ *   _____      _   _             _
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |        
- *                    |___/         
+ *                     __/ |
+ *                    |___/
  *
  * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
  */
@@ -34,11 +34,14 @@ package br.edu.ifrn.potigol
 import com.twitter.util.Eval
 import scala.util.{ Try, Success, Failure }
 
-class Compilador {
+class Compilador(val debug: Boolean = false) {
   def executar(code: String) = {
+    if (debug)
+      println(code)
     avaliar(code) match {
-      case Success(_) => print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b");(new Eval).apply[Unit](code)
-      case Failure(f) => println(codigoErro(code,f.getMessage))
+      case Success(_) =>
+        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b"); (new Eval).apply[Unit](code)
+      case Failure(f) => println(codigoErro(code, f.getMessage))
       case _ => println("erro")
     }
   }
@@ -53,10 +56,12 @@ class Compilador {
     val err = partes(2)
     val linha = partes(1).split(" ")(1).toInt
     val msg = err match {
+      case "not found" if debug => s"${code} - ${erro}"
       case "not found" => "Valor não encontrado"
+      case a if debug => a
       case _ => "Erro desconhecido"
     }
-    msg+"\nlinha: "+linha
+    msg + "\nlinha: " + linha
   }
 }
 

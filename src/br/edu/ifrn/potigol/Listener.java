@@ -102,6 +102,7 @@ import br.edu.ifrn.potigol.parser.potigolParser.SenaoseContext;
 import br.edu.ifrn.potigol.parser.potigolParser.Set_vetorContext;
 import br.edu.ifrn.potigol.parser.potigolParser.Soma_subContext;
 import br.edu.ifrn.potigol.parser.potigolParser.TextoContext;
+import br.edu.ifrn.potigol.parser.potigolParser.Texto_interpolacaoContext;
 import br.edu.ifrn.potigol.parser.potigolParser.Tipo2Context;
 import br.edu.ifrn.potigol.parser.potigolParser.TipoContext;
 import br.edu.ifrn.potigol.parser.potigolParser.Tipo_funcaoContext;
@@ -233,7 +234,7 @@ public class Listener extends potigolBaseListener {
 		String as = getValue(ctx.expr(1));
 		final String s;
 		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso)
-			s = "Lista(collection.immutable.::( " + a + ", a$"+as+"$))";
+			s = "Lista(collection.immutable.::( " + a + ", a$" + as + "$))";
 
 		else
 			s = a + "::" + as;
@@ -259,11 +260,12 @@ public class Listener extends potigolBaseListener {
 		String exps = getValue(ctx.exprlist());
 		int p = exp.indexOf("a$");
 		if (p >= 0) {
-			String s = exp.substring(p+2);
+			String s = exp.substring(p + 2);
 			p = s.indexOf("$");
 			s = s.substring(0, p);
-		//	String s = exp.split("if")[0].split("::")[1].replaceAll(" ", "").substring(2);
-			exps = 		"val " + s + " = Lista(a$"+s+"$);\n" + exps.substring(1) ;
+			// String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
+			// "").substring(2);
+			exps = "val " + s + " = Lista(a$" + s + "$);\n" + exps.substring(1);
 		}
 		String s = "case " + exp + " " + cond + " =>" + exps;
 		setValue(ctx, s);
@@ -310,7 +312,7 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void enterProg(ProgContext ctx) {
-		saida += "import br.edu.ifrn.potigol.potigolutil._\n";
+		saida += "import br.edu.ifrn.potigol.potigolutil._\nimport br.edu.ifrn.potigol.Matematica._\n";
 	}
 
 	@Override
@@ -719,6 +721,24 @@ public class Listener extends potigolBaseListener {
 			s = "s" + s;
 		}
 		setValue(ctx, s);
+	}
+
+	public void exitTexto_interpolacao(Texto_interpolacaoContext ctx) {
+		String s = ctx.BS().getText().replace("{", "${");
+		s = s + getValue(ctx.expr(0));
+		int i = 1;
+		for (TerminalNode x : ctx.MS()){
+	        s = s + x.getText().replace("{", "${");
+	        s = s + getValue(ctx.expr(i));
+	        i++;
+        }
+		s = s + ctx.ES().getText();
+		if (s.contains("\n")) {
+			s = "\"\"" + s + "\"\".stripMargin('|')";
+		}
+		s = "s"+ s;
+		setValue(ctx, s);
+
 	}
 
 	@Override

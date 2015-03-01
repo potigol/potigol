@@ -55,10 +55,16 @@ public class Principal {
 		}
 		System.out.print("Aguarde...");
 		try {
-			final Listener listener = getListner(args[0]);
+			String arq = args[0];
+			boolean debug = false;
+			if (arq.equals("-d")) {
+				arq = args[1];
+				debug = true;
+			}
+			final Listener listener = getListner(arq);
 			final String saida = listener.getSaida();
 			if (saida.trim().length() > 40) {
-				Compilador c = new Compilador();
+				Compilador c = new Compilador(debug);
 				c.executar(saida);
 			}
 		} catch (IOException e) {
