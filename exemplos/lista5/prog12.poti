@@ -1,3 +1,5 @@
+# -*- mode: python;-*-
+
 # função mdc (recursiva)
 
 mdc(a,b: Inteiro): Inteiro 
