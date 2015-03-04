@@ -1,3 +1,4 @@
+# -*- mode: python;-*-
 # par ou impar
 escreva "Digite um número"
 a = leia_inteiro
