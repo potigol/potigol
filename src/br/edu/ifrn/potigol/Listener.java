@@ -237,7 +237,7 @@ public class Listener extends potigolBaseListener {
 			s = "Lista(collection.immutable.::( " + a + ", a$" + as + "$))";
 
 		else
-			s = a + "::" + as;
+			s = "{"+a + "::" + as+"}";
 		setValue(ctx, s);
 	}
 
@@ -325,10 +325,10 @@ public class Listener extends potigolBaseListener {
 		String s = "";
 		for (int i = 0; i < ids.length; i++) {
 			aux[i] = nextVar();
-			s += "val " + aux[i] + " = " + exps[i] + "\n";
+			s += "val " + aux[i] + " = " + exps[i] + ";\n";
 		}
 		for (int i = 0; i < ids.length; i++) {
-			s += ids[i] + " = " + aux[i] + "\n";
+			s += ids[i] + " = " + aux[i] + ";\n";
 		}
 		setValue(ctx, s);
 	}
@@ -339,9 +339,9 @@ public class Listener extends potigolBaseListener {
 		String[] ids = id.split(", ");
 		String exp = getValue(ctx.expr());
 		String var = nextVar();
-		String s = "def " + var + " = " + exp + "\n";
+		String s = "def " + var + " = " + exp + ";\n";
 		for (String i : ids) {
-			s += i + " = " + var + " \n";
+			s += i + " = " + var + " ;\n";
 		}
 		setValue(ctx, s);
 	}
@@ -761,7 +761,7 @@ public class Listener extends potigolBaseListener {
 		String[] exps = exp.split(", ");
 		String s = "";
 		for (int i = 0; i < ids.length; i++) {
-			s += "val " + ids[i] + " = " + exps[i] + "\n";
+			s += "val " + ids[i] + " = " + exps[i] + ";\n";
 		}
 		setValue(ctx, s);
 	}
@@ -770,7 +770,7 @@ public class Listener extends potigolBaseListener {
 	public void exitValor_simples(Valor_simplesContext ctx) {
 		final String id = getValue(ctx.id1());
 		final String exp = getValue(ctx.expr());
-		setValue(ctx, "val " + id + " = " + exp);
+		setValue(ctx, "val " + id + " = " + exp+";\n");
 	}
 
 	@Override

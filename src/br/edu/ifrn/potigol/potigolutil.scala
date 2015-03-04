@@ -91,7 +91,7 @@ object potigolutil {
     def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
     def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
-    def junte(outra: Lista[T]) = Lista(lista ::: outra.lista)
+    def +(outra: Lista[T]) = Lista(lista ::: outra.lista)
     def ::[A >: T](a: A) = Lista(a :: lista)
   }
 
