@@ -45,8 +45,8 @@ object potigolutil {
   type Logico = Boolean
   type Real = Double
   type Caractere = Char
-  type Matriz[T] = List[List[T]]
-  type Cubo[T] = List[List[List[T]]]
+  type Matriz[T] = Lista[Lista[T]]
+  type Cubo[T] = Lista[Lista[Lista[T]]]
 
   // valores
   val verdadeiro = true
@@ -92,11 +92,31 @@ object potigolutil {
     def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
     def +(outra: Lista[T]) = Lista(lista ::: outra.lista)
-    def ::[A >: T](a: A) = Lista(a :: lista)
+    def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
   }
 
   object Lista {
     def apply[A](xs: A*): Lista[A] = Lista(xs.toList)
+    def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
+    def imutavel[A](x: Inteiro, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
+  }
+
+  object Matriz {
+    def mutavel[A](x: Inteiro, y: Inteiro, valor: => A): Vetor[Vetor[A]] = {
+      Lista(List.fill(x)(Lista(List.fill(y)(valor)).mutavel)).mutavel
+    }
+    def imutavel[A](x: Inteiro, y: Inteiro, valor: => A): Matriz[A] = {
+      Lista(List.fill(x)(Lista(List.fill(y)(valor))))
+    }
+  }
+
+  object Cubo {
+    def mutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Vetor[Vetor[Vetor[A]]] = {
+      Lista(List.fill(x)(Lista(List.fill(y)(Lista(List.fill(z)(valor)).mutavel)).mutavel)).mutavel
+    }
+    def imutavel[A](x: Inteiro, y: Inteiro)(valor: => A): Cubo[A] = {
+      Lista(List.fill(x)(Lista(List.fill(y)(Lista(List.fill(y)(valor))))))
+    }
   }
 
   case class Vetor[T](lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {

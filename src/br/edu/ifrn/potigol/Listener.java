@@ -177,10 +177,16 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitSet_vetor(Set_vetorContext ctx) {
-		String id = getValue(ctx.expr(0));
-		String indice = getValue(ctx.expr(1));
-		String exp = getValue(ctx.expr(2));
-		String s = id + "(" + indice + " -1) =" + exp;
+		String id = ctx.ID().getText();
+		int dim = ctx.expr().size() - 1;
+		String[] indices = new String[dim];
+		for (int i = 0; i < dim; i++)
+			indices[i] = getValue(ctx.expr(i));
+		String exp = getValue(ctx.expr(dim));
+		String s = id;
+		for (String ind : indices)
+			s = s + "(" + ind + " -1)";
+		s = s + "=" + exp;
 		setValue(ctx, s);
 	}
 
@@ -237,7 +243,7 @@ public class Listener extends potigolBaseListener {
 			s = "Lista(collection.immutable.::( " + a + ", a$" + as + "$))";
 
 		else
-			s = "{"+a + "::" + as+"}";
+			s = "{" + a + "::" + as + "}";
 		setValue(ctx, s);
 	}
 
@@ -727,16 +733,16 @@ public class Listener extends potigolBaseListener {
 		String s = ctx.BS().getText().replace("{", "${");
 		s = s + getValue(ctx.expr(0));
 		int i = 1;
-		for (TerminalNode x : ctx.MS()){
-	        s = s + x.getText().replace("{", "${");
-	        s = s + getValue(ctx.expr(i));
-	        i++;
-        }
+		for (TerminalNode x : ctx.MS()) {
+			s = s + x.getText().replace("{", "${");
+			s = s + getValue(ctx.expr(i));
+			i++;
+		}
 		s = s + ctx.ES().getText();
 		if (s.contains("\n")) {
 			s = "\"\"" + s + "\"\".stripMargin('|')";
 		}
-		s = "s"+ s;
+		s = "s" + s;
 		setValue(ctx, s);
 
 	}
@@ -770,7 +776,7 @@ public class Listener extends potigolBaseListener {
 	public void exitValor_simples(Valor_simplesContext ctx) {
 		final String id = getValue(ctx.id1());
 		final String exp = getValue(ctx.expr());
-		setValue(ctx, "val " + id + " = " + exp+";\n");
+		setValue(ctx, "val " + id + " = " + exp + ";\n");
 	}
 
 	@Override
