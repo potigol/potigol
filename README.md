@@ -11,3 +11,11 @@ Características
   - Inferencia de tipos
   - Multiparadigma
   - Encoraja a programação funcional
+
+Exemplos: https://github.com/potigol/Potigol/wiki/jogos
+
+``` python
+escreva "Qual é o su nome?"
+nome = leia_texto
+escreva "Olá {nome}"
+```
