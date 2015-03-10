@@ -14,8 +14,10 @@ Características
 
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
+[]
+
 ``` python
-escreva "Qual é o su nome?"
+escreva "Qual é o seu nome?"
 nome = leia_texto
 escreva "Olá {nome}"
 ```
