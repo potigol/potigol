@@ -12,9 +12,11 @@ Características
   - Multiparadigma
   - Encoraja a programação funcional
 
+
+![Editor](https://pbs.twimg.com/media/B9q3MH4IYAEgJo6.png)
+
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
-[]
 
 ``` python
 escreva "Qual é o seu nome?"
