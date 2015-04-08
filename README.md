@@ -4,6 +4,8 @@
 
 Linguagem de Programação moderna para iniciantes
 
+
+
 Características
   - Sintaxe simples
   - Palavras Chave em Português
@@ -12,10 +14,9 @@ Características
   - Multiparadigma
   - Encoraja a programação funcional
 
+![Editor](https://pbs.twimg.com/media/B-zJE8xW4AA6gfz.png)
+
+![Editor](https://pbs.twimg.com/media/B9q3MH4IYAEgJo6.png)
+
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
-``` python
-escreva "Qual é o su nome?"
-nome = leia_texto
-escreva "Olá {nome}"
-```
