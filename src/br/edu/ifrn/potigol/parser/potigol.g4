@@ -40,7 +40,7 @@ cmd : 'escreva' expr                  # escreva
     | 'imprima' expr                  # imprima
     | id1 ':=' expr                   # atrib_simples
     | id2 ':=' expr2                  # atrib_multipla
-    | expr'['expr']' ('='|':=') expr  # set_vetor
+    | ID('['expr']')+ ':=' expr       # set_vetor
     ;
 
 // Declaracao

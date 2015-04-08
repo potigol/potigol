@@ -499,6 +499,9 @@ public class Listener extends potigolBaseListener {
 			a.add(getValue(exp));
 		}
 		ids2String(ctx, a);
+		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr) 
+			setValue(ctx, "Tupla"+ctx.expr().size()+"("+ getValue(ctx)+")");
+
 	}
 
 	@Override
