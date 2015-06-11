@@ -1,0 +1,12 @@
+alunos = leia_textos(40)
+alunos_com_media  = 
+  para aluno em alunos gere
+    al = aluno.divida(":")
+    n1 = al[3].para_numero
+    n2 = al[4].para_numero
+    media = ((n1*2)+(n2*3)) / 5
+    media_s = media formato "%.1f"
+    "{al[1]}:{al[2]}:{al[3]}:{al[4]}:{media_s}"
+  fim
+
+escreva alunos_com_media.junte("\n")

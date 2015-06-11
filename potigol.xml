@@ -6,13 +6,13 @@
         <jar destfile="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol.jar">
             <manifest>
                 <attribute name="Main-Class" value="br.edu.ifrn.potigol.Principal"/>
-                <attribute name="Class-Path" value=". potigol_lib/antlr-runtime-4.4.jar potigol_lib/scala-compiler.jar potigol_lib/scala-library.jar potigol_lib/scala-reflect.jar"/>
+                <attribute name="Class-Path" value=". potigol_lib/antlr-runtime-4.5.jar potigol_lib/scala-compiler.jar potigol_lib/scala-library.jar potigol_lib/scala-reflect.jar"/>
             </manifest>
             <fileset dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/bin"/>
         </jar>
-        <delete dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>
+    <!--    <delete dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/> -->
         <mkdir dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>
-        <copy file="C:/Users/Lucena/workspace/luna/PotigolANTLR/antlr-runtime-4.4.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>
+<!--        <copy file="C:/Users/Lucena/workspace/luna/PotigolANTLR/antlr-runtime-4.5.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/> -->
         <copy file="C:/Program Files (x86)/scala/lib/scala-compiler.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>
         <copy file="C:/Program Files (x86)/scala/lib/scala-library.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>
         <copy file="C:/Program Files (x86)/scala/lib/scala-reflect.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/>

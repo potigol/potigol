@@ -1,0 +1,5 @@
+nomes = leia_textos(10)
+
+para nome em nomes faça
+  escreva "{nome.tamanho}:{nome}"
+fim

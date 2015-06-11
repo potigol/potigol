@@ -53,7 +53,7 @@ object potigolutil {
   val falso = false
 
   // Expressões Regulares
-  private val intRE = """-?(\d*)""".r
+  private val intRE = """-?\d+""".r
   private val numRE = """-?(\d*)(\.\d*)?""".r
 
   trait Colecao[T] {
@@ -131,7 +131,7 @@ object potigolutil {
   }
 
   implicit class Textos(val lista: String) {
-    def para_int: Int = ("0" + intRE.findPrefixOf(lista).getOrElse("0")).toInt
+    def para_int: Int = (intRE.findPrefixOf(lista).getOrElse("0")).toInt
     def para_i = para_int
     def para_inteiro = para_int
     def get(a: Int) = if (a > 0) lista(a - 1) else lista(tamanho + a)

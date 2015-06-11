@@ -1,0 +1,8 @@
+n = leia_inteiro
+numeros = leia_inteiros(n)
+x = leia_inteiro
+para numero em numeros faça
+  se numero mod x == 0 então
+    escreva numero
+  fim
+fim

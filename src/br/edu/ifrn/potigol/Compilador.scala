@@ -42,7 +42,7 @@ class Compilador(val debug: Boolean = false) {
       case Success(_) =>
         print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b"); (new Eval).apply[Unit](code)
       case Failure(f) => println(codigoErro(code, f.getMessage))
-      case _ => println("erro")
+      case _          => println("erro")
     }
   }
   def avaliar(code: String) = {
@@ -57,9 +57,9 @@ class Compilador(val debug: Boolean = false) {
     val linha = partes(1).split(" ")(1).toInt
     val msg = err match {
       case "not found" if debug => s"${code} - ${erro}"
-      case "not found" => "Valor não encontrado"
-      case a if debug => a
-      case _ => "Erro desconhecido"
+      case "not found"          => "Valor não encontrado"
+      case a if debug           => a
+      case _                    => "Erro desconhecido"
     }
     msg + "\nlinha: " + linha
   }
