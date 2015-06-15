@@ -93,12 +93,15 @@ object potigolutil {
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
     def +(outra: Lista[T]) = Lista(lista ::: outra.lista)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
+    def remova(i: Inteiro) = Lista(lista.take(i-1):::lista.drop(i))
+    def insira(i: Inteiro, valor: T) = Lista(lista.take(i-1):::valor::lista.drop(i-1))    
   }
 
   object Lista {
     def apply[A](xs: A*): Lista[A] = Lista(xs.toList)
     def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
     def imutavel[A](x: Inteiro, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
+    def vazia[A](x: A) = Lista(List.empty[A])
   }
 
   object Matriz {
@@ -128,6 +131,9 @@ object potigolutil {
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
+    def remova(i: Inteiro) = Vetor(lista.take(i-1)++lista.drop(i))
+    def insira(i: Inteiro, valor: T) = Vetor(lista.take(i-1)++List(valor)++lista.drop(i-1))    
+
   }
 
   implicit class Textos(val lista: String) {

@@ -37,7 +37,7 @@ import scala.util.{ Try, Success, Failure }
 class Compilador(val debug: Boolean = false) {
   def executar(code: String) = {
     if (debug)
-      println(code)
+      imprimirCodigo(code)
     avaliar(code) match {
       case Success(_) =>
         print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b"); (new Eval).apply[Unit](code)
@@ -62,6 +62,13 @@ class Compilador(val debug: Boolean = false) {
       case _                    => "Erro desconhecido"
     }
     msg + "\nlinha: " + linha
+  }
+  def imprimirCodigo(code: String){
+    val linhas = code.split('\n')
+    println()
+    for(line <- linhas.zipWithIndex){
+      println(s"${(line._2+1).formatted("%4d")} | ${line._1}")
+    }
   }
 }
 

@@ -230,7 +230,8 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitTipo_tupla(Tipo_tuplaContext ctx) {
-		String s = "(" + getValue(ctx.tipo2()) + ")";
+		String s = "Tupla" + ctx.tipo2().tipo().size() + "["
+				+ getValue(ctx.tipo2()) + "]";
 		setValue(ctx, s);
 	}
 
@@ -499,9 +500,12 @@ public class Listener extends potigolBaseListener {
 			a.add(getValue(exp));
 		}
 		ids2String(ctx, a);
-		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr) 
-			setValue(ctx, "Tupla"+ctx.expr().size()+"("+ getValue(ctx)+")");
-
+		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr)
+			setValue(ctx,
+			// "Tupla"+ctx.expr().size()+"("+
+					getValue(ctx)
+			// +")"
+			);
 	}
 
 	@Override
@@ -759,7 +763,7 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitTupla(TuplaContext ctx) {
 		String exp = getValue(ctx.expr2());
-		setValue(ctx, "(" + exp + ")");
+		setValue(ctx, "Tupla" + ctx.expr2().expr().size() + "(" + exp + ")");
 	}
 
 	@Override
