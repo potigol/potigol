@@ -6,7 +6,7 @@ Linguagem de Programação moderna para iniciantes
 
 
 
-Características
+##Características
   - Sintaxe simples
   - Palavras Chave em Português
   - Tipagem Estática e forte
@@ -18,5 +18,18 @@ Características
 
 ![Editor](https://pbs.twimg.com/media/B9q3MH4IYAEgJo6.png)
 
+##Como usar:
+  - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
+  - Descompacte o arquivo
+  - Para executar o Editor de Código digite no prompt do terminal
+  
+  ````java -jar epotigol.jar````
+
+  - Para executar um programa em Potigol digite no prompt do terminal
+
+  ````java -jar potigol.jar arquivo.poti````
+
+  - No Windows basta usar ````epotigol```` ou ````potigol arquivo.poti````.
+  
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
