@@ -86,6 +86,7 @@ object potigolutil {
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
     def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
+    def selecione = filtre _
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
@@ -128,6 +129,7 @@ object potigolutil {
     def inverta: Vetor[T] = Vetor(lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
     def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
+    def selecione = filtre _
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
@@ -153,6 +155,7 @@ object potigolutil {
     def tamanho = lista.length
     def inverta = lista.reverse
     def filtre(p: Char => Boolean) = lista.filter(p)
+    def selecione = filtre _
     def injete[A >: Char](f: (A, Char) => A): A = lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, Char) => A) = lista.foldLeft(neutro)(f)
     def mapeie[B, That](f: Char => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)

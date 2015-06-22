@@ -29,8 +29,13 @@
  * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
  */
 
+
 grammar potigol;
- 
+
+// Lexer
+@lexer::members {
+  public static final int COMMENTS = 1;
+} 
 prog: inst* ;
 
 inst: decl | expr | bloco | cmd; 
@@ -150,7 +155,6 @@ tipo2 : tipo (',' tipo)+ ;
 
 exprlist: inst* ;
 
-// Lexer
 
 ID: (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
@@ -179,6 +183,6 @@ BOOLEANO: 'verdadeiro' | 'falso' ;
 fragment
 ESC : '\\"' | '\\\\' ;
 
-COMMENT : '#' .*? '\r'? '\n' -> channel(HIDDEN) ;
-WS : (' '|'\t'|'\r'|'\n')+ -> channel(HIDDEN) ;
-
+WS : (' '|'\t'|'\r')+ -> skip ;
+COMMENT : '#' .*? '\r'? '\n' -> channel(1) ;
+NL: '\n' ->channel(2);

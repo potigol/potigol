@@ -25,7 +25,7 @@ public class potigolParser extends Parser {
 		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
 		T__45=46, T__46=47, T__47=48, T__48=49, T__49=50, T__50=51, T__51=52, 
 		T__52=53, T__53=54, ID=55, INT=56, FLOAT=57, STRING=58, BS=59, MS=60, 
-		ES=61, CHAR=62, BOOLEANO=63, COMMENT=64, WS=65;
+		ES=61, CHAR=62, BOOLEANO=63, WS=64, COMMENT=65, NL=66;
 	public static final int
 		RULE_prog = 0, RULE_inst = 1, RULE_cmd = 2, RULE_decl = 3, RULE_decl_valor = 4, 
 		RULE_decl_funcao = 5, RULE_decl_tipo = 6, RULE_decl_uso = 7, RULE_dcl = 8, 
@@ -51,7 +51,8 @@ public class potigolParser extends Parser {
 		"'e'", "'ou'", "'se'", "'entao'", "'ent\\u00e3o'", "'senaose'", "'sen\\u00e3ose'", 
 		"'senao'", "'sen\\u00e3o'", "'escolha'", "'caso'", "'para'", "'gere'", 
 		"'enquanto'", "'em'", "'de'", "'ate'", "'at\\u00e9'", "'passo'", "'faca'", 
-		"'fa\\u00e7a'"
+		"'fa\\u00e7a'", null, null, null, null, null, null, null, null, null, 
+		null, null, "'\n'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -59,7 +60,7 @@ public class potigolParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, "ID", "INT", "FLOAT", "STRING", 
-		"BS", "MS", "ES", "CHAR", "BOOLEANO", "COMMENT", "WS"
+		"BS", "MS", "ES", "CHAR", "BOOLEANO", "WS", "COMMENT", "NL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -3792,7 +3793,7 @@ public class potigolParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3C\u01d2\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3D\u01d2\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
