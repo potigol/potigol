@@ -14,7 +14,7 @@ Linguagem de Programação moderna para iniciantes
   - Multiparadigma
   - Encoraja a programação funcional
 
-![Editor](https://pbs.twimg.com/media/B-zJE8xW4AA6gfz.png)
+![Editor](https://cloud.githubusercontent.com/assets/303460/8604675/7180d638-2656-11e5-9239-90d29628d9d0.png)
 
 ![Editor](https://pbs.twimg.com/media/B9q3MH4IYAEgJo6.png)
 
