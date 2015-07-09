@@ -16,7 +16,6 @@ Linguagem de Programação moderna para iniciantes
 
 ![Editor](https://cloud.githubusercontent.com/assets/303460/8604675/7180d638-2656-11e5-9239-90d29628d9d0.png)
 
-![Editor](https://pbs.twimg.com/media/B9q3MH4IYAEgJo6.png)
 
 ##Como usar:
   - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
