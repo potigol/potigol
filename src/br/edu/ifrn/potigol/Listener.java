@@ -579,8 +579,10 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitInst(InstContext ctx) {
 		String s = "";
-		String codigo = ctx.start.getText();
-		codigo = ctx.getSourceInterval().a + " .. " + ctx.getSourceInterval().b;
+		// String codigo = ctx.start.getText();
+		int codigo = ctx.getStart().getLine();// ctx.getSourceInterval().a +
+												// " .. " +
+												// ctx.getSourceInterval().b;
 		for (ParseTree i : ctx.children) {
 			s += "/*Codigo: " + codigo + " */\n";
 			s += getValue(i) + "\n";

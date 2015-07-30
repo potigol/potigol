@@ -51,6 +51,15 @@ class Compilador(val debug: Boolean = false) {
     }
   }
 
+  def linhaErro(code: String) = {
+    avaliar(code) match {
+      case Success(_) => 0
+      case Failure(f) =>
+        val linhaScala = f.getMessage.split(": ")(1).split(" ")(1).toInt
+        code.split('\n').take(linhaScala).reverse.toList.dropWhile { x => !x.contains("/*Codigo") }.head.split(" ")(1).toInt;
+    }
+  }
+
   def codigoErro(code: String, erro: String) = {
     val partes = erro.split(": ")
     val err = partes(2)
@@ -63,11 +72,11 @@ class Compilador(val debug: Boolean = false) {
     }
     msg + "\nlinha: " + linha
   }
-  def imprimirCodigo(code: String){
+  def imprimirCodigo(code: String) {
     val linhas = code.split('\n')
     println()
-    for(line <- linhas.zipWithIndex){
-      println(s"${(line._2+1).formatted("%4d")} | ${line._1}")
+    for (line <- linhas.zipWithIndex) {
+      println(s"${(line._2 + 1).formatted("%4d")} | ${line._1}")
     }
   }
 }

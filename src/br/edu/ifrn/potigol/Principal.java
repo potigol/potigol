@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2005  Leonardo Lucena
+ *  Copyright (C) 2015  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
  */
 
 /**
- *   _____      _   _             _ 
+ *   _____      _   _             _
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |        
- *                    |___/         
+ *                     __/ |
+ *                    |___/
  *
  * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
  */

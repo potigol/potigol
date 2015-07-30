@@ -95,9 +95,6 @@ public class potigolLexer extends Lexer {
 	}
 
 
-	  public static final int COMMENTS = 1;
-
-
 	public potigolLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);

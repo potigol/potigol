@@ -32,10 +32,6 @@
 
 grammar potigol;
 
-// Lexer
-@lexer::members {
-  public static final int COMMENTS = 1;
-} 
 prog: inst* ;
 
 inst: decl | expr | bloco | cmd; 
@@ -156,6 +152,9 @@ tipo2 : tipo (',' tipo)+ ;
 exprlist: inst* ;
 
 
+// Lexer
+//channels { WSCHANNEL, MYHIDDEN };
+ 
 ID: (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
 fragment
