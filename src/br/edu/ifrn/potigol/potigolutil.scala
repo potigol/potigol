@@ -60,7 +60,7 @@ object potigolutil {
     val lista: Seq[T]
     def apply(a: Int) = lista(a)
     def length = lista.length
-    override def toString = lista.mkString("[", ",", "]")
+    override def toString = lista.mkString("[", ", ", "]")
     def junte(separador: String = "") = lista.mkString(separador)
     def junte(inicio: String, separador: String, fim: String) = lista.mkString(inicio, separador, fim)
     def tamanho: Inteiro = lista.length
@@ -85,7 +85,7 @@ object potigolutil {
     def cauda: Lista[T] = Lista(lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
-    def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
+    @deprecated def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
     def selecione = filtre _
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
@@ -94,8 +94,8 @@ object potigolutil {
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
     def +(outra: Lista[T]) = Lista(lista ::: outra.lista)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
-    def remova(i: Inteiro) = Lista(lista.take(i-1):::lista.drop(i))
-    def insira(i: Inteiro, valor: T) = Lista(lista.take(i-1):::valor::lista.drop(i-1))    
+    def remova(i: Inteiro) = Lista(lista.take(i - 1) ::: lista.drop(i))
+    def insira(i: Inteiro, valor: T) = Lista(lista.take(i - 1) ::: valor :: lista.drop(i - 1))
   }
 
   object Lista {
@@ -133,9 +133,8 @@ object potigolutil {
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
     def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
-    def remova(i: Inteiro) = Vetor(lista.take(i-1)++lista.drop(i))
-    def insira(i: Inteiro, valor: T) = Vetor(lista.take(i-1)++List(valor)++lista.drop(i-1))    
-
+    def remova(i: Inteiro) = Vetor(lista.take(i - 1) ++ lista.drop(i))
+    def insira(i: Inteiro, valor: T) = Vetor(lista.take(i - 1) ++ List(valor) ++ lista.drop(i - 1))
   }
 
   implicit class Textos(val lista: String) {
@@ -187,7 +186,7 @@ object potigolutil {
     def para_texto: Texto = x.toString
   }
 
-  def leia: Texto = StdIn.readLine()
+  def leia(): Texto = StdIn.readLine()
 
   def leia(separador: Texto): Lista[Texto] = Lista(leia
     .split(separador.toCharArray())
