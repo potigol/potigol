@@ -85,17 +85,22 @@ object potigolutil {
     def cauda: Lista[T] = Lista(lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
-    @deprecated def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
+    @deprecated("Use 'selecione'","0.9.4") def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
     def selecione = filtre _
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
-    def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
-    def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
+    @deprecated("Use 'descarte_enquanto'", "0.9.4") def passe_enquanto(p: T => Boolean): Lista[T] = Lista(lista.dropWhile(p))
+    def descarte_enquanto = passe_enquanto _
+    @deprecated("Use 'descarte'", "0.9.4") def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
+    def descarte = passe _
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
     def +(outra: Lista[T]) = Lista(lista ::: outra.lista)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
     def remova(i: Inteiro) = Lista(lista.take(i - 1) ::: lista.drop(i))
     def insira(i: Inteiro, valor: T) = Lista(lista.take(i - 1) ::: valor :: lista.drop(i - 1))
+    def divida_quando(f: (T, T) => Logico) = Lista(lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
+      if (b.isEmpty || f(a, b.head.head)) Lista(a) :: b else (a :: b.head) :: b.tail
+    })
   }
 
   object Lista {
@@ -132,7 +137,8 @@ object potigolutil {
     def selecione = filtre _
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
-    def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
+    @deprecated def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
+    def descarte_enquanto = passe_enquanto _
     def remova(i: Inteiro) = Vetor(lista.take(i - 1) ++ lista.drop(i))
     def insira(i: Inteiro, valor: T) = Vetor(lista.take(i - 1) ++ List(valor) ++ lista.drop(i - 1))
   }
@@ -147,6 +153,9 @@ object potigolutil {
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
+    def divida_quando(f: (Caractere, Caractere) => Logico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
+      if (b.isEmpty || f(a, b.head.head)) Lista(a) :: b else (a :: b.head) :: b.tail
+    }).map(_.junte("")))
     def contem(a: Char) = lista.contains(a)
     def cabeca = lista.head
     def ultimo = lista.last
@@ -160,7 +169,8 @@ object potigolutil {
     def mapeie[B, That](f: Char => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
     def ache(p: Char => Boolean): Option[Char] = lista.find(p)
     def pegue_enquanto(p: Char => Logico) = lista.takeWhile(p)
-    def passe_enquanto(p: Char => Logico) = lista.dropWhile(p)
+    @deprecated def passe_enquanto(p: Char => Logico) = lista.dropWhile(p)
+    def descarte_enquanto = passe_enquanto _
     def para_lista: List[Char] = lista.toList
     def contém = contem _
     def cabeça = cabeca
@@ -223,7 +233,7 @@ object potigolutil {
   def escreva(texto: Any) = println(texto.toString)
   def imprima(texto: Any) = print(texto.toString)
 
-  case class Tupla1[T1](primeiro: T1)
+//  case class Tupla1[T1](primeiro: T1)
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
   case class Tupla3[T1, T2, T3](primeiro: T1, segundo: T2, terceiro: T3)
   case class Tupla4[T1, T2, T3, T4](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)
