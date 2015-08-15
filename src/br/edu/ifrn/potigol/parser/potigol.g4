@@ -165,7 +165,7 @@ ACENTO : '\u00a1' .. '\ufffc' ;
 INT : DIGIT+ ;
 
 FLOAT
-    : DIGIT+ '.' DIGIT*
+    : DIGIT+ '.' DIGIT+
     |        '.' DIGIT+
     ;
 fragment

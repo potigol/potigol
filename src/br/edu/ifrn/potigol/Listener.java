@@ -34,6 +34,7 @@ package br.edu.ifrn.potigol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
@@ -115,6 +116,9 @@ import br.edu.ifrn.potigol.parser.potigolParser.Valor_simplesContext;
 public class Listener extends potigolBaseListener {
 	private int num = 0;
 	private final ParseTreeProperty<String> values = new ParseTreeProperty<String>();
+	private final Stack<List<String>> declaracoes = new Stack<List<String>>();
+	private final List<String> warnings = new ArrayList<String>();
+
 	private String saida = "";
 
 	private String nextVar() {
@@ -320,6 +324,12 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void enterProg(ProgContext ctx) {
 		saida += "import br.edu.ifrn.potigol.potigolutil._\nimport br.edu.ifrn.potigol.Matematica._\n";
+		declaracoes.push(new ArrayList<String>());
+	}
+
+	@Override
+	public void enterExprlist(ExprlistContext ctx) {
+		declaracoes.push(new ArrayList<String>());
 	}
 
 	@Override
@@ -515,6 +525,7 @@ public class Listener extends potigolBaseListener {
 			s += "  " + getValue(i) + "\n";
 		}
 		setValue(ctx, s);
+		declaracoes.pop();
 	}
 
 	@Override
@@ -607,7 +618,7 @@ public class Listener extends potigolBaseListener {
 	public void exitMais_menos_unario(Mais_menos_unarioContext ctx) {
 		String exp1 = getValue(ctx.expr());
 		String op = ctx.getChild(0).getText();
-		setValue(ctx, "{" + op + exp1 + "}");
+		setValue(ctx,  op + exp1);
 	}
 
 	@Override
@@ -671,11 +682,16 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitProg(ProgContext ctx) {
+		if (!warnings.isEmpty()){
+			saida +="escreva(\"===[ATENCAO]===\")\n";
+			saida +="escreva(\""+warnings.get(0)+"\")";
+		}
 		for (InstContext i : ctx.inst()) {
 			saida += getValue(i);
 		}
 		saida += "\n()\n";
 		setValue(ctx, saida);
+		declaracoes.pop();
 	}
 
 	@Override
@@ -775,16 +791,38 @@ public class Listener extends potigolBaseListener {
 		String exp = getValue(ctx.expr2());
 		String[] exps = exp.split(", ");
 		String s = "";
+		setValue(ctx, s);
+		
 		for (int i = 0; i < ids.length; i++) {
 			s += "val " + ids[i] + " = " + exps[i] + ";\n";
 		}
-		setValue(ctx, s);
+		for (String i : ids) {
+			if (valores().contains(i)) {
+				warnings.add("Valor " + i + " declarado duas vezes.");
+			}
+		}
+		declaracoes.peek().addAll(Arrays.asList(ids));
+	}
+
+	private List<String> valores() {
+		List<String> a = new ArrayList<String>();
+		for (List<String> s : declaracoes) {
+			a.addAll(s);
+		}
+		return a;
 	}
 
 	@Override
 	public void exitValor_simples(Valor_simplesContext ctx) {
 		final String id = getValue(ctx.id1());
 		final String exp = getValue(ctx.expr());
+		List<String> ids = Arrays.asList(id.split(","));
+		for (String i : ids) {
+			if (valores().contains(i)) {
+				warnings.add("Valor " + i + " declarado duas vezes.");
+			}
+		}
+		declaracoes.peek().addAll(ids);
 		setValue(ctx, "val " + id + " = " + exp + ";\n");
 	}
 
@@ -825,4 +863,5 @@ public class Listener extends potigolBaseListener {
 	public String getSaida() {
 		return saida.replaceAll("\n\n", "\n").replaceAll("\n\n", "\n");
 	}
+
 }
