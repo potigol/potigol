@@ -133,7 +133,7 @@ object potigolutil {
     def cauda: Vetor[T] = Vetor(lista.tail)
     def inverta: Vetor[T] = Vetor(lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
-    def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
+    @deprecated def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
     def selecione = filtre _
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
@@ -144,9 +144,10 @@ object potigolutil {
   }
 
   implicit class Textos(val lista: String) {
-    def para_int: Int = (intRE.findPrefixOf(lista).getOrElse("0")).toInt
-    def para_i = para_int
-    def para_inteiro = para_int
+    @deprecated def para_int: Int = (intRE.findPrefixOf(lista).getOrElse("0")).toInt
+    @deprecated def para_i = para_int
+    @deprecated def para_inteiro = para_int
+    def inteiro = para_int
     def get(a: Int) = if (a > 0) lista(a - 1) else lista(tamanho + a)
     def posicao(elem: Caractere): Int = lista.indexOf(elem) + 1
     def para_numero: Double = ("0" + numRE.findPrefixOf(lista).getOrElse("0.0")).toDouble
@@ -176,9 +177,10 @@ object potigolutil {
     def cabeça = cabeca
     def primeiro = cabeca
     def último = ultimo
-    def para_num = para_numero
-    def para_n = para_numero
-    def para_real = para_numero
+    @deprecated def para_num = para_numero
+    @deprecated def para_n = para_numero
+    @deprecated def para_real = para_numero
+    def real = para_numero
   }
 
   implicit class Reais(x: Double) {
@@ -193,7 +195,8 @@ object potigolutil {
         case e: IllegalFormatConversionException => "Erro de formato"
       }
     def %(formato_ : Texto) = formato(formato_)
-    def para_texto: Texto = x.toString
+    @deprecated def para_texto: Texto = x.toString
+    def texto = para_texto
   }
 
   def leia(): Texto = StdIn.readLine()
