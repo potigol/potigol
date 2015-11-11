@@ -35,19 +35,24 @@ import com.twitter.util.Eval
 import scala.util.{ Try, Success, Failure }
 
 class Compilador(val debug: Boolean = false) {
-  def executar(code: String) = {
+  def executar(code: String, codigoPotigol: String) = {
     if (debug)
       imprimirCodigo(code)
     avaliar(code) match {
       case Success(_) =>
-        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b"); (new Eval).apply[Unit](code)
-      case Failure(f) => println(codigoErro(code, f.getMessage))
-      case _          => println("erro")
+        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+        (new Eval(None)).apply[Unit](code)
+      case Failure(f) =>
+        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+        println(codigoErro(code, f.getMessage, codigoPotigol))
+      case _ =>
+        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+        println("erro")
     }
   }
   def avaliar(code: String) = {
     Try {
-      (new Eval).check(code)
+      (new Eval(None)).check(code)
     }
   }
 
@@ -60,27 +65,31 @@ class Compilador(val debug: Boolean = false) {
     }
   }
 
-  def codigoErro(code: String, erro: String) = {
+  def codigoErro(code: String, erro: String, codigoPotigol: String) = {
     val partes = erro.split(": ")
-    val err = partes(2)
-    val linha = partes(1).split(" ")(1).toInt
-    val msg = err match {
-      case "not found" if debug => s"${code} - ${erro}"
-      case "not found"          => "Valor não encontrado"
-      case a if debug           => a
-      case _                    => "Erro desconhecido"
+    if (partes.size > 2) {
+      val err = partes(2)
+      val linha = partes(1).split(" ")(1).toInt
+      val linhaPotigol = code.split("\n").take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
+      val msg = err match {
+        case "not found" if debug => s"${code} - ${erro}"
+        case "not found"          => "Valor não encontrado"
+        case a if debug           => a
+        case _                    => "Erro "
+      }
+      imprimirCodigo(codigoPotigol.split("\n").drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
+      msg + "\nlinha: " + linhaPotigol
     }
-    msg + "\nlinha: " + linha
   }
-  def imprimirCodigo(code: String) {
+  def imprimirCodigo(code: String, inicio: Int = 0) {
     val linhas = code.split('\n')
     println()
     for (line <- linhas.zipWithIndex) {
-      println(s"${(line._2 + 1).formatted("%4d")} | ${line._1}")
+      println(s"${(line._2 + 1 + inicio).formatted("%4d")} | ${line._1}")
     }
   }
 }
 
 object Comp extends App {
-  (new Compilador()).executar("println(1+2)\nval a = readInt\nprintln(b)")
+  (new Compilador()).executar("println(1+2)\nval a = readInt\nprintln(b)", "")
 }

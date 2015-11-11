@@ -618,7 +618,7 @@ public class Listener extends potigolBaseListener {
 	public void exitMais_menos_unario(Mais_menos_unarioContext ctx) {
 		String exp1 = getValue(ctx.expr());
 		String op = ctx.getChild(0).getText();
-		setValue(ctx,  op + exp1);
+		setValue(ctx, op + exp1);
 	}
 
 	@Override
@@ -682,9 +682,9 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitProg(ProgContext ctx) {
-		if (!warnings.isEmpty()){
-			saida +="escreva(\"===[ATENCAO]===\")\n";
-			saida +="escreva(\""+warnings.get(0)+"\")";
+		if (!warnings.isEmpty()) {
+			saida += "escreva(\"===[ATENCAO]===\")\n";
+			saida += "escreva(\"" + warnings.get(0) + "\")";
 		}
 		for (InstContext i : ctx.inst()) {
 			saida += getValue(i);
@@ -791,11 +791,12 @@ public class Listener extends potigolBaseListener {
 		String exp = getValue(ctx.expr2());
 		String[] exps = exp.split(", ");
 		String s = "";
-		setValue(ctx, s);
-		
+
 		for (int i = 0; i < ids.length; i++) {
 			s += "val " + ids[i] + " = " + exps[i] + ";\n";
 		}
+		setValue(ctx, s);
+
 		for (String i : ids) {
 			if (valores().contains(i)) {
 				warnings.add("Valor " + i + " declarado duas vezes.");

@@ -49,7 +49,7 @@ public class Principal {
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			System.out
-					.println("Potigol versão 0.9.4 Copyright (C) 2015 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+					.println("Potigol versão 0.9.5 Copyright (C) 2015 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
 			return;
 		}
 		System.out.print("Aguarde...");
@@ -64,7 +64,7 @@ public class Principal {
 			final String saida = listener.getSaida();
 			if (saida.trim().length() > 40) {
 				Compilador c = new Compilador(debug);
-				c.executar(saida);
+				c.executar(saida,lerArquivo(arq));
 			}
 		} catch (IOException e) {
 			System.out.println("Erro: Arquivo " + args[0] + " não encontrado.");
