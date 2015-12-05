@@ -97,8 +97,8 @@ expr:
     | expr 'e' expr                       # e_logico
     | expr 'ou' expr                      # ou_logico
     | dcl1 '=>' inst+                     # lambda
-	| decisao							  # decis
-	| repeticao							  # laco
+    | decisao                             # decis
+    | repeticao                           # laco
     | '(' expr ')'                        # paren
     | '(' expr2 ')'                       # tupla
     | '[' expr1? ']'                      # lista
