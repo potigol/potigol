@@ -47,6 +47,8 @@ object potigolutil {
   type Caractere = Char
   type Matriz[T] = Lista[Lista[T]]
   type Cubo[T] = Lista[Lista[Lista[T]]]
+  
+  var $cor = false
 
   // valores
   val verdadeiro = true
@@ -199,7 +201,12 @@ object potigolutil {
     def texto = para_texto
   }
 
-  def leia(): Texto = StdIn.readLine()
+  def leia(): Texto = {
+    if ($cor) print("\033[32m")
+    val s = StdIn.readLine()
+    if ($cor) print("\033[30m")
+    s
+  }
 
   def leia(separador: Texto): Lista[Texto] = Lista(leia
     .split(separador.toCharArray())

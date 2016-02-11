@@ -34,20 +34,25 @@ package br.edu.ifrn.potigol
 import com.twitter.util.Eval
 import scala.util.{ Try, Success, Failure }
 
-class Compilador(val debug: Boolean = false) {
-  def executar(code: String, codigoPotigol: String) = {
+class Compilador(val debug: Boolean = false, wait: Boolean = false) {
+
+  def executar(code: String, codigoPotigol: String, cor: Boolean = false) = {
+    val c = (code.split("\n").take(2) ++ List(s"$$cor=${cor}") ++
+      code.split("\n").drop(2)).mkString("\n");
     if (debug)
-      imprimirCodigo(code)
-    avaliar(code) match {
-      case Success(_) =>
-        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
-        (new Eval(None)).apply[Unit](code)
-      case Failure(f) =>
-        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
-        println(codigoErro(code, f.getMessage, codigoPotigol))
-      case _ =>
-        print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
-        println("erro")
+      imprimirCodigo(c)
+    else {
+      avaliar(c) match {
+        case Success(_) =>
+          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          (new Eval(None)).apply[Unit](c)
+        case Failure(f) =>
+          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          println(codigoErro(c, f.getMessage, codigoPotigol))
+        case _ =>
+          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          println("erro")
+      }
     }
   }
   def avaliar(code: String) = {

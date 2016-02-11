@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2015  Leonardo Lucena
+ *  Copyright (C) 2015-2016  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
  *                     __/ |
  *                    |___/
  *
- * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
+ * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
 
 package br.edu.ifrn.potigol;
@@ -35,6 +35,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -49,25 +53,29 @@ public class Principal {
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			System.out
-					.println("Potigol versão 0.9.5 Copyright (C) 2015 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+					.println("Potigol versão 0.9.6 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
 			return;
 		}
-		System.out.print("Aguarde...");
+
+		String arq = args[args.length - 1];
+		List<String> argList = Arrays.asList(args);
+		boolean debug = argument(argList, "-d").isPresent();
+		boolean wait = argument(argList, "-w").isPresent();
+		boolean color = argument(argList, "-c").isPresent();
 		try {
-			String arq = args[0];
-			boolean debug = false;
-			if (arq.equals("-d")) {
-				arq = args[1];
-				debug = true;
+			if (wait) {
+				System.out.print("Aguarde...");
 			}
+			
 			final Listener listener = getListner(arq);
 			final String saida = listener.getSaida();
+
 			if (saida.trim().length() > 40) {
-				Compilador c = new Compilador(debug);
-				c.executar(saida,lerArquivo(arq));
+				Compilador c = new Compilador(debug, wait);
+				c.executar(saida, lerArquivo(arq), color);
 			}
 		} catch (IOException e) {
-			System.out.println("Erro: Arquivo " + args[0] + " não encontrado.");
+			System.out.println("Erro: Arquivo " + arq + " não encontrado.");
 		}
 	}
 
@@ -80,19 +88,13 @@ public class Principal {
 		final ParseTree tree = parser.prog();
 		final ParseTreeWalker walker = new ParseTreeWalker();
 		final Listener listener = new Listener();
-
-		try {
-			// if (tree.toString() != "[]")
-			walker.walk(listener, tree);
-		} catch (Exception e) {
-		}
+		walker.walk(listener, tree);
 		return listener;
 	}
 
 	private static String lerArquivo(String arq) throws IOException {
 		Path path = Paths.get(arq);
-		java.util.List<String> linhas = Files.readAllLines(path,
-				StandardCharsets.UTF_8);
+		List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
 		StringBuffer s = new StringBuffer();
 		for (String linha : linhas) {
 			s.append(linha + "\n");
@@ -100,4 +102,12 @@ public class Principal {
 		return s.toString();
 	}
 
+	private static Optional<String> argument(final List<String> list, final String value) {
+		return list.stream().filter(new Predicate<String>() {
+			@Override
+			public boolean test(String t) {
+				return t.startsWith(value);
+			}
+		}).findFirst();
+	}
 }
