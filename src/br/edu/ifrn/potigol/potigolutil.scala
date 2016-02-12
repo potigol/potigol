@@ -47,7 +47,7 @@ object potigolutil {
   type Caractere = Char
   type Matriz[T] = Lista[Lista[T]]
   type Cubo[T] = Lista[Lista[Lista[T]]]
-  
+
   var $cor = false
 
   // valores
@@ -78,16 +78,19 @@ object potigolutil {
     def cabeça = cabeca
     def primeiro = cabeca
     def último = ultimo
+    def posição = posicao _
+    def posiçao = posicao _
+    def posicão = posicao _
     def para_lista: Lista[T] = Lista(lista.toList)
     def mutavel: Vetor[T] = Vetor(lista.to)
-    def mutável: Vetor[T] = Vetor(lista.to)
+    def mutável = mutavel
   }
 
   case class Lista[T](val lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
     def cauda: Lista[T] = Lista(lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
-    @deprecated("Use 'selecione'","0.9.4") def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
+    @deprecated("Use 'selecione'", "0.9.4") def filtre(p: T => Logico): Lista[T] = Lista(lista.filter(p))
     def selecione = filtre _
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
@@ -110,6 +113,8 @@ object potigolutil {
     def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
     def imutavel[A](x: Inteiro, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
     def vazia[A](x: A) = Lista(List.empty[A])
+    def imutável[A] = imutavel[A] _
+    def mutável[A] = mutavel[A] _
   }
 
   object Matriz {
@@ -119,6 +124,8 @@ object potigolutil {
     def imutavel[A](x: Inteiro, y: Inteiro, valor: => A): Matriz[A] = {
       Lista(List.fill(x)(Lista(List.fill(y)(valor))))
     }
+    def imutável[A] = imutavel[A] _
+    def mutável[A] = mutavel[A] _
   }
 
   object Cubo {
@@ -128,6 +135,8 @@ object potigolutil {
     def imutavel[A](x: Inteiro, y: Inteiro)(valor: => A): Cubo[A] = {
       Lista(List.fill(x)(Lista(List.fill(y)(Lista(List.fill(y)(valor))))))
     }
+    def imutável[A] = imutavel[A] _
+    def mutável[A] = mutavel[A] _
   }
 
   case class Vetor[T](lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {
@@ -167,6 +176,8 @@ object potigolutil {
     def inverta = lista.reverse
     def filtre(p: Char => Boolean) = lista.filter(p)
     def selecione = filtre _
+    def maiúsculo = maiusculo
+    def minúsculo = minusculo
     def injete[A >: Char](f: (A, Char) => A): A = lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, Char) => A) = lista.foldLeft(neutro)(f)
     def mapeie[B, That](f: Char => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
@@ -183,11 +194,18 @@ object potigolutil {
     @deprecated def para_n = para_numero
     @deprecated def para_real = para_numero
     def real = para_numero
+    def posição = posicao _
+    def posiçao = posicao _
+    def posicão = posicao _
   }
 
   implicit class Reais(x: Double) {
     def arredonde: Inteiro = x.round.toInt
     def arredonde(n: Inteiro): Numero = ((x * Math.pow(10, n)).round / Math.pow(10, n))
+  }
+  
+  implicit class Inteiros(x: Int){
+    def caractere: Caractere = x.toChar
   }
 
   implicit class Todos[T <: Any](x: T) {
@@ -204,7 +222,7 @@ object potigolutil {
   def leia(): Texto = {
     if ($cor) print("\033[32m")
     val s = StdIn.readLine()
-    if ($cor) print("\033[30m")
+    if ($cor) print("\033[37m")
     s
   }
 
@@ -240,10 +258,16 @@ object potigolutil {
   def leia_reais(n: Int): Lista[Real] = leia_nums(n)
   def leia_reais(separador: Texto): Lista[Real] = leia_nums(separador)
 
-  def escreva(texto: Any) = println(texto.toString)
-  def imprima(texto: Any) = print(texto.toString)
+  def escreva(texto: Any) = {
+    if ($cor) print("\033[37m")
+    println(texto.toString)
+  }
+  def imprima(texto: Any) = {
+    if ($cor) print("\033[37m")
+    print(texto.toString)
+  }
 
-//  case class Tupla1[T1](primeiro: T1)
+  //  case class Tupla1[T1](primeiro: T1)
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
   case class Tupla3[T1, T2, T3](primeiro: T1, segundo: T2, terceiro: T3)
   case class Tupla4[T1, T2, T3, T4](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)

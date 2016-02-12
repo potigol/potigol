@@ -744,7 +744,10 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitTexto(TextoContext ctx) {
-		String s = ctx.getText().replace("{", "${");
+		String s = ctx.getText();
+		if (s.contains("{"))
+			s = s.replace("$", "$$");
+		s = s.replace("{", "${");
 		if (s.contains("\n")) {
 			s = "\"\"" + s + "\"\".stripMargin('|')";
 		}

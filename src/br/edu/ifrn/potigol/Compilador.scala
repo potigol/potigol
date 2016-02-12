@@ -48,7 +48,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
           (new Eval(None)).apply[Unit](c)
         case Failure(f) =>
           if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
-          println(codigoErro(c, f.getMessage, codigoPotigol))
+          println(codigoErro(c, f.getMessage, codigoPotigol, cor))
         case _ =>
           if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
           println("erro")
@@ -70,7 +70,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     }
   }
 
-  def codigoErro(code: String, erro: String, codigoPotigol: String) = {
+  def codigoErro(code: String, erro: String, codigoPotigol: String, cor: Boolean = false) = {
     val partes = erro.split(": ")
     if (partes.size > 2) {
       val err = partes(2)
@@ -82,7 +82,9 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
         case a if debug           => a
         case _                    => "Erro "
       }
-      imprimirCodigo(codigoPotigol.split("\n").drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
+      imprimirCodigo((codigoPotigol.split("\n").toList
+        .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
+        .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
       msg + "\nlinha: " + linhaPotigol
     }
   }
