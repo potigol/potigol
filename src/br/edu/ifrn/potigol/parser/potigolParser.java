@@ -1,4 +1,4 @@
-// Generated from potigol.g4 by ANTLR 4.5
+// Generated from potigol.g4 by ANTLR 4.5.2
 package br.edu.ifrn.potigol.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class potigolParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.5.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -208,6 +208,7 @@ public class potigolParser extends Parser {
 		enterRule(_localctx, 2, RULE_inst);
 		try {
 			setState(78);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -373,6 +374,7 @@ public class potigolParser extends Parser {
 		int _la;
 		try {
 			setState(104);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new EscrevaContext(_localctx);
@@ -498,6 +500,7 @@ public class potigolParser extends Parser {
 		enterRule(_localctx, 6, RULE_decl);
 		try {
 			setState(110);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -646,6 +649,7 @@ public class potigolParser extends Parser {
 		int _la;
 		try {
 			setState(130);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				_localctx = new Valor_simplesContext(_localctx);
@@ -792,6 +796,7 @@ public class potigolParser extends Parser {
 		int _la;
 		try {
 			setState(154);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				_localctx = new Def_funcaoContext(_localctx);
@@ -931,6 +936,7 @@ public class potigolParser extends Parser {
 		int _la;
 		try {
 			setState(170);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				_localctx = new AliasContext(_localctx);
@@ -960,6 +966,7 @@ public class potigolParser extends Parser {
 				while (_la==ID) {
 					{
 					setState(164);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 					case 1:
 						{
@@ -1194,6 +1201,7 @@ public class potigolParser extends Parser {
 		enterRule(_localctx, 20, RULE_dcl1);
 		try {
 			setState(198);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -1343,6 +1351,7 @@ public class potigolParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(211);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
 			case 1:
 				{
@@ -1870,6 +1879,7 @@ public class potigolParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(249);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				{
@@ -2019,6 +2029,7 @@ public class potigolParser extends Parser {
 					_prevctx = _localctx;
 					{
 					setState(295);
+					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
 					case 1:
 						{
@@ -2142,6 +2153,7 @@ public class potigolParser extends Parser {
 						setState(277);
 						match(ID);
 						setState(282);
+						_errHandler.sync(this);
 						switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
 						case 1:
 							{
@@ -2937,6 +2949,7 @@ public class potigolParser extends Parser {
 		enterRule(_localctx, 42, RULE_repeticao);
 		try {
 			setState(370);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,32,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
@@ -3192,6 +3205,7 @@ public class potigolParser extends Parser {
 		int _la;
 		try {
 			setState(406);
+			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);

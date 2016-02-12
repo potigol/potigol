@@ -3,7 +3,7 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol.jar">
+        <jar destfile="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol.jar" encoding="UTF-8">
             <manifest>
                 <attribute name="Main-Class" value="br.edu.ifrn.potigol.Principal"/>
                 <attribute name="Class-Path" value=". potigol_lib/antlr-runtime-4.5.jar potigol_lib/scala-compiler.jar potigol_lib/scala-library.jar potigol_lib/scala-reflect.jar"/>
