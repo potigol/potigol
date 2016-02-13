@@ -96,7 +96,7 @@ expr:
     | ('nao'|'n\u00e3o') expr             # nao_logico
     | expr 'e' expr                       # e_logico
     | expr 'ou' expr                      # ou_logico
-    | dcl1 '=>' inst+                     # lambda
+    | dcl1 '=>' inst                      # lambda
     | decisao                             # decis
     | repeticao                           # laco
     | '(' expr ')'                        # paren

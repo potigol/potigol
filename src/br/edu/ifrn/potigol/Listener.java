@@ -197,11 +197,7 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitLambda(LambdaContext ctx) {
 		String param = getValue(ctx.dcl1());
-
-		String corpo = "";
-		for (InstContext i : ctx.inst()) {
-			corpo += getValue(i) + "\n";
-		}
+		String corpo = getValue(ctx.inst());
 		String s = " (" + param + ") => {" + corpo + " }";
 		setValue(ctx, s);
 	}
