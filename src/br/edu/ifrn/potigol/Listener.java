@@ -308,12 +308,14 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitClasse(ClasseContext ctx) {
 		String id = ctx.ID().getText();
-		String s = "case class " + escapeID(id) + " {\n";
+		String s = "case class " + escapeID(id) + "(";
 		for (int i = 2; i < ctx.children.size() - 1; i++) {
 			ParseTree d = ctx.children.get(i);
-			s += "  " + getValue(d) + "\n";
+			s += "  " + getValue(d);
+			if (i < ctx.children.size() - 2)
+				s += ",";
 		}
-		s += "}";
+		s += "){}";
 		setValue(ctx, s);
 	}
 
@@ -392,7 +394,7 @@ public class Listener extends potigolBaseListener {
 		String tipo = getValue(ctx.tipo());
 		String s = id.replaceAll(", ", ": " + tipo + ", ") + ": " + tipo;
 		if (ctx.parent.getRuleIndex() == potigolParser.RULE_decl_tipo) {
-			s = "var " + s;
+			s = "" + s;
 		}
 		setValue(ctx, s);
 	}

@@ -75,7 +75,7 @@ dcl1: ID
     ;
 
 tipo: ID                                  # tipo_simples
-    | '(' tipo2 ')'                       # tipo_tupla
+    | 'Tupla(' tipo2 ')'                  # tipo_tupla
     | ID '[' tipo ']'                     # tipo_generico
     | tipo '=>' tipo                      # tipo_funcao
     ;
@@ -100,7 +100,7 @@ expr:
     | decisao                             # decis
     | repeticao                           # laco
     | '(' expr ')'                        # paren
-    | '(' expr2 ')'                       # tupla
+    | 'Tupla(' expr2 ')'                  # tupla
     | '[' expr1? ']'                      # lista
     ;
     
