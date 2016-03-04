@@ -58,6 +58,10 @@ object potigolutil {
   private val intRE = """-?\d+""".r
   private val numRE = """-?(\d*)(\.\d*)?""".r
 
+  def lista[A](n: Int)(valor: => A) = Lista.apply(n, valor)
+  def matriz[A](i: Int, j: Int)(valor: => A) = Matriz.apply(i, j, valor)
+  def cubo[A](i: Int, j: Int, k: Int)(valor: => A) = Cubo.apply(i, j, k, valor)
+
   trait Colecao[T] {
     val lista: Seq[T]
     def apply(a: Int) = lista(a)
@@ -104,12 +108,12 @@ object potigolutil {
     def remova(i: Inteiro) = Lista(lista.take(i - 1) ::: lista.drop(i))
     def insira(i: Inteiro, valor: T) = Lista(lista.take(i - 1) ::: valor :: lista.drop(i - 1))
     def divida_quando(f: (T, T) => Logico) = Lista(lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
-      if (b.isEmpty || f(a, b.head.head)) Lista(a) :: b else (a :: b.head) :: b.tail
+      if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     })
   }
 
   object Lista {
-    def apply[A](xs: A*): Lista[A] = Lista(xs.toList)
+    def apply[A] = imutavel[A] _
     def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
     def imutavel[A](x: Inteiro, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
     def vazia[A](x: A) = Lista(List.empty[A])
@@ -118,22 +122,26 @@ object potigolutil {
   }
 
   object Matriz {
+    import List.fill
+    def apply[A] = imutavel[A] _
     def mutavel[A](x: Inteiro, y: Inteiro, valor: => A): Vetor[Vetor[A]] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(valor)).mutavel)).mutavel
+      Lista(fill(x)(Lista(fill(y)(valor)).mutavel)).mutavel
     }
     def imutavel[A](x: Inteiro, y: Inteiro, valor: => A): Matriz[A] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(valor))))
+      Lista(fill(x)(Lista(fill(y)(valor))))
     }
     def imutável[A] = imutavel[A] _
     def mutável[A] = mutavel[A] _
   }
 
   object Cubo {
+    import List.fill
+    def apply[A] = imutavel[A] _
     def mutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Vetor[Vetor[Vetor[A]]] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(Lista(List.fill(z)(valor)).mutavel)).mutavel)).mutavel
+      Lista(fill(x)(Lista(fill(y)(Lista(fill(z)(valor)).mutavel)).mutavel)).mutavel
     }
-    def imutavel[A](x: Inteiro, y: Inteiro)(valor: => A): Cubo[A] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(Lista(List.fill(y)(valor))))))
+    def imutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Cubo[A] = {
+      Lista(fill(x)(Lista(fill(y)(Lista(fill(z)(valor))))))
     }
     def imutável[A] = imutavel[A] _
     def mutável[A] = mutavel[A] _
@@ -166,7 +174,7 @@ object potigolutil {
     def minusculo: Texto = lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
     def divida_quando(f: (Caractere, Caractere) => Logico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
-      if (b.isEmpty || f(a, b.head.head)) Lista(a) :: b else (a :: b.head) :: b.tail
+      if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     }).map(_.junte("")))
     def contem(a: Char) = lista.contains(a)
     def cabeca = lista.head
@@ -203,8 +211,8 @@ object potigolutil {
     def arredonde: Inteiro = x.round.toInt
     def arredonde(n: Inteiro): Numero = ((x * Math.pow(10, n)).round / Math.pow(10, n))
   }
-  
-  implicit class Inteiros(x: Int){
+
+  implicit class Inteiros(x: Int) {
     def caractere: Caractere = x.toChar
   }
 

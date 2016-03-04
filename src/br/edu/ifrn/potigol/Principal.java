@@ -37,8 +37,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -53,20 +51,20 @@ public class Principal {
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			System.out
-					.println("Potigol versão 0.9.6 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+					.println("Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
 			return;
 		}
 
 		String arq = args[args.length - 1];
 		List<String> argList = Arrays.asList(args);
-		boolean debug = argument(argList, "-d").isPresent();
-		boolean wait = argument(argList, "-w").isPresent();
-		boolean color = argument(argList, "-c").isPresent();
+		boolean debug = argument(argList, "-d");
+		boolean wait = argument(argList, "-w");
+		boolean color = argument(argList, "-c");
 		try {
 			if (wait) {
 				System.out.print("Aguarde...");
 			}
-			
+
 			final Listener listener = getListner(arq);
 			final String saida = listener.getSaida();
 
@@ -79,7 +77,7 @@ public class Principal {
 		}
 	}
 
-	private static Listener getListner(final String arq) throws IOException {
+	public static Listener getListner(final String arq) throws IOException {
 		String r = lerArquivo(arq);
 		final ANTLRInputStream input = new ANTLRInputStream(r);
 		final potigolLexer lexer = new potigolLexer(input);
@@ -92,7 +90,7 @@ public class Principal {
 		return listener;
 	}
 
-	private static String lerArquivo(String arq) throws IOException {
+	public static String lerArquivo(String arq) throws IOException {
 		Path path = Paths.get(arq);
 		List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
 		StringBuffer s = new StringBuffer();
@@ -102,12 +100,11 @@ public class Principal {
 		return s.toString();
 	}
 
-	private static Optional<String> argument(final List<String> list, final String value) {
-		return list.stream().filter(new Predicate<String>() {
-			@Override
-			public boolean test(String t) {
-				return t.startsWith(value);
-			}
-		}).findFirst();
+	private static boolean argument(final List<String> list, final String value) {
+		for (String a : list) {
+			if (a.startsWith(value))
+				return true;
+		}
+		return false;
 	}
 }

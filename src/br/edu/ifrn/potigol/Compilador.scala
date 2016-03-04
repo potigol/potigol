@@ -76,16 +76,17 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       val err = partes(2)
       val linha = partes(1).split(" ")(1).toInt
       val linhaPotigol = code.split("\n").take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
-      val msg = err match {
+ /*     val msg = err match {
         case "not found" if debug => s"${code} - ${erro}"
         case "not found"          => "Valor não encontrado"
         case a if debug           => a
         case _                    => "Erro "
-      }
+      } */
+      val msg = Erros.traduzir(erro)
       imprimirCodigo((codigoPotigol.split("\n").toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
         .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
-      msg + "\nlinha: " + linhaPotigol
+      "\n"+msg + "\nlinha: " + linhaPotigol
     }
   }
   def imprimirCodigo(code: String, inicio: Int = 0) {
