@@ -34,7 +34,7 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
 # Instalação
 
-##Windows 8
+##Windows 8 e 10
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
@@ -43,7 +43,7 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
   - Em propriedades altere o ícone. Escolha o icone em cores que está na pasta do potigol.
   - Envie um atalho de C:\Windows\System32\cmd.exe para a área de trabalho.
   - Em propriedade altere:
-    Destino: C:\Windows\System32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
+    Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
     Iniciar em: [Vazio]
     Alterar ícone. Escolha o icone em preto e branco.
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial"
