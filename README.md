@@ -1,7 +1,7 @@
 # Linguagem Potigol
 
 [![Join the chat at https://gitter.im/potigol/Potigol](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/potigol/Potigol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![](https://img.shields.io/twitter/follow/potigol.svg?style=social)
+[![Follow us](https://img.shields.io/twitter/follow/potigol.svg?style=social)](http://twitter.com/potigol)
  	
 
 Linguagem de Programação moderna para iniciantes
