@@ -48,9 +48,9 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
   - 
  >   Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
 
- >   Iniciar em: [Vazio]
+ > Iniciar em: [Vazio]
 
- >   Alterar ícone. Escolha o icone em preto e branco.
+ > Alterar ícone. Escolha o icone em preto e branco.
 
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial"
   - Instale as fontes da pasta "fonts". 
@@ -61,8 +61,11 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Copie a pasta Potigol para o local adequado
   - Insira as linhas abaixo no final do arquivo /etc/bash.bashrc
-    ````alias potigol='java -jar [caminho até a pasta do potigol]/potigol.jar'````
-    ````alias epotigol='java -jar [caminho até a pasta do potigol]/epotigol.jar'````
+
+>   ````alias potigol='java -jar [caminho até a pasta do potigol]/potigol.jar'````
+
+>   ````alias epotigol='java -jar [caminho até a pasta do potigol]/epotigol.jar'````
+
   - Crie o arquivo '~/Área de Trabalho/potigol_lancador.desktop'
     
 ````
