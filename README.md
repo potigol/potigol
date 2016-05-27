@@ -45,9 +45,13 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
   - Em propriedades altere o ícone. Escolha o icone em cores que está na pasta do potigol.
   - Envie um atalho de C:\Windows\System32\cmd.exe para a área de trabalho.
   - Em propriedade altere:
-    Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
-    Iniciar em: [Vazio]
-    Alterar ícone. Escolha o icone em preto e branco.
+  - 
+ >   Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
+
+ >   Iniciar em: [Vazio]
+
+ >   Alterar ícone. Escolha o icone em preto e branco.
+
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial"
   - Instale as fontes da pasta "fonts". 
 
@@ -60,8 +64,11 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
     ````alias potigol='java -jar [caminho até a pasta do potigol]/potigol.jar'````
     ````alias epotigol='java -jar [caminho até a pasta do potigol]/epotigol.jar'````
   - Crie o arquivo '~/Área de Trabalho/potigol_lancador.desktop'
-    ````[Desktop Entry]
-        Name=Potigol
-        Type=Application
-        Exec=java -jar [caminho até a pasta do potigol]/potigol.jar
-        Icon=[caminho até a pasta do potigol]/potigol.png````
+    
+````
+[Desktop Entry]
+Name=Potigol
+Type=Application
+Exec=java -jar [caminho até a pasta do potigol]/potigol.jar
+Icon=[caminho até a pasta do potigol]/potigol.png
+````
