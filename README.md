@@ -35,6 +35,14 @@ Linguagem de Programação moderna para iniciantes
   
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
+##Editores de Código
+
+Potigol já vem com um editor de código (````epotigol````). Existem outros editores e plugins:
+
+  - [x] [JCEditor](https://github.com/cristian-henrique/JCEditor)
+  - [x] [Plugin](https://github.com/potigol/language-potigol) para o [Atom](https://atom.io)
+  - [x] [Plugin](https://github.com/nfischer/vim-potigol) para o [Vim](http://www.vim.org/)
+
 # Instalação
 
 ##Windows 8 e 10
