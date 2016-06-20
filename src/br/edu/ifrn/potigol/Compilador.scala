@@ -32,7 +32,7 @@
 package br.edu.ifrn.potigol
 
 import com.twitter.util.Eval
-import scala.util.{ Try, Success, Failure }
+import scala.util.{Try, Success, Failure}
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
 

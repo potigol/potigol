@@ -1,12 +1,9 @@
 package br.edu.ifrn.potigol
 
-import org.antlr.v4.runtime.ANTLRInputStream
-import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
 import org.antlr.v4.runtime.tree.ParseTreeWalker
-import br.edu.ifrn.potigol.parser.potigolLexer
-import br.edu.ifrn.potigol.parser.potigolParser
-import scala.util.matching.Regex
-import scala.util.Try
+
+import br.edu.ifrn.potigol.parser.{ potigolLexer, potigolParser }
 
 object Erros extends App {
   case class Erro(erro: String, codigo: String)
@@ -180,7 +177,7 @@ object Erros extends App {
       case pMetodoNaoExiste(a, "Double") => s"Valores do tipo 'Real' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, "String") => s"Valores do tipo 'Texto' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, "Boolean") => s"Valores do tipo 'Lógico' não possuem o método '${a}'."
-      case pMetodoNaoExiste("get", "Char") => s"Valores do tipo 'Caractere' não possuem o método '[ ]'."      
+      case pMetodoNaoExiste("get", "Char") => s"Valores do tipo 'Caractere' não possuem o método '[ ]'."
       case pMetodoNaoExiste(a, "Char") => s"Valores do tipo 'Caractere' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, b) => s"Valores do tipo '${b}' não possuem o método '${a}'."
       case pMatrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
@@ -214,5 +211,5 @@ object Erros extends App {
     println(texto(c.avaliar(listener.getSaida).toString()))
   }
 
- //  erros.drop(24).foreach { imprimir_erro }
+  //  erros.drop(24).foreach { imprimir_erro }
 }

@@ -31,11 +31,11 @@
 
 package br.edu.ifrn.potigol
 
-import collection.generic.CanBuildFrom
-import collection.mutable.MutableList
 import java.util.IllegalFormatConversionException
-import collection.mutable.{ Seq => MSeq }
-import io.StdIn
+
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.{ Seq => MSeq }
+import scala.io.StdIn
 
 object potigolutil {
   // Tipos
@@ -292,7 +292,7 @@ object potigolutil {
 }
 
 object Matematica {
-  import potigolutil.{ Inteiro, Real, Colecao }
+  import potigolutil.{ Colecao, Inteiro, Real }
   def sen(a: Real): Real = Math.sin(a)
   def cos(a: Real): Real = Math.cos(a)
   def tg(a: Real): Real = Math.tan(a)
