@@ -42,7 +42,9 @@ object potigolutil {
   type Texto = String
   type Inteiro = Int
   type Numero = Double
+  type Número = Numero
   type Logico = Boolean
+  type Lógico = Logico
   type Real = Double
   type Caractere = Char
   type Matriz[T] = Lista[Lista[T]]
@@ -155,6 +157,8 @@ object potigolutil {
     @deprecated def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
     def selecione = filtre _
     def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
+    def pegue(a: Inteiro): Vetor[T] = Vetor(lista.take(a))
+    def descarte(a: Inteiro): Vetor[T] = Vetor(lista.drop(a))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
     @deprecated def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
     def descarte_enquanto = passe_enquanto _
@@ -242,8 +246,8 @@ object potigolutil {
     for (i <- 1 to n) yield { leia }
   }.toList)
 
-  def leia_texto = leia
-  def leia_textos(n: Int) = leia(n)
+  def leia_texto: Texto = leia
+  def leia_textos(n: Int): Lista[Texto] = leia(n)
   def leia_textos(separador: Texto) = leia(separador)
 
   def leia_int: Int = leia.para_int
@@ -275,7 +279,6 @@ object potigolutil {
     print(texto.toString)
   }
 
-  //  case class Tupla1[T1](primeiro: T1)
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
   case class Tupla3[T1, T2, T3](primeiro: T1, segundo: T2, terceiro: T3)
   case class Tupla4[T1, T2, T3, T4](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)

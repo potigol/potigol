@@ -115,6 +115,10 @@ object Erros extends App {
       """a=1.2
         a.maior
       """),
+    Erro("",
+      """a=verdadeiro
+        a.maior
+      """),
 
     Erro("",
       """a = [1,2,3]
@@ -132,7 +136,11 @@ object Erros extends App {
 
     Erro("Dois erros",
       """a,b = x,y
-      """))
+      """),
+
+    Erro("Método inexistente",
+      """ 'a'.get(0)
+        """))
 
   def traduzir(texto: String) = {
     val pNaoDeclarado = "not found: value (\\S+).*".r
@@ -160,6 +168,7 @@ object Erros extends App {
       case pTipoDiferente("Int") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Inteiro'."
       case pTipoDiferente("Double") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Real'."
       case pTipoDiferente("String") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Texto'."
+      case pTipoDiferente("Boolean") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Lógico'."
       case pTipoDiferente(a) => s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
       case pParametroTipo(a) => s"'${a}' precisa do tipo.\nPoderia ser '${a}[Inteiro]' ou '${a}[Texto]'?"
       case pVariavelJaExiste(a) => s"A variável '${a}' já existe.\nSe quiser modificar o valor de '${a}' use ':=' ao invés de '='."
@@ -167,11 +176,14 @@ object Erros extends App {
       case pValorJaDeclarado(a) => s"O valor '${a}' já foi declarado antes.\nUse outro nome."
       case pFuncaoJaDefinida(a) => s"Já existe uma função chamada '${a}'.\nUse outro nome."
       case pFuncaoRecursivaSemTipo(a) => s"A função recursiva '${a}' precisa definir o tipo do valor de retorno."
-      case pMatrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
       case pMetodoNaoExiste(a, "Int") => s"Valores do tipo 'Inteiro' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, "Double") => s"Valores do tipo 'Real' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, "String") => s"Valores do tipo 'Texto' não possuem o método '${a}'."
+      case pMetodoNaoExiste(a, "Boolean") => s"Valores do tipo 'Lógico' não possuem o método '${a}'."
+      case pMetodoNaoExiste("get", "Char") => s"Valores do tipo 'Caractere' não possuem o método '[ ]'."      
+      case pMetodoNaoExiste(a, "Char") => s"Valores do tipo 'Caractere' não possuem o método '${a}'."
       case pMetodoNaoExiste(a, b) => s"Valores do tipo '${b}' não possuem o método '${a}'."
+      case pMatrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
       case a => a
     }
     val inicio = texto.indexOf("error:")
@@ -202,5 +214,5 @@ object Erros extends App {
     println(texto(c.avaliar(listener.getSaida).toString()))
   }
 
- // erros.drop(24).foreach { imprimir_erro }
+ //  erros.drop(24).foreach { imprimir_erro }
 }

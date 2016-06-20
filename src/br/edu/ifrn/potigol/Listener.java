@@ -754,7 +754,7 @@ public class Listener extends potigolBaseListener {
 		}
 		setValue(ctx, s);
 	}
-
+	@Override
 	public void exitTexto_interpolacao(Texto_interpolacaoContext ctx) {
 		String s = ctx.BS().getText().replace("{", "${");
 		s = s + getValue(ctx.expr(0));
