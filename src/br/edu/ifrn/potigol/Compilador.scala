@@ -32,15 +32,16 @@
 package br.edu.ifrn.potigol
 
 import com.twitter.util.Eval
-import scala.util.{Try, Success, Failure}
+import scala.util.{ Try, Success, Failure }
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
 
-  def executar(code: String, codigoPotigol: String, cor: Boolean = false) = {
+  def executar(code: String, codigoPotigol: String, cor: Boolean = false): Unit = {
     val c = (code.split("\n").take(2) ++ List(s"$$cor=${cor}") ++
       code.split("\n").drop(2)).mkString("\n");
-    if (debug)
+    if (debug) {
       imprimirCodigo(c)
+    }
     else {
       avaliar(c) match {
         case Success(_) =>
@@ -55,13 +56,13 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       }
     }
   }
-  def avaliar(code: String) = {
+  def avaliar(code: String): Try[Unit] = {
     Try {
       (new Eval(None)).check(code)
     }
   }
 
-  def linhaErro(code: String) = {
+  def linhaErro(code: String): Int = {
     avaliar(code) match {
       case Success(_) => 0
       case Failure(f) =>
@@ -76,7 +77,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       val err = partes(2)
       val linha = partes(1).split(" ")(1).toInt
       val linhaPotigol = code.split("\n").take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
- /*     val msg = err match {
+      /*     val msg = err match {
         case "not found" if debug => s"${code} - ${erro}"
         case "not found"          => "Valor não encontrado"
         case a if debug           => a
@@ -86,13 +87,13 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       imprimirCodigo((codigoPotigol.split("\n").toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
         .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
-      "\n"+msg + "\nlinha: " + linhaPotigol
+      "\n" + msg + "\nlinha: " + linhaPotigol
     }
   }
-  def imprimirCodigo(code: String, inicio: Int = 0) {
+  def imprimirCodigo(code: String, inicio: Int = 0): Unit = {
     val linhas = code.split('\n')
     println()
-    for (line <- linhas.zipWithIndex) {
+    for {line <- linhas.zipWithIndex} {
       println(s"${(line._2 + 1 + inicio).formatted("%4d")} | ${line._1}")
     }
   }
