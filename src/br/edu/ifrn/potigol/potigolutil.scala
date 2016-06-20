@@ -72,7 +72,7 @@ object potigolutil {
     def junte(separador: String = ""): Texto = lista.mkString(separador)
     def junte(inicio: String, separador: String, fim: String): Texto = lista.mkString(inicio, separador, fim)
     def tamanho: Inteiro = lista.length
-    def get(a: Int) = if (a > 0) apply(a - 1) else apply(tamanho + a)
+    def get(a: Int): T = if (a > 0) apply(a - 1) else apply(tamanho + a)
     def posicao(elem: T): Inteiro = lista.indexOf(elem) + 1
     def cabeca: T = lista.head
     def contem(a: T): Lógico = lista.contains(a)
@@ -150,13 +150,13 @@ object potigolutil {
   }
 
   case class Vetor[T](lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {
-    override def update(ind: Int, elem: T) { lista.update(ind, elem) }
+    override def update(ind: Int, elem: T): Unit = { lista.update(ind, elem) }
     def cauda: Vetor[T] = Vetor(lista.tail)
     def inverta: Vetor[T] = Vetor(lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
     @deprecated def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
     def selecione: (T => Lógico) => Vetor[T] = filtre
-    def mapeie[B: Manifest](f: T => B) = Vetor(lista.map(f))
+    def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(lista.map(f))
     def pegue(a: Inteiro): Vetor[T] = Vetor(lista.take(a))
     def descarte(a: Inteiro): Vetor[T] = Vetor(lista.drop(a))
     def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
@@ -180,7 +180,7 @@ object potigolutil {
     def divida_quando(f: (Caractere, Caractere) => Logico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     }).map(_.junte("")))
-    def contem(a: Char) = lista.contains(a)
+    def contem(a: Caractere): Lógico = lista.contains(a)
     def cabeca: Caractere = lista.head
     def ultimo: Caractere = lista.last
     def cauda: Texto = lista.tail
@@ -195,8 +195,8 @@ object potigolutil {
     def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
     def ache(p: Caractere => Boolean): Option[Char] = lista.find(p)
     def pegue_enquanto(p: Caractere => Logico): Texto = lista.takeWhile(p)
-    @deprecated def passe_enquanto(p: Caractere => Logico) = lista.dropWhile(p)
-    def descarte_enquanto = passe_enquanto _
+    @deprecated def passe_enquanto(p: Caractere => Logico): Texto = lista.dropWhile(p)
+    def descarte_enquanto: (Caractere => Lógico) => Texto = passe_enquanto
     def para_lista: Lista[Caractere] = Lista(lista.toList)
     def contém: Caractere => Boolean = contem
     def cabeça: Caractere = cabeca

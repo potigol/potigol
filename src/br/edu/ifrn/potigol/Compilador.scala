@@ -71,7 +71,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     }
   }
 
-  def codigoErro(code: String, erro: String, codigoPotigol: String, cor: Boolean = false) = {
+  def codigoErro(code: String, erro: String, codigoPotigol: String, cor: Boolean = false): String = {
     val partes = erro.split(": ")
     if (partes.size > 2) {
       val err = partes(2)
@@ -88,12 +88,12 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
         .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
       "\n" + msg + "\nlinha: " + linhaPotigol
-    }
+    } else ""
   }
   def imprimirCodigo(code: String, inicio: Int = 0): Unit = {
     val linhas = code.split('\n')
     println()
-    for {line <- linhas.zipWithIndex} {
+    for { line <- linhas.zipWithIndex } {
       println(s"${(line._2 + 1 + inicio).formatted("%4d")} | ${line._1}")
     }
   }

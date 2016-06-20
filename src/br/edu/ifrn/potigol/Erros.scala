@@ -139,48 +139,54 @@ object Erros extends App {
       """ 'a'.get(0)
         """))
 
-  private object msg {
-    val pNaoDeclarado = "not found: value (\\S+).*".r
-    val pParametroAusente = "not enough arguments for method (\\S+)\\:.+Unspecified value parameter (\\S).*".r
-    val pParametroMais = "too many arguments for method (\\S+)\\:(.+)\\Z.*".r
-    val pTipoIndefinido = "not found: type (\\S+).*".r
-    val pTipoDiferente = "type mismatch.+required: (?:\\S*\\.)?([^| .]+) .*".r
-    val pParametroTipo = "(?:type|class) (\\S+) takes type parameters .*".r
-    val pVariavelJaExiste = "(\\S+) is already defined as variable .+".r
-    val pAlterarValorConstante = "reassignment to val \\| (\\S+).*".r
-    val pValorJaDeclarado = "(\\S+) is already defined as value.*".r
-    val pFuncaoJaDefinida = "method (\\S+) is defined twice .*".r
-    val pFuncaoRecursivaSemTipo = "recursive method (\\S+) needs result type.*".r
-    val pMatrizNaoDeclarada = "value (?:get|update) is not (\\S+) member of.*".r
-    val pMetodoNaoExiste = "value (\\S+) is not a member of (?:\\S*\\.)?(\\S+) .*".r
+  private[this] object erro {
+    val naoDeclarado = "not found: value (\\S+).*".r
+    val parametroAusente = "not enough arguments for method (\\S+)\\:.+Unspecified value parameter (\\S).*".r
+    val parametroMais = "too many arguments for method (\\S+)\\:(.+)\\Z.*".r
+    val tipoIndefinido = "not found: type (\\S+).*".r
+    val tipoDiferente = "type mismatch.+required: (?:\\S*\\.)?([^| .]+) .*".r
+    val parametroTipo = "(?:type|class) (\\S+) takes type parameters .*".r
+    val variavelJaExiste = "(\\S+) is already defined as variable .+".r
+    val alterarValorConstante = "reassignment to val \\| (\\S+).*".r
+    val valorJaDeclarado = "(\\S+) is already defined as value.*".r
+    val funcaoJaDefinida = "method (\\S+) is defined twice .*".r
+    val funcaoRecursivaSemTipo = "recursive method (\\S+) needs result type.*".r
+    val matrizNaoDeclarada = "value (?:get|update) is not (\\S+) member of.*".r
+    val metodoNaoExiste = "value (\\S+) is not a member of (?:\\S*\\.)?(\\S+) .*".r
+  }
+
+  private[this] object msg {
+    def valorNaoDeclarado(a: String) = s"Valor '${a}' não declarado."
+    def tipoNaoPossuiMetodo(tipo: String, a: String) = s"Valores do tipo '${tipo}' não possuem o método '${a}'."
+    def tipoErrado(a: String) = s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
   }
   private def mensagens(s: String) = s.replace("\n", " | ") match {
-    case msg.pNaoDeclarado(a) => s"Valor '${a}' não declarado."
-    case msg.pParametroAusente(a, b) => s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
-    case msg.pParametroMais("apply", b) => s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${b.count(':' == _)} parâmetro(s)."
-    case msg.pParametroMais(a, b) if b.count(':' == _) == 0 => s"A função '${a}' não precisa de parâmetro."
-    case msg.pParametroMais(a, b) if b.count(':' == _) == 1 => s"A função '${a}' precisa de apenas 1 parâmetro."
-    case msg.pParametroMais(a, b) => s"A função '${a}' precisa de apenas ${b.count(':' == _)} parâmetros."
-    case msg.pTipoIndefinido(a) => s"O tipo '${a}' não existe.\nNão seria 'Inteiro', 'Real' ou 'Texto'?"
-    case msg.pTipoDiferente("Int") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Inteiro'."
-    case msg.pTipoDiferente("Double") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Real'."
-    case msg.pTipoDiferente("String") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Texto'."
-    case msg.pTipoDiferente("Boolean") => s"Tipo errado.\nEu estava esperando um valor do tipo 'Lógico'."
-    case msg.pTipoDiferente(a) => s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
-    case msg.pParametroTipo(a) => s"'${a}' precisa do tipo.\nPoderia ser '${a}[Inteiro]' ou '${a}[Texto]'?"
-    case msg.pVariavelJaExiste(a) => s"A variável '${a}' já existe.\nSe quiser modificar o valor de '${a}' use ':=' ao invés de '='."
-    case msg.pAlterarValorConstante(a) => s"'${a}' é um valor constante, não pode ser alterado."
-    case msg.pValorJaDeclarado(a) => s"O valor '${a}' já foi declarado antes.\nUse outro nome."
-    case msg.pFuncaoJaDefinida(a) => s"Já existe uma função chamada '${a}'.\nUse outro nome."
-    case msg.pFuncaoRecursivaSemTipo(a) => s"A função recursiva '${a}' precisa definir o tipo do valor de retorno."
-    case msg.pMetodoNaoExiste(a, "Int") => s"Valores do tipo 'Inteiro' não possuem o método '${a}'."
-    case msg.pMetodoNaoExiste(a, "Double") => s"Valores do tipo 'Real' não possuem o método '${a}'."
-    case msg.pMetodoNaoExiste(a, "String") => s"Valores do tipo 'Texto' não possuem o método '${a}'."
-    case msg.pMetodoNaoExiste(a, "Boolean") => s"Valores do tipo 'Lógico' não possuem o método '${a}'."
-    case msg.pMetodoNaoExiste("get", "Char") => s"Valores do tipo 'Caractere' não possuem o método '[ ]'."
-    case msg.pMetodoNaoExiste(a, "Char") => s"Valores do tipo 'Caractere' não possuem o método '${a}'."
-    case msg.pMetodoNaoExiste(a, b) => s"Valores do tipo '${b}' não possuem o método '${a}'."
-    case msg.pMatrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
+    case erro.naoDeclarado(a) => msg.valorNaoDeclarado(a)
+    case erro.parametroAusente(a, b) => s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
+    case erro.parametroMais("apply", b) => s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${b.count(':' == _)} parâmetro(s)."
+    case erro.parametroMais(a, b) if b.count(':' == _) == 0 => s"A função '${a}' não precisa de parâmetro."
+    case erro.parametroMais(a, b) if b.count(':' == _) == 1 => s"A função '${a}' precisa de apenas 1 parâmetro."
+    case erro.parametroMais(a, b) => s"A função '${a}' precisa de apenas ${b.count(':' == _)} parâmetros."
+    case erro.tipoIndefinido(a) => s"O tipo '${a}' não existe.\nNão seria 'Inteiro', 'Real' ou 'Texto'?"
+    case erro.tipoDiferente("Int") => msg.tipoErrado("Inteiro")
+    case erro.tipoDiferente("Double") => msg.tipoErrado("Real")
+    case erro.tipoDiferente("String") => msg.tipoErrado("Texto")
+    case erro.tipoDiferente("Boolean") => msg.tipoErrado("Lógico")
+    case erro.tipoDiferente(a) => msg.tipoErrado(a)
+    case erro.parametroTipo(a) => s"'${a}' precisa do tipo.\nPoderia ser '${a}[Inteiro]' ou '${a}[Texto]'?"
+    case erro.variavelJaExiste(a) => s"A variável '${a}' já existe.\nSe quiser modificar o valor de '${a}' use ':=' ao invés de '='."
+    case erro.alterarValorConstante(a) => s"'${a}' é um valor constante, não pode ser alterado."
+    case erro.valorJaDeclarado(a) => s"O valor '${a}' já foi declarado antes.\nUse outro nome."
+    case erro.funcaoJaDefinida(a) => s"Já existe uma função chamada '${a}'.\nUse outro nome."
+    case erro.funcaoRecursivaSemTipo(a) => s"A função recursiva '${a}' precisa definir o tipo do valor de retorno."
+    case erro.metodoNaoExiste(a, "Int") => msg.tipoNaoPossuiMetodo("Inteiro", a)
+    case erro.metodoNaoExiste(a, "Double") => msg.tipoNaoPossuiMetodo("Real", a)
+    case erro.metodoNaoExiste(a, "String") => msg.tipoNaoPossuiMetodo("Texto", a)
+    case erro.metodoNaoExiste(a, "Boolean") => msg.tipoNaoPossuiMetodo("Lógico", a)
+    case erro.metodoNaoExiste("get", "Char") => msg.tipoNaoPossuiMetodo("Caractere", "[ ]")
+    case erro.metodoNaoExiste(a, "Char") => msg.tipoNaoPossuiMetodo("Caractere", a)
+    case erro.metodoNaoExiste(a, b) => msg.tipoNaoPossuiMetodo(b, a)
+    case erro.matrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
     case a => a
   }
   def traduzir(texto: String): String = {
