@@ -121,6 +121,14 @@ public class Listener extends potigolBaseListener {
 
 	private String saida = "";
 
+	static private List<String> scalawords = Arrays.asList("type", "yield",
+			"lazy", "override", "def", "with", "val", "var", "false", "true",
+			"sealed", "abstract", "private", "trait", "object", "null", "if",
+			"for", "while", "throw", "finally", "protected", "extends",
+			"import", "final", "return", "else", "break", "new", "catch",
+			"super", "class", "case", "package", "default", "try", "this",
+			"match", "continue", "throws");	
+
 	private String nextVar() {
 		num++;
 		return "$a" + num;
@@ -133,14 +141,6 @@ public class Listener extends potigolBaseListener {
 	private String getValue(ParseTree node) {
 		return values.get(node);
 	}
-
-	static private List<String> scalawords = Arrays.asList("type", "yield",
-			"lazy", "override", "def", "with", "val", "var", "false", "true",
-			"sealed", "abstract", "private", "trait", "object", "null", "if",
-			"for", "while", "throw", "finally", "protected", "extends",
-			"import", "final", "return", "else", "break", "new", "catch",
-			"super", "class", "case", "package", "default", "try", "this",
-			"match", "continue", "throws");
 
 	private String escapeID(String id) {
 		if (scalawords.contains(id)) {
@@ -624,11 +624,11 @@ public class Listener extends potigolBaseListener {
 		String exp1 = getValue(ctx.expr(0));
 		String exp2 = getValue(ctx.expr(1));
 		String op = ctx.getChild(1).getText();
-		if (op.equals("mod"))
+		if ("mod".equals(op))
 			op = "%";
-		if (op.equals("/"))
+		if ("/".equals(op))
 			exp1 = "(" + exp1 + ").toDouble";
-		if (op.equals("div")) {
+		if ("div".equals(op)) {
 			op = "/";
 		}
 		setValue(ctx, "{" + exp1 + " " + op + " " + exp2 + "}");
@@ -754,6 +754,7 @@ public class Listener extends potigolBaseListener {
 		}
 		setValue(ctx, s);
 	}
+
 	@Override
 	public void exitTexto_interpolacao(Texto_interpolacaoContext ctx) {
 		String s = ctx.BS().getText().replace("{", "${");
@@ -858,6 +859,7 @@ public class Listener extends potigolBaseListener {
 			break;
 		default:
 			s = node.getText();
+			break;
 		}
 		setValue(node, s);
 	}

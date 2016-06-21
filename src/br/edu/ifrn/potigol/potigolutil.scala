@@ -230,10 +230,12 @@ object potigolutil {
     def texto: Texto = para_texto
   }
 
+  private[this] def corSim = print("\033[32m")
+  private[this] def  corNao = print("\033[37m")
   def leia(): Texto = {
-    if ($cor) print("\033[32m")
+    if ($cor) corSim
     val s = StdIn.readLine()
-    if ($cor) print("\033[37m")
+    if ($cor) corNao
     s
   }
 
@@ -270,11 +272,11 @@ object potigolutil {
   def leia_reais(separador: Texto): Lista[Real] = leia_nums(separador)
 
   def escreva(texto: Any): Unit = {
-    if ($cor) print("\033[37m")
+    if ($cor) corNao
     println(texto.toString)
   }
   def imprima(texto: Any): Unit = {
-    if ($cor) print("\033[37m")
+    if ($cor) corNao
     print(texto.toString)
   }
 

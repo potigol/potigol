@@ -95,7 +95,8 @@ public class Principal {
 		List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
 		StringBuffer s = new StringBuffer();
 		for (String linha : linhas) {
-			s.append(linha + "\n");
+			s.append(linha);
+			s.append("\n");
 		}
 		return s.toString();
 	}
