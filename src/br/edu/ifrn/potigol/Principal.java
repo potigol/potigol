@@ -96,7 +96,7 @@ public class Principal {
 		StringBuffer s = new StringBuffer();
 		for (String linha : linhas) {
 			s.append(linha);
-			s.append("\n");
+			s.append('\n');
 		}
 		return s.toString();
 	}

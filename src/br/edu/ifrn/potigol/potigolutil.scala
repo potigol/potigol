@@ -231,7 +231,7 @@ object potigolutil {
   }
 
   private[this] def corSim = print("\033[32m")
-  private[this] def  corNao = print("\033[37m")
+  private[this] def corNao = print("\033[37m")
   def leia(): Texto = {
     if ($cor) corSim
     val s = StdIn.readLine()
