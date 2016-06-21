@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2005  Leonardo Lucena
+ *  Copyright (C) 2015-2016  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *                     __/ |
  *                    |___/
  *
- * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
+ * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
 
 package br.edu.ifrn.potigol
@@ -35,23 +35,25 @@ import com.twitter.util.Eval
 import scala.util.{ Try, Success, Failure }
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
+  val NL = "\n"
+  def clean(): Unit = print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
 
   def executar(code: String, codigoPotigol: String, cor: Boolean = false): Unit = {
-    val c = (code.split("\n").take(2) ++ List(s"$$cor=${cor}") ++
-      code.split("\n").drop(2)).mkString("\n");
+    val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor}") ++
+      code.split(NL).drop(2)).mkString(NL);
     if (debug) {
       imprimirCodigo(c)
     }
     else {
       avaliar(c) match {
         case Success(_) =>
-          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          if (wait) clean()
           (new Eval(None)).apply[Unit](c)
         case Failure(f) =>
-          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          if (wait) clean()
           println(codigoErro(c, f.getMessage, codigoPotigol, cor))
         case _ =>
-          if (wait) print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+          if (wait) clean()
           println("erro")
       }
     }
@@ -76,7 +78,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     if (partes.size > 2) {
       val err = partes(2)
       val linha = partes(1).split(" ")(1).toInt
-      val linhaPotigol = code.split("\n").take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
+      val linhaPotigol = code.split(NL).take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
       /*     val msg = err match {
         case "not found" if debug => s"${code} - ${erro}"
         case "not found"          => "Valor não encontrado"
@@ -84,10 +86,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
         case _                    => "Erro "
       } */
       val msg = Erros.traduzir(erro)
-      imprimirCodigo((codigoPotigol.split("\n").toList
+      imprimirCodigo((codigoPotigol.split(NL).toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
-        .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
-      "\n" + msg + "\nlinha: " + linhaPotigol
+        .drop(linhaPotigol - 3).take(5).mkString(NL), Math.max(linhaPotigol - 3, 0))
+      NL + msg + NL + "linha: " + linhaPotigol
     }
     else {
       ""
