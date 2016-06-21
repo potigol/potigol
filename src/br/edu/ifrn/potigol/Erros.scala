@@ -37,7 +37,7 @@ object Erros extends App {
          soma("2","3")
       """),
     Erro("Tipo encontrado diferente do esperado",
-      """soma(a: Int) = a 
+      """soma(a: Int) = a
          soma("1")
       """),
 
@@ -156,11 +156,11 @@ object Erros extends App {
   }
 
   private[this] object msg {
-    def valorNaoDeclarado(a: String) = s"Valor '${a}' não declarado."
-    def tipoNaoPossuiMetodo(tipo: String, a: String) = s"Valores do tipo '${tipo}' não possuem o método '${a}'."
-    def tipoErrado(a: String) = s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
+    def valorNaoDeclarado(a: String): String = s"Valor '${a}' não declarado."
+    def tipoNaoPossuiMetodo(tipo: String, a: String): String = s"Valores do tipo '${tipo}' não possuem o método '${a}'."
+    def tipoErrado(a: String): String = s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
   }
-  private def mensagens(s: String) = s.replace("\n", " | ") match {
+  private def mensagens(s: String): String = s.replace("\n", " | ") match {
     case erro.naoDeclarado(a) => msg.valorNaoDeclarado(a)
     case erro.parametroAusente(a, b) => s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
     case erro.parametroMais("apply", b) => s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${b.count(':' == _)} parâmetro(s)."

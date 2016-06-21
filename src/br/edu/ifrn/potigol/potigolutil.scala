@@ -280,13 +280,26 @@ object potigolutil {
 
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
   case class Tupla3[T1, T2, T3](primeiro: T1, segundo: T2, terceiro: T3)
-  case class Tupla4[T1, T2, T3, T4](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)
-  case class Tupla5[T1, T2, T3, T4, T5](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5)
-  case class Tupla6[T1, T2, T3, T4, T5, T6](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6)
-  case class Tupla7[T1, T2, T3, T4, T5, T6, T7](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7) { def setimo: T7 = sétimo }
-  case class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8) { def setimo: T7 = sétimo }
-  case class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9) { def setimo: T7 = sétimo }
-  case class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9, décimo: T10) { def setimo: T7 = sétimo; def decimo: T10 = décimo }
+  case class Tupla4[T1, T2, T3, T4](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)
+  case class Tupla5[T1, T2, T3, T4, T5](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5)
+  case class Tupla6[T1, T2, T3, T4, T5, T6](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6)
+  case class Tupla7[T1, T2, T3, T4, T5, T6, T7](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
+    sétimo: T7) { def setimo: T7 = sétimo }
+  case class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
+    sétimo: T7, oitavo: T8) { def setimo: T7 = sétimo }
+  case class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
+    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
+    sétimo: T7, oitavo: T8, nono: T9) { def setimo: T7 = sétimo }
+  case class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
+      primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
+      sétimo: T7, oitavo: T8, nono: T9, décimo: T10) {
+    def setimo: T7 = sétimo; def decimo: T10 = décimo
+  }
 
 }
 

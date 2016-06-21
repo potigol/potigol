@@ -88,7 +88,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
         .drop(linhaPotigol - 3).take(5).mkString("\n"), Math.max(linhaPotigol - 3, 0))
       "\n" + msg + "\nlinha: " + linhaPotigol
-    } else ""
+    }
+    else {
+      ""
+    }
   }
   def imprimirCodigo(code: String, inicio: Int = 0): Unit = {
     val linhas = code.split('\n')
