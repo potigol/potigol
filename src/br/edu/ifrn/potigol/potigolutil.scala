@@ -57,20 +57,20 @@ object potigolutil {
   val falso = false
 
   // Expressões Regulares
-  private val intRE = """-?\d+""".r
-  private val numRE = """-?(\d*)(\.\d*)?""".r
+  private[this] val intRE = """-?\d+""".r
+  private[this] val numRE = """-?(\d*)(\.\d*)?""".r
 
-  def lista[A](n: Int)(valor: => A) = Lista.apply(n, valor)
-  def matriz[A](i: Int, j: Int)(valor: => A): Matriz[A] = Matriz.apply(i, j, valor)
-  def cubo[A](i: Int, j: Int, k: Int)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
+  def lista[A](n: Inteiro)(valor: => A) = Lista.apply(n, valor)
+  def matriz[A](i: Inteiro, j: Inteiro)(valor: => A): Matriz[A] = Matriz.apply(i, j, valor)
+  def cubo[A](i: Inteiro, j: Inteiro, k: Inteiro)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
 
   trait Colecao[T] {
     val lista: Seq[T]
     def apply(a: Int): T = lista(a)
     def length: Int = lista.length
     override def toString: String = lista.mkString("[", ", ", "]")
-    def junte(separador: String = ""): Texto = lista.mkString(separador)
-    def junte(inicio: String, separador: String, fim: String): Texto = lista.mkString(inicio, separador, fim)
+    def junte(separador: Texto = ""): Texto = lista.mkString(separador)
+    def junte(inicio: Texto, separador: Texto, fim: Texto): Texto = lista.mkString(inicio, separador, fim)
     def tamanho: Inteiro = lista.length
     def get(a: Int): T = if (a > 0) apply(a - 1) else apply(tamanho + a)
     def posicao(elem: T): Inteiro = lista.indexOf(elem) + 1
@@ -99,7 +99,7 @@ object potigolutil {
     @deprecated("Use 'selecione'", "0.9.4") def filtre(p: T => Lógico): Lista[T] = Lista(lista.filter(p))
     def selecione: (T => Lógico) => Lista[T] = filtre
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
-    def pegue_enquanto(p: T => Boolean): Lista[T] = Lista(lista.takeWhile(p))
+    def pegue_enquanto(p: T => Lógico): Lista[T] = Lista(lista.takeWhile(p))
     @deprecated("Use 'descarte_enquanto'", "0.9.4") def passe_enquanto(p: T => Lógico): Lista[T] = Lista(lista.dropWhile(p))
     def descarte_enquanto: (T => Lógico) => Lista[T] = passe_enquanto
     @deprecated("Use 'descarte'", "0.9.4") def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
@@ -124,13 +124,12 @@ object potigolutil {
   }
 
   object Matriz {
-    import List.fill
     def apply[A]: (Inteiro, Inteiro, => A) => Matriz[A] = imutavel
     def mutavel[A](x: Inteiro, y: Inteiro, valor: => A): Vetor[Vetor[A]] = {
-      Lista(fill(x)(Lista(fill(y)(valor)).mutavel)).mutavel
+      Lista(List.fill(x)(Lista(List.fill(y)(valor)).mutavel)).mutavel
     }
     def imutavel[A](x: Inteiro, y: Inteiro, valor: => A): Matriz[A] = {
-      Lista(fill(x)(Lista(fill(y)(valor))))
+      Lista(List.fill(x)(Lista(List.fill(y)(valor))))
     }
     def imutável[A]: (Inteiro, Inteiro, => A) => Matriz[A] = imutavel
     def mutável[A]: (Inteiro, Inteiro, => A) => Vetor[Vetor[A]] = mutavel
@@ -159,8 +158,8 @@ object potigolutil {
     def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(lista.map(f))
     def pegue(a: Inteiro): Vetor[T] = Vetor(lista.take(a))
     def descarte(a: Inteiro): Vetor[T] = Vetor(lista.drop(a))
-    def pegue_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.takeWhile(p))
-    @deprecated def passe_enquanto(p: T => Boolean): Vetor[T] = Vetor(lista.dropWhile(p))
+    def pegue_enquanto(p: T => Lógico): Vetor[T] = Vetor(lista.takeWhile(p))
+    @deprecated def passe_enquanto(p: T => Lógico): Vetor[T] = Vetor(lista.dropWhile(p))
     def descarte_enquanto: (T => Lógico) => Vetor[T] = passe_enquanto
     def remova(i: Inteiro): Vetor[T] = Vetor(lista.take(i - 1) ++ lista.drop(i))
     def insira(i: Inteiro, valor: T): Vetor[T] = Vetor(lista.take(i - 1) ++ List(valor) ++ lista.drop(i - 1))
@@ -190,15 +189,15 @@ object potigolutil {
     def selecione: (Caractere => Lógico) => Texto = filtre
     def maiúsculo: Texto = maiusculo
     def minúsculo: Texto = minusculo
-    def injete[A >: Char](f: (A, Caractere) => A): A = lista.reduceLeft(f)
+    def injete[A >: Caractere](f: (A, Caractere) => A): A = lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, Caractere) => A): A = lista.foldLeft(neutro)(f)
     def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
-    def ache(p: Caractere => Boolean): Option[Char] = lista.find(p)
+    def ache(p: Caractere => Lógico): Option[Caractere] = lista.find(p)
     def pegue_enquanto(p: Caractere => Logico): Texto = lista.takeWhile(p)
     @deprecated def passe_enquanto(p: Caractere => Logico): Texto = lista.dropWhile(p)
     def descarte_enquanto: (Caractere => Lógico) => Texto = passe_enquanto
     def para_lista: Lista[Caractere] = Lista(lista.toList)
-    def contém: Caractere => Boolean = contem
+    def contém: Caractere => Lógico = contem
     def cabeça: Caractere = cabeca
     def primeiro: Caractere = cabeca
     def último: Caractere = ultimo
@@ -226,9 +225,9 @@ object potigolutil {
       catch {
         case e: IllegalFormatConversionException => "Erro de formato"
       }
-    def %(formato_ : Texto) = formato(formato_)
+    def %(formato_ : Texto): Texto = formato(formato_)
     @deprecated def para_texto: Texto = x.toString
-    def texto = para_texto
+    def texto: Texto = para_texto
   }
 
   def leia(): Texto = {
@@ -251,7 +250,7 @@ object potigolutil {
   def leia_textos(separador: Texto): Lista[Texto] = leia(separador)
 
   def leia_int: Inteiro = leia.para_int
-  def leia_ints(n: Inteiro): Lista[Int] = Lista(((1 to n) map { _ => leia_int }).toList)
+  def leia_ints(n: Inteiro): Lista[Inteiro] = Lista(((1 to n) map { _ => leia_int }).toList)
   def leia_ints(separador: Texto): Lista[Int] = {
     val l = leia(separador).lista
     Lista(l.map(_.para_int))
@@ -266,8 +265,8 @@ object potigolutil {
   def leia_nums(separador: Texto): Lista[Real] = Lista(leia(separador).lista.map { _.para_num })
   def leia_numeros(n: Inteiro): Lista[Real] = leia_nums(n)
   def leia_numeros(separador: Texto): Lista[Real] = leia_nums(separador)
-  def leia_real: Double = leia_num
-  def leia_reais(n: Int): Lista[Real] = leia_nums(n)
+  def leia_real: Real = leia_num
+  def leia_reais(n: Inteiro): Lista[Real] = leia_nums(n)
   def leia_reais(separador: Texto): Lista[Real] = leia_nums(separador)
 
   def escreva(texto: Any): Unit = {
@@ -284,10 +283,10 @@ object potigolutil {
   case class Tupla4[T1, T2, T3, T4](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)
   case class Tupla5[T1, T2, T3, T4, T5](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5)
   case class Tupla6[T1, T2, T3, T4, T5, T6](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6)
-  case class Tupla7[T1, T2, T3, T4, T5, T6, T7](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7) { def setimo = sétimo }
-  case class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8) { def setimo = sétimo }
-  case class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9) { def setimo = sétimo }
-  case class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9, décimo: T10) { def setimo = sétimo; def decimo = décimo }
+  case class Tupla7[T1, T2, T3, T4, T5, T6, T7](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7) { def setimo: T7 = sétimo }
+  case class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8) { def setimo: T7 = sétimo }
+  case class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9) { def setimo: T7 = sétimo }
+  case class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6, sétimo: T7, oitavo: T8, nono: T9, décimo: T10) { def setimo: T7 = sétimo; def decimo: T10 = décimo }
 
 }
 
