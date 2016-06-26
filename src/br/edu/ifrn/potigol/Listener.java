@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2015 by Leonardo Lucena
+ *  Copyright (C) 2015-2016 by Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *                     __/ |        
  *                    |___/         
  *
- * @author Leonardo Lucena (leonardo.lucena@escolar.ifrn.edu.br)
+ * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
 
 package br.edu.ifrn.potigol;
@@ -346,7 +346,7 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void enterProg(ProgContext ctx) {
-		saida += "import br.edu.ifrn.potigol.potigolutil._\n";
+		saida += "import br.edu.ifrn.potigol.Potigolutil._\n";
 		saida += "import br.edu.ifrn.potigol.Matematica._\n";
 		declaracoes.push(new ArrayList<String>());
 	}
