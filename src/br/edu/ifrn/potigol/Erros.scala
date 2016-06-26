@@ -19,16 +19,25 @@ object Erros {
 
   private[this] object msg {
     def valorNaoDeclarado(a: String): String = s"Valor '${a}' não declarado."
-    def tipoNaoPossuiMetodo(tipo: String, a: String): String = s"Valores do tipo '${tipo}' não possuem o método '${a}'."
-    def tipoErrado(a: String): String = s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
+    def tipoNaoPossuiMetodo(tipo: String, a: String): String =
+      s"Valores do tipo '${tipo}' não possuem o método '${a}'."
+    def tipoErrado(a: String): String =
+      s"Tipo errado.\nEu estava esperando um valor do tipo '${a}'."
+    def faltaParametro(a: String, b: String): String =
+      s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
+    def parametrosMais(n: Int): String =
+      s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${n} parâmetro(s)."
   }
+  
+  private[this] def contar(b: String) = b.count(':' == _)
+
   private def mensagens(s: String): String = s.replace("\n", " | ") match {
     case erro.naoDeclarado(a) => msg.valorNaoDeclarado(a)
-    case erro.parametroAusente(a, b) => s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
-    case erro.parametroMais("apply", b) => s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${b.count(':' == _)} parâmetro(s)."
-    case erro.parametroMais(a, b) if b.count(':' == _) == 0 => s"A função '${a}' não precisa de parâmetro."
-    case erro.parametroMais(a, b) if b.count(':' == _) == 1 => s"A função '${a}' precisa de apenas 1 parâmetro."
-    case erro.parametroMais(a, b) => s"A função '${a}' precisa de apenas ${b.count(':' == _)} parâmetros."
+    case erro.parametroAusente(a, b) => msg.faltaParametro(a, b)
+    case erro.parametroMais("apply", b) => msg.parametrosMais(contar(b))
+    case erro.parametroMais(a, b) if contar(b) == 0 => s"A função '${a}' não precisa de parâmetro."
+    case erro.parametroMais(a, b) if contar(b) == 1 => s"A função '${a}' precisa de apenas 1 parâmetro."
+    case erro.parametroMais(a, b) => s"A função '${a}' precisa de apenas ${contar(b)} parâmetros."
     case erro.tipoIndefinido(a) => s"O tipo '${a}' não existe.\nNão seria 'Inteiro', 'Real' ou 'Texto'?"
     case erro.tipoDiferente("Int") => msg.tipoErrado("Inteiro")
     case erro.tipoDiferente("Double") => msg.tipoErrado("Real")

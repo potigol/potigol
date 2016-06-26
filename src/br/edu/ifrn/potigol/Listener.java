@@ -129,26 +129,26 @@ public class Listener extends potigolBaseListener {
 			"super", "class", "case", "package", "default", "try", "this",
 			"match", "continue", "throws");
 
-	private static class K {
-		static final String val = "val ";
-		static final String def = "def ";
-		static final String semi = " ;\n";
-		static final String igual = " = ";
-		static final String var = "var ";
-		static final String and = " && ";
-		static final String or = " || ";
-		static final String enquanto = "while ";
-		static final String type = "type ";
-		static final String arrow = " => ";
-		static final String se = "case _ if (";
-		static final String senao = "case _ => ";
-		static final String entao = ") => ";
+	static class K {
+		private static final String val = "val ";
+		private static final String def = "def ";
+		private static final String semi = " ;\n";
+		private static final String igual = " = ";
+		private static final String var = "var ";
+		private static final String and = " && ";
+		private static final String or = " || ";
+		private static final String enquanto = "while ";
+		private static final String type = "type ";
+		private static final String arrow = " => ";
+		private static final String se = "case _ if (";
+		private static final String senao = "case _ => ";
+		private static final String entao = ") => ";
 
-		static final String bloco(String corpo) {
+		private static final String bloco(String corpo) {
 			return "{\n" + corpo + "\n}";
 		}
 
-		static final String generico(String s) {
+		private static final String generico(String s) {
 			return "[" + s + "]";
 		}
 	}
