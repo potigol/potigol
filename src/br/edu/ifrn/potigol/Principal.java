@@ -48,64 +48,64 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
 
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			System.out
-					.println("Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
-			return;
-		}
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println(
+                    "Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+            return;
+        }
 
-		String arq = args[args.length - 1];
-		List<String> argList = Arrays.asList(args);
-		boolean debug = argument(argList, "-d");
-		boolean wait = argument(argList, "-w");
-		boolean color = argument(argList, "-c");
-		try {
-			if (wait) {
-				System.out.print("Aguarde...");
-			}
+        String arq = args[args.length - 1];
+        List<String> argList = Arrays.asList(args);
+        boolean debug = argument(argList, "-d");
+        boolean wait = argument(argList, "-w");
+        boolean color = argument(argList, "-c");
+        try {
+            if (wait) {
+                System.out.print("Aguarde...");
+            }
 
-			final Listener listener = getListner(arq);
-			final String saida = listener.getSaida();
+            final Listener listener = getListner(arq);
+            final String saida = listener.getSaida();
 
-			if (saida.trim().length() > 40) {
-				Compilador c = new Compilador(debug, wait);
-				c.executar(saida, lerArquivo(arq), color);
-			}
-		} catch (IOException e) {
-			System.out.println("Erro: Arquivo " + arq + " não encontrado.");
-		}
-	}
+            if (saida.trim().length() > 40) {
+                Compilador c = new Compilador(debug, wait);
+                c.executar(saida, lerArquivo(arq), color);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro: Arquivo " + arq + " não encontrado.");
+        }
+    }
 
-	public static Listener getListner(final String arq) throws IOException {
-		String r = lerArquivo(arq);
-		final ANTLRInputStream input = new ANTLRInputStream(r);
-		final potigolLexer lexer = new potigolLexer(input);
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		final potigolParser parser = new potigolParser(tokens);
-		final ParseTree tree = parser.prog();
-		final ParseTreeWalker walker = new ParseTreeWalker();
-		final Listener listener = new Listener();
-		walker.walk(listener, tree);
-		return listener;
-	}
+    public static Listener getListner(final String arq) throws IOException {
+        String r = lerArquivo(arq);
+        final ANTLRInputStream input = new ANTLRInputStream(r);
+        final potigolLexer lexer = new potigolLexer(input);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final potigolParser parser = new potigolParser(tokens);
+        final ParseTree tree = parser.prog();
+        final ParseTreeWalker walker = new ParseTreeWalker();
+        final Listener listener = new Listener();
+        walker.walk(listener, tree);
+        return listener;
+    }
 
-	public static String lerArquivo(String arq) throws IOException {
-		Path path = Paths.get(arq);
-		List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
-		StringBuffer s = new StringBuffer();
-		for (String linha : linhas) {
-			s.append(linha);
-			s.append('\n');
-		}
-		return s.toString();
-	}
+    public static String lerArquivo(String arq) throws IOException {
+        Path path = Paths.get(arq);
+        List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
+        StringBuffer s = new StringBuffer();
+        for (String linha : linhas) {
+            s.append(linha);
+            s.append('\n');
+        }
+        return s.toString();
+    }
 
-	private static boolean argument(final List<String> list, final String value) {
-		for (String a : list) {
-			if (a.startsWith(value))
-				return true;
-		}
-		return false;
-	}
+    private static boolean argument(final List<String> list, final String value) {
+        for (String a : list) {
+            if (a.startsWith(value))
+                return true;
+        }
+        return false;
+    }
 }

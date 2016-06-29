@@ -31,13 +31,14 @@
 
 package br.edu.ifrn.potigol
 
+import java.util.regex.PatternSyntaxException
+
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.{ Seq => MSeq }
 import scala.io.StdIn
 import scala.util.{ Failure, Success, Try }
-import List.fill
 
-import br.edu.ifrn.potigol.Potigolutil.Texto
+import br.edu.ifrn.potigol.Potigolutil.{ Inteiro, Matriz, Vetor }
 
 object Potigolutil {
   // Tipos
@@ -75,7 +76,7 @@ object Potigolutil {
     def junte(inicio: Texto, separador: Texto, fim: Texto): Texto = lista.mkString(inicio, separador, fim)
     def tamanho: Inteiro = lista.length
     def get(a: Int): T = if (a > 0) apply(a - 1) else apply(tamanho + a)
-    def posicao(elem: T): Inteiro = lista.indexOf(elem) + 1
+    def posicao(elem: T): Inteiro = lista.indexOf(elem, 0) + 1
     def cabeca: T = lista.head
     def contem(a: T): Lógico = lista.contains(a)
     def ultimo: T = lista.last
@@ -172,10 +173,10 @@ object Potigolutil {
     @deprecated def para_int: Inteiro = (intRE.findPrefixOf(lista).getOrElse(ZERO)).toInt
     @deprecated def para_i: Inteiro = para_int
     @deprecated def para_inteiro: Inteiro = para_int
-    
+
     def inteiro: Inteiro = para_int
     def get(a: Int): Caractere = if (a > 0) lista(a - 1) else lista(tamanho + a)
-    def posicao(elem: Caractere): Inteiro = lista.indexOf(elem) + 1
+    def posicao(elem: Caractere): Inteiro = lista.indexOf(elem, 0) + 1
     def para_numero: Real = (ZERO + numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()

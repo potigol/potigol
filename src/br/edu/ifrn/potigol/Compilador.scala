@@ -31,8 +31,9 @@
 
 package br.edu.ifrn.potigol
 
+import scala.util.{ Failure, Success, Try }
+
 import com.twitter.util.Eval
-import scala.util.{ Try, Success, Failure }
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   val NL = "\n"
@@ -69,7 +70,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       case Success(_) => 0
       case Failure(f) =>
         val linhaScala = f.getMessage.split(": ")(1).split(" ")(1).toInt
-        code.split('\n').take(linhaScala).reverse.toList.dropWhile { x => !x.contains("/*Codigo") }.head.split(" ")(1).toInt;
+        val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile {
+          x => !x.contains("/*Codigo")
+        }
+        linhaPotigol.headOption.map { l => l.split(" ")(1).toInt }.getOrElse(1)
     }
   }
 
@@ -99,7 +103,9 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     val linhas = code.split('\n')
     println()
     for { line <- linhas.zipWithIndex } {
-      println(s"${(line._2 + 1 + inicio).formatted("%4d")} | ${line._1}")
+      val numero = (line._2 + 1 + inicio)
+      val linha = line._1
+      println(s"${numero.formatted("%4d")} | ${linha}")
     }
   }
 }

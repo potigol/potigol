@@ -45,7 +45,7 @@ object Erros {
     val Logico = "Lógico"
     val Caractere = "Caractere"
   }
-  
+
   private[this] object Erro {
     val naoDeclarado = "not found: value (\\S+).*".r
     val parametroAusente = "not enough arguments for method (\\S+)\\:.+Unspecified value parameter (\\S).*".r
