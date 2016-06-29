@@ -55,11 +55,11 @@ public class Principal {
             return;
         }
 
-        String arq = args[args.length - 1];
-        List<String> argList = Arrays.asList(args);
-        boolean debug = argument(argList, "-d");
-        boolean wait = argument(argList, "-w");
-        boolean color = argument(argList, "-c");
+        final String arq = args[args.length - 1];
+        final List<String> argList = Arrays.asList(args);
+        final boolean debug = argument(argList, "-d");
+        final boolean wait = argument(argList, "-w");
+        final boolean color = argument(argList, "-c");
         try {
             if (wait) {
                 System.out.print("Aguarde...");
@@ -78,7 +78,7 @@ public class Principal {
     }
 
     public static Listener getListner(final String arq) throws IOException {
-        String r = lerArquivo(arq);
+        final String r = lerArquivo(arq);
         final ANTLRInputStream input = new ANTLRInputStream(r);
         final potigolLexer lexer = new potigolLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -90,10 +90,10 @@ public class Principal {
         return listener;
     }
 
-    public static String lerArquivo(String arq) throws IOException {
-        Path path = Paths.get(arq);
-        List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
-        StringBuffer s = new StringBuffer();
+    public static String lerArquivo(final String arq) throws IOException {
+        final Path path = Paths.get(arq);
+        final List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
+        final StringBuffer s = new StringBuffer();
         for (String linha : linhas) {
             s.append(linha);
             s.append('\n');
