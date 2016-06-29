@@ -115,61 +115,79 @@ import br.edu.ifrn.potigol.parser.potigolParser.Valor_simplesContext;
 
 public class Listener extends potigolBaseListener {
     private int num = 0;
+
     private final ParseTreeProperty<String> values = new ParseTreeProperty<String>();
+
     private final Stack<List<String>> declaracoes = new Stack<List<String>>();
+
     private final List<String> warnings = new ArrayList<String>();
 
     private String saida = "";
 
-    static private List<String> scalawords = Arrays.asList("type", "yield", "lazy", "override", "def", "with", "val",
-            "var", "false", "true", "sealed", "abstract", "private", "trait", "object", "null", "if", "for", "while",
-            "throw", "finally", "protected", "extends", "import", "final", "return", "else", "break", "new", "catch",
-            "super", "class", "case", "package", "default", "try", "this", "match", "continue", "throws");
+    private static List<String> scalawords = Arrays.asList("type", "yield",
+            "lazy", "override", "def", "with", "val", "var", "false", "true",
+            "sealed", "abstract", "private", "trait", "object", "null", "if",
+            "for", "while", "throw", "finally", "protected", "extends",
+            "import", "final", "return", "else", "break", "new", "catch",
+            "super", "class", "case", "package", "default", "try", "this",
+            "match", "continue", "throws");
 
     static class K {
         private static final String val = "val ";
+
         private static final String def = "def ";
+
         private static final String semi = " ;\n";
+
         private static final String igual = " = ";
+
         private static final String var = "var ";
+
         private static final String and = " && ";
+
         private static final String or = " || ";
+
         private static final String enquanto = "while ";
+
         private static final String type = "type ";
+
         private static final String arrow = " => ";
+
         private static final String se = "case _ if (";
+
         private static final String senao = "case _ => ";
+
         private static final String entao = ") => ";
 
-        private static final String bloco(final String corpo) {
+        private static String bloco(final String corpo) {
             return "{\n" + corpo + "\n}";
         }
 
-        private static final String generico(final String s) {
+        private static String generico(final String s) {
             return "[" + s + "]";
         }
 
-        private static final String exp(final String s) {
+        private static String exp(final String s) {
             return "(" + s + ")";
         }
 
-        private static final String param(final String s) {
+        private static String param(final String s) {
             return "(" + s + ")";
         }
 
-        private static final String formato(final String s, final String fmt) {
+        private static String formato(final String s, final String fmt) {
             return exp(s) + ".format" + param(fmt);
         }
 
-        private static final String escreva(final String s) {
+        private static String escreva(final String s) {
             return "escreva(" + s + ")";
         }
 
-        private static final String lista(final String exp) {
+        private static String lista(final String exp) {
             return "Lista(List(" + exp + "))";
         }
 
-        private static final String guarda(final String cond) {
+        private static String guarda(final String cond) {
             if (!cond.isEmpty()) {
                 return " if " + cond;
             }
@@ -199,8 +217,9 @@ public class Listener extends potigolBaseListener {
 
     private String getOrElse(final ParseTree node, final String s) {
         final String value = getValue(node);
-        if (value == null)
+        if (value == null) {
             return s;
+        }
         return value;
     }
 
@@ -232,12 +251,13 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDcl1(final Dcl1Context ctx) {
         final ParseTree p;
-        if (ctx.ID() != null)
+        if (ctx.ID() != null) {
             p = ctx.ID();
-        else if (ctx.expr2() != null)
+        } else if (ctx.expr2() != null) {
             p = ctx.expr2();
-        else
+        } else {
             p = ctx.dcls();
+        }
         setValue(ctx, getValue(p));
     }
 
@@ -303,11 +323,11 @@ public class Listener extends potigolBaseListener {
         final String a = getValue(ctx.expr(0));
         final String as = getValue(ctx.expr(1));
         final String s;
-        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso)
+        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
             s = "Lista(collection.immutable.::( " + a + ", a$" + as + "$))";
-
-        else
+        } else {
             s = K.bloco(a + "::" + as);
+        }
         setValue(ctx, s);
     }
 
@@ -324,14 +344,15 @@ public class Listener extends potigolBaseListener {
         final String exp = getValue(ctx.expr(0));
         final String cond = getOrElse(ctx.expr(1), "");
         String exps = getValue(ctx.exprlist());
-        int p = exp.indexOf("a$",0);
+        int p = exp.indexOf("a$", 0);
         if (p >= 0) {
             String s = exp.substring(p + 2);
-            p = s.indexOf('$',0);
+            p = s.indexOf('$', 0);
             s = s.substring(0, p);
             // String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
             // "").substring(2);
-            exps = K.val + s + K.igual + "Lista(a$" + s + "$);\n" + exps.substring(1);
+            exps = K.val + s + K.igual + "Lista(a$" + s + "$);\n"
+                    + exps.substring(1);
         }
         String s = "case " + exp + K.guarda(cond) + K.arrow + exps;
         setValue(ctx, s);
@@ -371,8 +392,9 @@ public class Listener extends potigolBaseListener {
         for (int i = 2; i < ctx.children.size() - 1; i++) {
             ParseTree d = ctx.children.get(i);
             s += "  " + getValue(d);
-            if (i < ctx.children.size() - 2)
+            if (i < ctx.children.size() - 2) {
                 s += ",";
+            }
         }
         s += ")";
         setValue(ctx, s);
@@ -504,7 +526,8 @@ public class Listener extends potigolBaseListener {
         final String param = getValue(ctx.dcls());
         final String tipo = getOrElse(ctx.tipo(), "");
         final String corpo = getValue(ctx.expr());
-        final String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual + K.bloco(corpo);
+        final String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual
+                + K.bloco(corpo);
         setValue(ctx, s);
     }
 
@@ -514,7 +537,8 @@ public class Listener extends potigolBaseListener {
         final String param = getValue(ctx.dcls());
         final String tipo = getOrElse(ctx.tipo(), "");
         final String corpo = getValue(ctx.exprlist());
-        final String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual + K.bloco(corpo) + "\n";
+        final String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual
+                + K.bloco(corpo) + "\n";
         setValue(ctx, s);
     }
 
@@ -550,8 +574,9 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitEveryRule(final ParserRuleContext ctx) {
-        if (getValue(ctx) == null)
+        if (getValue(ctx) == null) {
             setValue(ctx, getValue(ctx.getChild(0)));
+        }
     }
 
     @Override
@@ -570,12 +595,13 @@ public class Listener extends potigolBaseListener {
             a.add(getValue(exp));
         }
         ids2String(ctx, a);
-        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr)
+        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr) {
             setValue(ctx,
                     // "Tupla"+ctx.expr().size()+"("+
                     getValue(ctx)
             // +")"
             );
+        }
     }
 
     @Override
@@ -596,12 +622,13 @@ public class Listener extends potigolBaseListener {
         final String fim = getValue(ctx.expr(1));
         final String passo = getValue(ctx.expr(2));
         final int tamanho = ctx.expr().size();
-        if (tamanho == 1)
+        if (tamanho == 1) {
             s = inicio;
-        else if (tamanho == 2)
+        } else if (tamanho == 2) {
             s = inicio + " to " + fim;
-        else
+        } else {
             s = inicio + " to " + fim + " by " + passo;
+        }
         setValue(ctx, id + " <- " + s);
     }
 
@@ -610,8 +637,9 @@ public class Listener extends potigolBaseListener {
         final StringBuilder s = new StringBuilder("");
         for (final FaixaContext f : ctx.faixa()) {
             String faixa = getValue(f);
-            if (f != ctx.faixa(0))
+            if (f != ctx.faixa(0)) {
                 s.append(K.semi);
+            }
             s.append(faixa);
         }
         setValue(ctx, s.toString());
@@ -655,7 +683,8 @@ public class Listener extends potigolBaseListener {
         // " .. " +
         // ctx.getSourceInterval().b;
         for (final ParseTree i : ctx.children) {
-            s.append("/*Codigo: ").append(codigo).append(" */\n").append(getValue(i)).append("\n");
+            s.append("/*Codigo: ").append(codigo).append(" */\n")
+                    .append(getValue(i)).append("\n");
         }
         setValue(ctx, s.toString());
     }
@@ -683,10 +712,12 @@ public class Listener extends potigolBaseListener {
         String exp1 = getValue(ctx.expr(0));
         final String exp2 = getValue(ctx.expr(1));
         String op = ctx.getChild(1).getText();
-        if ("mod".equals(op))
+        if ("mod".equals(op)) {
             op = "%";
-        if ("/".equals(op))
+        }
+        if ("/".equals(op)) {
             exp1 = K.exp(exp1) + ".toDouble";
+        }
         if ("div".equals(op)) {
             op = "/";
         }
@@ -721,7 +752,8 @@ public class Listener extends potigolBaseListener {
         final String faixas = getValue(ctx.faixas());
         final String se = getOrElse(ctx.expr(), "");
         final String gere = getValue(ctx.exprlist());
-        final String s = "Lista((for{" + faixas + K.guarda(se) + "} yield " + K.bloco(gere) + ").toList)";
+        final String s = "Lista((for{" + faixas + K.guarda(se) + "} yield "
+                + K.bloco(gere) + ").toList)";
         setValue(ctx, s);
     }
 
@@ -794,8 +826,9 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitTexto(final TextoContext ctx) {
         String s = ctx.getText();
-        if (s.contains("{"))
+        if (s.contains("{")) {
             s = s.replace("$", "$$");
+        }
         s = s.replace("{", "${");
         if (s.contains("\n")) {
             s = "\"\"" + s + "\"\".stripMargin('|')";
@@ -883,10 +916,11 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitBooleano(final BooleanoContext ctx) {
         final String valor;
-        if (ctx.BOOLEANO().getText().equals("verdadeiro"))
+        if (ctx.BOOLEANO().getText().equals("verdadeiro")) {
             valor = Boolean.TRUE.toString();
-        else
+        } else {
             valor = Boolean.FALSE.toString();
+        }
         setValue(ctx, valor);
     }
 
