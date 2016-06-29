@@ -157,8 +157,8 @@ public class Listener extends potigolBaseListener {
 			return "(" + s + ")";
 		}
 
-		private static final String formato(String s) {
-			return ".format" + param(s);
+		private static final String formato(String s, String fmt) {
+			return exp(s) + ".format" + param(fmt);
 		}
 
 		private static final String escreva(String s) {
@@ -174,6 +174,13 @@ public class Listener extends potigolBaseListener {
 				return " if " + cond;
 			}
 			return " ";
+		}
+
+		private static String tipo(String s) {
+			if (s.isEmpty()) {
+				return "";
+			} else
+				return ": " + s;
 		}
 	}
 
@@ -345,7 +352,7 @@ public class Listener extends potigolBaseListener {
 	public void exitFormato(FormatoContext ctx) {
 		String exp1 = getValue(ctx.expr(0));
 		String fmt = getValue(ctx.expr(1));
-		String s = K.exp(exp1) + K.formato(fmt);
+		String s = K.formato(exp1, fmt);
 		setValue(ctx, s);
 	}
 
@@ -496,10 +503,8 @@ public class Listener extends potigolBaseListener {
 		String id = getValue(ctx.ID());
 		String param = getValue(ctx.dcls());
 		String tipo = getOrElse(ctx.tipo(), "");
-		if (!tipo.isEmpty())
-			tipo = ": " + tipo;
 		String corpo = getValue(ctx.expr());
-		String s = K.def + id + K.param(param) + tipo + K.igual + K.bloco(corpo);
+		String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual + K.bloco(corpo);
 		setValue(ctx, s);
 	}
 
@@ -509,9 +514,7 @@ public class Listener extends potigolBaseListener {
 		String param = getValue(ctx.dcls());
 		String tipo = getOrElse(ctx.tipo(), "");
 		String corpo = getValue(ctx.exprlist());
-		if (!tipo.isEmpty())
-			tipo = ": " + tipo;
-		String s = K.def + id + K.param(param) + tipo + K.igual + K.bloco(corpo) + "\n";
+		String s = K.def + id + K.param(param) + K.tipo(tipo) + K.igual + K.bloco(corpo) + "\n";
 		setValue(ctx, s);
 	}
 
@@ -708,9 +711,7 @@ public class Listener extends potigolBaseListener {
 		String faixas = getValue(ctx.faixas());
 		String se = getOrElse(ctx.expr(), "");
 		String bloco = getValue(ctx.bloco());
-		if (!se.isEmpty())
-			se = " if " + se;
-		String s = "for{" + faixas + se + "} " + bloco;
+		String s = "for{" + faixas + K.guarda(se) + "} " + bloco;
 		setValue(ctx, s);
 	}
 
@@ -719,11 +720,8 @@ public class Listener extends potigolBaseListener {
 		String faixas = getValue(ctx.faixas());
 		String se = getOrElse(ctx.expr(), "");
 		String gere = getValue(ctx.exprlist());
-		if (!se.isEmpty())
-			se = " if " + se;
-		String s = "Lista((for{" + faixas + se + "} yield " + K.bloco(gere) + ").toList)";
+		String s = "Lista((for{" + faixas + K.guarda(se) + "} yield " + K.bloco(gere) + ").toList)";
 		setValue(ctx, s);
-
 	}
 
 	@Override
@@ -885,9 +883,9 @@ public class Listener extends potigolBaseListener {
 	public void exitBooleano(BooleanoContext ctx) {
 		final String valor;
 		if (ctx.BOOLEANO().getText().equals("verdadeiro"))
-			valor = "true";
+			valor = Boolean.TRUE.toString();
 		else
-			valor = "false";
+			valor = Boolean.FALSE.toString();
 		setValue(ctx, valor);
 	}
 
