@@ -250,7 +250,7 @@ public class Listener extends potigolBaseListener {
             indices[i] = getValue(ctx.expr(i));
         final String exp = getValue(ctx.expr(dim));
         final StringBuilder s = new StringBuilder(id);
-        for (String ind : indices)
+        for (final String ind : indices)
             s.append(K.param(ind + " -1"));
         s.append(K.igual).append(exp);
         setValue(ctx, s.toString());
@@ -283,7 +283,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitTipo2(final Tipo2Context ctx) {
         String s = "";
-        for (TipoContext tipo : ctx.tipo()) {
+        for (final TipoContext tipo : ctx.tipo()) {
             s += ", " + getValue(tipo);
         }
         s = s.replaceFirst(", ", " ");
@@ -341,7 +341,7 @@ public class Listener extends potigolBaseListener {
     public void exitEscolha(final EscolhaContext ctx) {
         final String exp = getValue(ctx.expr());
         String corpo = "";
-        for (CasoContext caso : ctx.caso()) {
+        for (final CasoContext caso : ctx.caso()) {
             corpo += "  " + getValue(caso) + "\n";
         }
         final String s = K.exp(exp) + " match " + K.bloco(corpo);
@@ -415,7 +415,7 @@ public class Listener extends potigolBaseListener {
         final String exp = getValue(ctx.expr());
         final String var = nextVar();
         String s = K.def + var + K.igual + exp + K.semi;
-        for (String id : ids) {
+        for (final String id : ids) {
             s += id + K.igual + var + K.semi;
         }
         setValue(ctx, s);
@@ -463,7 +463,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDcls(final DclsContext ctx) {
         final List<String> a = new ArrayList<String>();
-        for (DclContext dcl : ctx.dcl()) {
+        for (final DclContext dcl : ctx.dcl()) {
             a.add(getValue(dcl));
         }
         ids2String(ctx, a);
@@ -472,7 +472,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDecl(final DeclContext ctx) {
         String s = "";
-        for (ParseTree i : ctx.children) {
+        for (final ParseTree i : ctx.children) {
             s += "\n" + getValue(i);
         }
         setValue(ctx, s);
@@ -557,7 +557,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitExpr1(final Expr1Context ctx) {
         final List<String> a = new ArrayList<String>();
-        for (ExprContext exp : ctx.expr()) {
+        for (final ExprContext exp : ctx.expr()) {
             a.add(getValue(exp));
         }
         ids2String(ctx, a);
@@ -566,7 +566,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitExpr2(final Expr2Context ctx) {
         final List<String> a = new ArrayList<String>();
-        for (ExprContext exp : ctx.expr()) {
+        for (final ExprContext exp : ctx.expr()) {
             a.add(getValue(exp));
         }
         ids2String(ctx, a);
@@ -581,7 +581,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitExprlist(final ExprlistContext ctx) {
         String s = "\n";
-        for (InstContext i : ctx.inst()) {
+        for (final InstContext i : ctx.inst()) {
             s += "  " + getValue(i) + "\n";
         }
         setValue(ctx, s);
@@ -608,7 +608,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitFaixas(final FaixasContext ctx) {
         final StringBuilder s = new StringBuilder("");
-        for (FaixaContext f : ctx.faixa()) {
+        for (final FaixaContext f : ctx.faixa()) {
             String faixa = getValue(f);
             if (f != ctx.faixa(0))
                 s.append(K.semi);
@@ -625,7 +625,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitId1(final Id1Context ctx) {
         final List<String> a = new ArrayList<String>();
-        for (TerminalNode id : ctx.ID()) {
+        for (final TerminalNode id : ctx.ID()) {
             a.add(getValue(id));
         }
         ids2String(ctx, a);
@@ -634,7 +634,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitId2(final Id2Context ctx) {
         final List<String> a = new ArrayList<String>();
-        for (TerminalNode id : ctx.ID()) {
+        for (final TerminalNode id : ctx.ID()) {
             a.add(getValue(id));
         }
         ids2String(ctx, a);
@@ -654,12 +654,8 @@ public class Listener extends potigolBaseListener {
                                                     // +
         // " .. " +
         // ctx.getSourceInterval().b;
-        for (ParseTree i : ctx.children) {
-            s.append("/*Codigo: ");
-            s.append(codigo);
-            s.append(" */\n");
-            s.append(getValue(i));
-            s.append("\n");
+        for (final ParseTree i : ctx.children) {
+            s.append("/*Codigo: ").append(codigo).append(" */\n").append(getValue(i)).append("\n");
         }
         setValue(ctx, s.toString());
     }
