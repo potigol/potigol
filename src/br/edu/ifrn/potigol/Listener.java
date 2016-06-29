@@ -121,13 +121,10 @@ public class Listener extends potigolBaseListener {
 
 	private String saida = "";
 
-	static private List<String> scalawords = Arrays.asList("type", "yield",
-			"lazy", "override", "def", "with", "val", "var", "false", "true",
-			"sealed", "abstract", "private", "trait", "object", "null", "if",
-			"for", "while", "throw", "finally", "protected", "extends",
-			"import", "final", "return", "else", "break", "new", "catch",
-			"super", "class", "case", "package", "default", "try", "this",
-			"match", "continue", "throws");
+	static private List<String> scalawords = Arrays.asList("type", "yield", "lazy", "override", "def", "with", "val",
+			"var", "false", "true", "sealed", "abstract", "private", "trait", "object", "null", "if", "for", "while",
+			"throw", "finally", "protected", "extends", "import", "final", "return", "else", "break", "new", "catch",
+			"super", "class", "case", "package", "default", "try", "this", "match", "continue", "throws");
 
 	static class K {
 		private static final String val = "val ";
@@ -151,6 +148,33 @@ public class Listener extends potigolBaseListener {
 		private static final String generico(String s) {
 			return "[" + s + "]";
 		}
+
+		private static final String exp(String s) {
+			return "(" + s + ")";
+		}
+
+		private static final String param(String s) {
+			return "(" + s + ")";
+		}
+
+		private static final String formato(String s) {
+			return ".format" + param(s);
+		}
+
+		private static final String escreva(String s) {
+			return "escreva(" + s + ")";
+		}
+
+		private static final String lista(String exp) {
+			return "Lista(List(" + exp + "))";
+		}
+
+		private static final String guarda(String cond) {
+			if (!cond.isEmpty()) {
+				return " if " + cond;
+			}
+			return " ";
+		}
 	}
 
 	private String nextVar() {
@@ -164,6 +188,13 @@ public class Listener extends potigolBaseListener {
 
 	private String getValue(ParseTree node) {
 		return values.get(node);
+	}
+
+	private String getOrElse(ParseTree node, String s) {
+		String value = getValue(node);
+		if (value == null)
+			return s;
+		return value;
 	}
 
 	private String escapeID(String id) {
@@ -213,8 +244,8 @@ public class Listener extends potigolBaseListener {
 		String exp = getValue(ctx.expr(dim));
 		String s = id;
 		for (String ind : indices)
-			s = s + "(" + ind + " -1)";
-		s = s + "=" + exp;
+			s = s + K.param(ind + " -1");
+		s = s + K.igual + exp;
 		setValue(ctx, s);
 	}
 
@@ -238,7 +269,7 @@ public class Listener extends potigolBaseListener {
 	public void exitTipo_funcao(Tipo_funcaoContext ctx) {
 		String esq = getValue(ctx.tipo(0));
 		String dir = getValue(ctx.tipo(1));
-		String s = "(" + esq + K.arrow + dir + ")";
+		String s = K.exp(esq + K.arrow + dir);
 		setValue(ctx, s);
 	}
 
@@ -254,8 +285,9 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitTipo_tupla(Tipo_tuplaContext ctx) {
-		String s = "Tupla" + ctx.tipo2().tipo().size() + "["
-				+ getValue(ctx.tipo2()) + "]";
+		int tamanho = ctx.tipo2().tipo().size();
+		String tipo = getValue(ctx.tipo2());
+		String s = "Tupla" + tamanho + K.generico(tipo);
 		setValue(ctx, s);
 	}
 
@@ -276,18 +308,14 @@ public class Listener extends potigolBaseListener {
 	public void exitExpoente(ExpoenteContext ctx) {
 		String base = getValue(ctx.expr(0));
 		String exp = getValue(ctx.expr(1));
-		String s = "( Math.pow(" + base + ", " + exp + ") )";
+		String s = K.exp("Math.pow(" + base + ", " + exp + ")");
 		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitCaso(CasoContext ctx) {
 		final String exp = getValue(ctx.expr(0));
-		final String cond;
-		if (ctx.expr().size() > 1) {
-			cond = "if " + getValue(ctx.expr(1));
-		} else
-			cond = "";
+		final String cond = getOrElse(ctx.expr(1), "");
 		String exps = getValue(ctx.exprlist());
 		int p = exp.indexOf("a$");
 		if (p >= 0) {
@@ -296,10 +324,9 @@ public class Listener extends potigolBaseListener {
 			s = s.substring(0, p);
 			// String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
 			// "").substring(2);
-			exps = K.val + s + K.igual + "Lista(a$" + s + "$);\n"
-					+ exps.substring(1);
+			exps = K.val + s + K.igual + "Lista(a$" + s + "$);\n" + exps.substring(1);
 		}
-		String s = "case " + exp + " " + cond + K.arrow + exps;
+		String s = "case " + exp + K.guarda(cond) + K.arrow + exps;
 		setValue(ctx, s);
 	}
 
@@ -310,15 +337,15 @@ public class Listener extends potigolBaseListener {
 		for (CasoContext caso : ctx.caso()) {
 			corpo += "  " + getValue(caso) + "\n";
 		}
-		String s = "(" + exp + ") match " + K.bloco(corpo);
+		String s = K.exp(exp) + " match " + K.bloco(corpo);
 		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitFormato(FormatoContext ctx) {
 		String exp1 = getValue(ctx.expr(0));
-		String exp2 = getValue(ctx.expr(1));
-		String s = "(" + exp1 + ").formato(" + exp2 + ")";
+		String fmt = getValue(ctx.expr(1));
+		String s = K.exp(exp1) + K.formato(fmt);
 		setValue(ctx, s);
 	}
 
@@ -340,7 +367,7 @@ public class Listener extends potigolBaseListener {
 			if (i < ctx.children.size() - 2)
 				s += ",";
 		}
-		s += "){}";
+		s += ")";
 		setValue(ctx, s);
 	}
 
@@ -389,17 +416,18 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitChamada_funcao(Chamada_funcaoContext ctx) {
-		setValue(ctx, getValue(ctx.expr()) + "(" + getValue(ctx.expr1()) + ")");
+		String nome = getValue(ctx.expr());
+		String param = getValue(ctx.expr1());
+		String s = nome + K.param(param);
+		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitChamada_metodo(Chamada_metodoContext ctx) {
-		String exp = getValue(ctx.expr());
-		String id = getValue(ctx.ID());
-		String exp1 = getValue(ctx.expr1());
-		String s = exp + "." + id;
-		if (exp1 != null)
-			s += "(" + exp1 + ")";
+		String objeto = getValue(ctx.expr());
+		String metodo = getValue(ctx.ID());
+		String param = getOrElse(ctx.expr1(), "");
+		String s = objeto + "." + metodo + K.param(param);
 		setValue(ctx, s);
 	}
 
@@ -467,14 +495,11 @@ public class Listener extends potigolBaseListener {
 	public void exitDef_funcao(Def_funcaoContext ctx) {
 		String id = getValue(ctx.ID());
 		String param = getValue(ctx.dcls());
-		String tipo = getValue(ctx.tipo());
-		if (tipo != null)
+		String tipo = getOrElse(ctx.tipo(), "");
+		if (!tipo.isEmpty())
 			tipo = ": " + tipo;
-		else
-			tipo = "";
 		String corpo = getValue(ctx.expr());
-		String s = K.def + id + tipo + "(" + param + ")" + K.igual
-				+ K.bloco(corpo);
+		String s = K.def + id + K.param(param) + tipo + K.igual + K.bloco(corpo);
 		setValue(ctx, s);
 	}
 
@@ -482,12 +507,11 @@ public class Listener extends potigolBaseListener {
 	public void exitDef_funcao_corpo(Def_funcao_corpoContext ctx) {
 		String id = getValue(ctx.ID());
 		String param = getValue(ctx.dcls());
-		String tipo = getValue(ctx.tipo());
+		String tipo = getOrElse(ctx.tipo(), "");
 		String corpo = getValue(ctx.exprlist());
-		String s = K.def + id + "(" + param + ")";
-		if (tipo != null)
-			s += ": " + tipo;
-		s += K.igual + K.bloco(corpo) + "\n";
+		if (!tipo.isEmpty())
+			tipo = ": " + tipo;
+		String s = K.def + id + K.param(param) + tipo + K.igual + K.bloco(corpo) + "\n";
 		setValue(ctx, s);
 	}
 
@@ -495,14 +519,15 @@ public class Listener extends potigolBaseListener {
 	public void exitE_logico(E_logicoContext ctx) {
 		String exp1 = getValue(ctx.expr(0));
 		String exp2 = getValue(ctx.expr(1));
-		setValue(ctx, "(" + exp1 + K.and + exp2 + ")");
+		String s = K.exp(exp1 + K.and + exp2);
+		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitEnquanto(EnquantoContext ctx) {
 		String exp = getValue(ctx.expr());
 		String bloco = getValue(ctx.bloco());
-		String s = K.enquanto + "(" + exp + ") " + bloco;
+		String s = K.enquanto + K.exp(exp) + bloco;
 		setValue(ctx, s);
 	}
 
@@ -515,7 +540,9 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitEscreva(EscrevaContext ctx) {
-		setValue(ctx, "escreva(" + getValue(ctx.expr()) + ")");
+		String exp = getValue(ctx.expr());
+		String s = K.escreva(exp);
+		setValue(ctx, s);
 	}
 
 	@Override
@@ -542,7 +569,7 @@ public class Listener extends potigolBaseListener {
 		ids2String(ctx, a);
 		if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr)
 			setValue(ctx,
-			// "Tupla"+ctx.expr().size()+"("+
+					// "Tupla"+ctx.expr().size()+"("+
 					getValue(ctx)
 			// +")"
 			);
@@ -562,18 +589,16 @@ public class Listener extends potigolBaseListener {
 	public void exitFaixa(FaixaContext ctx) {
 		final String s;
 		String id = getValue(ctx.ID());
-		switch (ctx.expr().size()) {
-		case 1:
-			s = getValue(ctx.expr(0));
-			break;
-		case 2:
-			s = getValue(ctx.expr(0)) + " to " + getValue(ctx.expr(1));
-			break;
-		default:
-			s = getValue(ctx.expr(0)) + " to " + getValue(ctx.expr(1)) + " by "
-					+ getValue(ctx.expr(2));
-			break;
-		}
+		String inicio = getValue(ctx.expr(0));
+		String fim = getValue(ctx.expr(1));
+		String passo = getValue(ctx.expr(2));
+		int tamanho = ctx.expr().size();
+		if (tamanho == 1)
+			s = inicio;
+		else if (tamanho == 2)
+			s = inicio + " to " + fim;
+		else
+			s = inicio + " to " + fim + " by " + passo;
 		setValue(ctx, id + " <- " + s);
 	}
 
@@ -582,9 +607,8 @@ public class Listener extends potigolBaseListener {
 		String s = "";
 		for (FaixaContext f : ctx.faixa()) {
 			if (f != ctx.faixa(0))
-				s += "; " + getValue(f);
-			else
-				s += getValue(f);
+				s += K.semi;
+			s += getValue(f);
 		}
 		setValue(ctx, s);
 	}
@@ -614,7 +638,8 @@ public class Listener extends potigolBaseListener {
 
 	@Override
 	public void exitImprima(ImprimaContext ctx) {
-		setValue(ctx, "imprima(" + getValue(ctx.expr()) + ")");
+		String exp = getValue(ctx.expr());
+		setValue(ctx, "imprima(" + exp + ")");
 	}
 
 	@Override
@@ -639,9 +664,7 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitLista(ListaContext ctx) {
 		String exp = getValue(ctx.expr1());
-		if (exp == null)
-			exp = "";
-		setValue(ctx, "Lista(List(" + exp + "))");
+		setValue(ctx, K.lista(exp));
 	}
 
 	@Override
@@ -659,7 +682,7 @@ public class Listener extends potigolBaseListener {
 		if ("mod".equals(op))
 			op = "%";
 		if ("/".equals(op))
-			exp1 = "(" + exp1 + ").toDouble";
+			exp1 = K.exp(exp1) + ".toDouble";
 		if ("div".equals(op)) {
 			op = "/";
 		}
@@ -676,30 +699,29 @@ public class Listener extends potigolBaseListener {
 	public void exitOu_logico(Ou_logicoContext ctx) {
 		String exp1 = getValue(ctx.expr(0));
 		String exp2 = getValue(ctx.expr(1));
-		setValue(ctx, "{" + exp1 + K.or + exp2 + "}");
+		String s = K.exp(exp1 + K.or + exp2);
+		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitPara_faca(Para_facaContext ctx) {
 		String faixas = getValue(ctx.faixas());
-		String se = getValue(ctx.expr());
+		String se = getOrElse(ctx.expr(), "");
 		String bloco = getValue(ctx.bloco());
-		String s = "for(" + faixas;
-		if (se != null)
-			s += " if " + se;
-		s += ") " + bloco;
+		if (!se.isEmpty())
+			se = " if " + se;
+		String s = "for{" + faixas + se + "} " + bloco;
 		setValue(ctx, s);
 	}
 
 	@Override
 	public void exitPara_gere(Para_gereContext ctx) {
 		String faixas = getValue(ctx.faixas());
-		String se = getValue(ctx.expr());
-		String faca = getValue(ctx.exprlist());
-		String s = "Lista((for(" + faixas;
-		if (se != null)
-			s += " if " + se;
-		s += ")  yield " + K.bloco(faca) + ").toList)";
+		String se = getOrElse(ctx.expr(), "");
+		String gere = getValue(ctx.exprlist());
+		if (!se.isEmpty())
+			se = " if " + se;
+		String s = "Lista((for{" + faixas + se + "} yield " + K.bloco(gere) + ").toList)";
 		setValue(ctx, s);
 
 	}
@@ -707,7 +729,8 @@ public class Listener extends potigolBaseListener {
 	@Override
 	public void exitParen(ParenContext ctx) {
 		String exp = getValue(ctx.expr());
-		setValue(ctx, "(" + exp + ")");
+		String s = K.exp(exp);
+		setValue(ctx, s);
 	}
 
 	@Override
@@ -734,17 +757,12 @@ public class Listener extends potigolBaseListener {
 		String s = "1 match {\n";
 		String cond = getValue(ctx.expr());
 		String entao = getValue(ctx.entao());
+		String senao = getOrElse(ctx.senao(), "");
 		s += K.se + cond + K.entao + entao + "\n";
 		for (SenaoseContext c : ctx.senaose()) {
 			s += getValue(c) + "\n";
 		}
-
-		if (ctx.senao() == null) {
-			s += K.senao;
-		} else {
-			s += K.senao + getValue(ctx.senao());
-		}
-		s += "\n}";
+		s += K.senao + senao + "\n}";
 		setValue(ctx, s);
 	}
 
