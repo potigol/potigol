@@ -324,10 +324,10 @@ public class Listener extends potigolBaseListener {
         final String exp = getValue(ctx.expr(0));
         final String cond = getOrElse(ctx.expr(1), "");
         String exps = getValue(ctx.exprlist());
-        int p = exp.indexOf("a$");
+        int p = exp.indexOf("a$",0);
         if (p >= 0) {
             String s = exp.substring(p + 2);
-            p = s.indexOf("$");
+            p = s.indexOf('$',0);
             s = s.substring(0, p);
             // String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
             // "").substring(2);
@@ -738,7 +738,7 @@ public class Listener extends potigolBaseListener {
             saida += "escreva(\"===[ATENCAO]===\")\n";
             saida += "escreva(\"" + warnings.get(0) + "\")";
         }
-        for (InstContext i : ctx.inst()) {
+        for (final InstContext i : ctx.inst()) {
             saida += getValue(i);
         }
         saida += "\n()\n";
@@ -758,7 +758,7 @@ public class Listener extends potigolBaseListener {
         final String entao = getValue(ctx.entao());
         final String senao = getOrElse(ctx.senao(), "");
         s += K.se + cond + K.entao + entao + "\n";
-        for (SenaoseContext c : ctx.senaose()) {
+        for (final SenaoseContext c : ctx.senaose()) {
             s += getValue(c) + "\n";
         }
         s += K.senao + senao + "\n}";
@@ -811,7 +811,7 @@ public class Listener extends potigolBaseListener {
         String s = ctx.BS().getText().replace("{", "${");
         s = s + getValue(ctx.expr(0));
         int i = 1;
-        for (TerminalNode x : ctx.MS()) {
+        for (final TerminalNode x : ctx.MS()) {
             s = s + x.getText().replace("{", "${");
             s = s + getValue(ctx.expr(i));
             i++;
@@ -850,7 +850,7 @@ public class Listener extends potigolBaseListener {
         }
         setValue(ctx, s);
 
-        for (String i : ids) {
+        for (final String i : ids) {
             if (valores().contains(i)) {
                 warnings.add("Valor " + i + " declarado duas vezes.");
             }
@@ -860,7 +860,7 @@ public class Listener extends potigolBaseListener {
 
     private List<String> valores() {
         final List<String> a = new ArrayList<String>();
-        for (List<String> s : declaracoes) {
+        for (final List<String> s : declaracoes) {
             a.addAll(s);
         }
         return a;
@@ -871,7 +871,7 @@ public class Listener extends potigolBaseListener {
         final String id = getValue(ctx.id1());
         final String exp = getValue(ctx.expr());
         final List<String> ids = Arrays.asList(id.split(","));
-        for (String i : ids) {
+        for (final String i : ids) {
             if (valores().contains(i)) {
                 warnings.add("Valor " + i + " declarado duas vezes.");
             }
