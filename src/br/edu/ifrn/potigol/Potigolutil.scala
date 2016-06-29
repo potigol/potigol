@@ -31,11 +31,13 @@
 
 package br.edu.ifrn.potigol
 
-import java.util.IllegalFormatConversionException
-
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.{ Seq => MSeq }
 import scala.io.StdIn
+import scala.util.{ Failure, Success, Try }
+import List.fill
+
+import br.edu.ifrn.potigol.Potigolutil.Texto
 
 object Potigolutil {
   // Tipos
@@ -126,23 +128,22 @@ object Potigolutil {
   object Matriz {
     def apply[A]: (Inteiro, Inteiro, => A) => Matriz[A] = imutavel
     def mutavel[A](x: Inteiro, y: Inteiro, valor: => A): Vetor[Vetor[A]] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(valor)).mutavel)).mutavel
+      Lista.mutavel(x, Lista.mutavel(y, valor))
     }
     def imutavel[A](x: Inteiro, y: Inteiro, valor: => A): Matriz[A] = {
-      Lista(List.fill(x)(Lista(List.fill(y)(valor))))
+      Lista.imutavel(x, Lista.imutavel(y, valor))
     }
     def imutável[A]: (Inteiro, Inteiro, => A) => Matriz[A] = imutavel
     def mutável[A]: (Inteiro, Inteiro, => A) => Vetor[Vetor[A]] = mutavel
   }
 
   object Cubo {
-    import List.fill
     def apply[A]: (Inteiro, Inteiro, Inteiro, => A) => Cubo[A] = imutavel[A] _
     def mutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Vetor[Vetor[Vetor[A]]] = {
-      Lista(fill(x)(Lista(fill(y)(Lista(fill(z)(valor)).mutavel)).mutavel)).mutavel
+      Lista.mutavel(x, Lista.mutavel(y, Lista.mutavel(z, valor)))
     }
     def imutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Cubo[A] = {
-      Lista(fill(x)(Lista(fill(y)(Lista(fill(z)(valor))))))
+      Lista.imutavel(x, Lista.imutavel(y, Lista.imutavel(z, valor)))
     }
     def imutável[A]: (Inteiro, Inteiro, Inteiro, => A) => Cubo[A] = imutavel
     def mutável[A]: (Inteiro, Inteiro, Inteiro, => A) => Vetor[Vetor[Vetor[A]]] = mutavel
@@ -166,13 +167,16 @@ object Potigolutil {
   }
 
   implicit class Textos(val lista: String) {
-    @deprecated def para_int: Inteiro = (intRE.findPrefixOf(lista).getOrElse("0")).toInt
+    private[this] val ZERO = "0"
+
+    @deprecated def para_int: Inteiro = (intRE.findPrefixOf(lista).getOrElse(ZERO)).toInt
     @deprecated def para_i: Inteiro = para_int
     @deprecated def para_inteiro: Inteiro = para_int
+    
     def inteiro: Inteiro = para_int
     def get(a: Int): Caractere = if (a > 0) lista(a - 1) else lista(tamanho + a)
     def posicao(elem: Caractere): Inteiro = lista.indexOf(elem) + 1
-    def para_numero: Real = ("0" + numRE.findPrefixOf(lista).getOrElse("0.0")).toDouble
+    def para_numero: Real = (ZERO + numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
@@ -212,7 +216,10 @@ object Potigolutil {
 
   implicit class Reais(x: Double) {
     def arredonde: Inteiro = x.round.toInt
-    def arredonde(n: Inteiro): Numero = ((x * Math.pow(10, n)).round / Math.pow(10, n))
+    def arredonde(n: Inteiro): Real = {
+      val precisao = Math.pow(10, n)
+      (x * precisao).round / precisao
+    }
   }
 
   implicit class Inteiros(x: Int) {
@@ -220,11 +227,13 @@ object Potigolutil {
   }
 
   implicit class Todos[T <: Any](x: T) {
-    def formato(formato: Texto): Texto =
-      try x.formatted(formato)
-      catch {
-        case e: IllegalFormatConversionException => "Erro de formato"
-      }
+    def formato(formato: Texto): Texto = Try {
+      x.formatted(formato)
+    } match {
+      case Success(s) => s
+      case Failure(_) => "Erro de formato"
+    }
+
     def %(formato_ : Texto): Texto = formato(formato_)
     @deprecated def para_texto: Texto = x.toString
     def texto: Texto = para_texto
