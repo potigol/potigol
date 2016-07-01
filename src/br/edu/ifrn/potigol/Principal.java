@@ -48,7 +48,7 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
 
-    public static void main(final String[] args) {
+    public static void main(final String ... args) {
         if (args.length == 0) {
             System.out.println(
                     "Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
@@ -94,15 +94,14 @@ public class Principal {
         final Path path = Paths.get(arq);
         final List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
         final StringBuffer s = new StringBuffer();
-        for (String linha : linhas) {
-            s.append(linha);
-            s.append('\n');
+        for (final String linha : linhas) {
+            s.append(linha).append('\n');
         }
         return s.toString();
     }
 
     private static boolean argument(final List<String> list, final String value) {
-        for (String a : list) {
+        for (final String a : list) {
             if (a.startsWith(value)) {
                 return true;
             }
