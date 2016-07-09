@@ -12,57 +12,59 @@ public class M {
             "super", "class", "case", "package", "default", "try", "this",
             "match", "continue", "throws");
 
-    static int num = 0;
+    private static int num = 0;
 
-    static String nextVar() {
+    private static String nextVar() {
         num++;
         return "$a" + num;
     }
 
-    static String escapeID(final String id) {
+    public static String escapeID(final String id) {
         if (scalawords.contains(id)) {
             return "`" + id + "`";
         }
         return id;
     }
 
-    static String getVetor(String id, String indice) {
+    public static String getVetor(final String id, final String indice) {
         return id + ".get(" + indice + ")";
     }
 
-    public static String lambda(String param, String corpo) {
+    public static String lambda(final String param, final String corpo) {
         return " (" + param + ")" + K.arrow + K.bloco(corpo);
     }
 
-    public static String tipoGenerico(String id, String tipo) {
+    public static String tipoGenerico(final String id, final String tipo) {
         return id + K.generico(tipo);
     }
 
-    public static String tipoFuncao(String esq, String dir) {
+    public static String tipoFuncao(final String esq, final String dir) {
         return K.exp(esq + K.arrow + dir);
     }
 
-    public static String tipoTupla(int tamanho, String tipo) {
+    public static String tipoTupla(final int tamanho, final String tipo) {
         return K.tupla + tamanho + K.generico(tipo);
     }
 
-    public static String chamadaFuncao(String nome, String param) {
+    public static String chamadaFuncao(final String nome, final String param) {
         return nome + K.param(param);
     }
 
-    public static String operacaoBin(String exp1, String op, String exp2) {
+    public static String operacaoBin(final String exp1, final String op,
+            final String exp2) {
         return "{" + exp1 + op + exp2 + "}";
     }
 
-    public static String paraFaca(String faixas, String guarda, String bloco) {
+    public static String paraFaca(final String faixas, final String guarda,
+            final String bloco) {
         return "for{" + faixas + K.guarda(guarda) + "} " + bloco;
     }
 
-    public static String expoente(String base, String exp) {
+    public static String expoente(final String base, final String exp) {
         return K.exp("Math.pow(" + base + K.virgula + exp + ")");
     }
 
-    public static String escolha(String exp, List<String> casos) {
+    public static String escolha(final String exp, final List<String> casos) {
         String corpo = "";
         for (final String caso : casos) {
             corpo += "  " + caso + K.NL;
@@ -70,28 +72,28 @@ public class M {
         return K.exp(exp) + " match " + K.bloco(corpo);
     }
 
-    public static String enquanto(String exp, String bloco) {
+    public static String enquanto(final String exp, final String bloco) {
         return K.enquanto + K.exp(exp) + bloco;
     }
 
-    public static String chamadaMetodo(String objeto, String metodo,
-            String param) {
+    public static String chamadaMetodo(final String objeto, final String metodo,
+            final String param) {
         return objeto + "." + metodo + K.param(param);
     }
 
-    public static String formato(String exp1, String fmt) {
+    public static String formato(final String exp1, final String fmt) {
         return K.formato(exp1, fmt);
     }
 
-    public static String aliasTipo(String id, String tipo) {
+    public static String aliasTipo(final String id, final String tipo) {
         return K.type + escapeID(id) + K.igual + tipo;
     }
 
-    public static String bloco(String exp) {
+    public static String bloco(final String exp) {
         return K.bloco(exp);
     }
 
-    public static String escreva(String exp, boolean nl) {
+    public static String escreva(final String exp, final boolean nl) {
         final String s;
         if (nl) {
             s = K.escreva(exp);
@@ -101,17 +103,18 @@ public class M {
         return s;
     }
 
-    public static String paraGere(String faixas, String se, String gere) {
+    public static String paraGere(final String faixas, final String se,
+            final String gere) {
         return "Lista((for{" + faixas + K.guarda(se) + "} yield "
                 + K.bloco(gere) + ").toList)";
     }
 
-    public static String senaoSe(String cond, String entao) {
+    public static String senaoSe(final String cond, final String entao) {
         return K.se + cond + K.entao + entao + K.NL;
     }
 
-    public static String se(String cond, String entao, List<String> senaose,
-            String senao) {
+    public static String se(final String cond, String entao,
+            final List<String> senaose, final String senao) {
         String s = "1 match {" + K.NL;
         s += K.se + cond + K.entao + entao + K.NL;
         for (final String c : senaose) {
@@ -121,7 +124,8 @@ public class M {
         return s;
     }
 
-    public static String atribSimples(List<String> ids, String exp) {
+    public static String atribSimples(final List<String> ids,
+            final String exp) {
         final String var = nextVar();
         String s = K.def + var + K.igual + exp + K.semi;
         for (final String id : ids) {
@@ -130,7 +134,7 @@ public class M {
         return s;
     }
 
-    public static String uso(String uso) {
+    public static String uso(final String uso) {
         return "import " + stripString(uso) + "._";
     }
 
@@ -153,25 +157,25 @@ public class M {
         return Arrays.asList(s.split(K.virgula));
     }
 
-    public static String DefFuncao(String id, String param, String tipo,
-            String corpo) {
+    public static String DefFuncao(final String id, final String param,
+            final String tipo, final String corpo) {
         return K.def + id + K.param(param) + K.tipo(tipo) + K.igual
                 + K.bloco(corpo) + K.NL;
     }
 
-    public static String declVariavel(String id, String exp) {
+    public static String declVariavel(final String id, final String exp) {
         return K.var + id + K.igual + exp;
     }
 
-    public static String tupla(int tamanho, String exp) {
+    public static String tupla(final int tamanho, final String exp) {
         return K.tupla + tamanho + K.param(exp);
     }
 
-    public static String lista(String exp) {
+    public static String lista(final String exp) {
         return K.lista(exp);
     }
 
-    public static String booleano(String bool) {
+    public static String booleano(final String bool) {
         final String valor;
         if (bool.equals("verdadeiro")) {
             valor = Boolean.TRUE.toString();
@@ -181,11 +185,12 @@ public class M {
         return valor;
     }
 
-    public static String declValor(String id, String exp) {
+    public static String declValor(final String id, final String exp) {
         return K.val + id + K.igual + exp + K.semi;
     }
 
-    public static String atribMultipla(List<String> ids, List<String> exps) {
+    public static String atribMultipla(final List<String> ids,
+            final List<String> exps) {
         final String[] aux = new String[ids.size()];
         final StringBuilder s = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
@@ -198,7 +203,7 @@ public class M {
         return s.toString();
     }
 
-    public static String faixa(String id, List<String> exps) {
+    public static String faixa(final String id, final List<String> exps) {
         final int tamanho = exps.size();
         final String inicio = exps.get(0);
         final String s;
@@ -215,7 +220,7 @@ public class M {
         return id + " <- " + s;
     }
 
-    public static String texto(String texto) {
+    public static String texto(final String texto) {
         String s = texto;
         if (s.contains("{")) {
             s = s.replace("$", "$$");
@@ -228,5 +233,8 @@ public class M {
             s = "s" + s;
         }
         return s;
+    }
+
+    private M() {
     }
 }
