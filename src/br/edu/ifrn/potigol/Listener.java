@@ -211,7 +211,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitTipo2(final Tipo2Context ctx) {
-        final List<String> lista = getValues(ctx.tipo());
+        final List<String> lista = this.getValues(ctx.tipo());
         String s = M.list2String(lista);
         this.setValue(ctx, s);
     }
@@ -248,7 +248,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitCaso(final CasoContext ctx) {
         final String exp = this.getValue(ctx.expr(0));
-        final String cond = getOrElse(ctx.expr(1), "");
+        final String cond = this.getOrElse(ctx.expr(1), "");
         String exps = this.getValue(ctx.exprlist());
         int p = exp.indexOf("a$", 0);
         if (p >= 0) {
@@ -347,7 +347,7 @@ public class Listener extends potigolBaseListener {
     public void exitChamada_metodo(final Chamada_metodoContext ctx) {
         final String objeto = this.getValue(ctx.expr());
         final String metodo = this.getValue(ctx.ID());
-        final String param = getOrElse(ctx.expr1(), "");
+        final String param = this.getOrElse(ctx.expr1(), "");
         final String s = M.chamadaMetodo(objeto, metodo, param);
         this.setValue(ctx, s);
     }
@@ -413,7 +413,7 @@ public class Listener extends potigolBaseListener {
     public void exitDef_funcao(final Def_funcaoContext ctx) {
         final String id = this.getValue(ctx.ID());
         final String param = this.getValue(ctx.dcls());
-        final String tipo = getOrElse(ctx.tipo(), "");
+        final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.expr());
         final String s = M.DefFuncao(id, param, tipo, corpo);
         this.setValue(ctx, s);
@@ -423,7 +423,7 @@ public class Listener extends potigolBaseListener {
     public void exitDef_funcao_corpo(final Def_funcao_corpoContext ctx) {
         final String id = this.getValue(ctx.ID());
         final String param = this.getValue(ctx.dcls());
-        final String tipo = getOrElse(ctx.tipo(), "");
+        final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.exprlist());
         final String s = M.DefFuncao(id, param, tipo, corpo);
         this.setValue(ctx, s);
@@ -474,7 +474,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitExpr2(final Expr2Context ctx) {
-        final List<String> a = getValues(ctx.expr());
+        final List<String> a = this.getValues(ctx.expr());
         this.setValue(ctx, M.list2String(a));
         if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr) {
             this.setValue(ctx,
@@ -498,7 +498,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitFaixa(final FaixaContext ctx) {
         final String id = this.getValue(ctx.ID());
-        final List<String> exps = getValues(ctx.expr());
+        final List<String> exps = this.getValues(ctx.expr());
         final String s = M.faixa(id, exps);
         this.setValue(ctx, s);
     }
@@ -523,13 +523,13 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitId1(final Id1Context ctx) {
-        final List<String> a = getValues(ctx.ID());
+        final List<String> a = this.getValues(ctx.ID());
         this.setValue(ctx, M.list2String(a));
     }
 
     @Override
     public void exitId2(final Id2Context ctx) {
-        final List<String> a = getValues(ctx.ID());
+        final List<String> a = this.getValues(ctx.ID());
         this.setValue(ctx, M.list2String(a));
     }
 
@@ -607,7 +607,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitPara_faca(final Para_facaContext ctx) {
         final String faixas = this.getValue(ctx.faixas());
-        final String guarda = getOrElse(ctx.expr(), "");
+        final String guarda = this.getOrElse(ctx.expr(), "");
         final String bloco = this.getValue(ctx.bloco());
         final String s = M.paraFaca(faixas, guarda, bloco);
         this.setValue(ctx, s);
@@ -616,7 +616,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitPara_gere(final Para_gereContext ctx) {
         final String faixas = this.getValue(ctx.faixas());
-        final String se = getOrElse(ctx.expr(), "");
+        final String se = this.getOrElse(ctx.expr(), "");
         final String gere = this.getValue(ctx.exprlist());
         final String s = M.paraGere(faixas, se, gere);
         this.setValue(ctx, s);
@@ -652,7 +652,7 @@ public class Listener extends potigolBaseListener {
     public void exitSe(final SeContext ctx) {
         final String cond = this.getValue(ctx.expr());
         final String entao = this.getValue(ctx.entao());
-        final String senao = getOrElse(ctx.senao(), "");
+        final String senao = this.getOrElse(ctx.senao(), "");
         final List<String> senaose = new ArrayList<String>();
         for (final SenaoseContext c : ctx.senaose()) {
             senaose.add(this.getValue(c));
@@ -781,11 +781,11 @@ public class Listener extends potigolBaseListener {
 
     private void verificarDuplicados(final List<String> ids) {
         for (final String i : ids) {
-            if (valores().contains(i)) {
+            if (this.valores().contains(i)) {
                 this.warnings.add("Valor " + i + " declarado duas vezes.");
             }
         }
-        declaracoes.peek().addAll(ids);
+        this.declaracoes.peek().addAll(ids);
     }
 
     private List<String> valores() {
@@ -795,5 +795,4 @@ public class Listener extends potigolBaseListener {
         }
         return a;
     }
-
 }

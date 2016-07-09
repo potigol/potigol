@@ -3,7 +3,7 @@ package br.edu.ifrn.potigol;
 import java.util.Arrays;
 import java.util.List;
 
-public class M {
+public final class M {
     private static List<String> scalawords = Arrays.asList("type", "yield",
             "lazy", "override", "def", "with", "val", "var", "false", "true",
             "sealed", "abstract", "private", "trait", "object", "null", "if",
@@ -113,7 +113,7 @@ public class M {
         return K.se + cond + K.entao + entao + K.NL;
     }
 
-    public static String se(final String cond, String entao,
+    public static String se(final String cond, final String entao,
             final List<String> senaose, final String senao) {
         String s = "1 match {" + K.NL;
         s += K.se + cond + K.entao + entao + K.NL;
@@ -177,7 +177,7 @@ public class M {
 
     public static String booleano(final String bool) {
         final String valor;
-        if (bool.equals("verdadeiro")) {
+        if ("verdadeiro".equals(bool)) {
             valor = Boolean.TRUE.toString();
         } else {
             valor = Boolean.FALSE.toString();

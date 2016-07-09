@@ -1,6 +1,6 @@
 package br.edu.ifrn.potigol;
 
-public class K {
+public final class K {
     public static final String val = "val ";
 
     public static final String def = "def ";
@@ -34,6 +34,9 @@ public class K {
     public static final String senao = "case _ => ";
 
     public static final String entao = ") => ";
+
+    private K() {
+    }
 
     public static String bloco(final String corpo) {
         return "{" + NL + corpo + NL + "}";
@@ -80,8 +83,5 @@ public class K {
         } else {
             return ": " + s;
         }
-    }
-
-    private K() {
     }
 }
