@@ -128,17 +128,17 @@ public class Listener extends potigolBaseListener {
     }
 
     private List<String> getValues(final List<? extends ParseTree> list) {
-        final List<String> a = new ArrayList<String>();
+        final List<String> values = new ArrayList<String>();
         for (final ParseTree id : list) {
-            a.add(this.getValue(id));
+            values.add(this.getValue(id));
         }
-        return a;
+        return values;
     }
 
     private String getOrElse(final ParseTree node, final String defaultValue) {
-        final String value = this.getValue(node);
+        String value = this.getValue(node);
         if (value == null) {
-            return defaultValue;
+            value = defaultValue;
         }
         return value;
     }
@@ -182,7 +182,6 @@ public class Listener extends potigolBaseListener {
         final StringBuilder resposta = new StringBuilder(id);
         for (final String ind : indices) {
             resposta.append(K.param(ind + " -1"));
-
         }
         resposta.append(K.IGUAL).append(exp);
         this.setValue(ctx, resposta.toString());
@@ -229,14 +228,14 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitCons(final ConsContext ctx) {
-        final String a = this.getValue(ctx.expr(0));
-        final String as = this.getValue(ctx.expr(1));
+        final String head = this.getValue(ctx.expr(0));
+        final String tail = this.getValue(ctx.expr(1));
         final String resposta;
         if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
-            resposta = "Lista(collection.immutable.::( " + a + ", a$" + as
+            resposta = "Lista(collection.immutable.::( " + head + ", a$" + tail
                     + "$))";
         } else {
-            resposta = K.bloco(a + "::" + as);
+            resposta = K.bloco(head + "::" + tail);
         }
         this.setValue(ctx, resposta);
     }
@@ -254,11 +253,11 @@ public class Listener extends potigolBaseListener {
         final String exp = this.getValue(ctx.expr(0));
         final String cond = this.getOrElse(ctx.expr(1), "");
         String exps = this.getValue(ctx.exprlist());
-        int p = exp.indexOf("a$", 0);
-        if (p >= 0) {
-            String resposta = exp.substring(p + 2);
-            p = resposta.indexOf('$', 0);
-            resposta = resposta.substring(0, p);
+        int posicao = exp.indexOf("a$", 0);
+        if (posicao >= 0) {
+            String resposta = exp.substring(posicao + 2);
+            posicao = resposta.indexOf('$', 0);
+            resposta = resposta.substring(0, posicao);
             // String resposta = exp.split("if")[0].split("::")[1].replaceAll("
             // ",
             // "").substring(2);
@@ -362,7 +361,7 @@ public class Listener extends potigolBaseListener {
     public void exitComparacao(final ComparacaoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
-        String op = ctx.getChild(1).getText().replace("<>", "!=");
+        final String op = ctx.getChild(1).getText().replace("<>", "!=");
         final String resposta = M.operacaoBin(exp1, op, exp2);
         this.setValue(ctx, resposta);
     }
@@ -381,8 +380,8 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitDcls(final DclsContext ctx) {
-        final List<String> a = this.getValues(ctx.dcl());
-        this.setValue(ctx, M.list2String(a));
+        final List<String> lista = this.getValues(ctx.dcl());
+        this.setValue(ctx, M.list2String(lista));
     }
 
     @Override
@@ -474,14 +473,14 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitExpr1(final Expr1Context ctx) {
-        final List<String> a = this.getValues(ctx.expr());
-        this.setValue(ctx, M.list2String(a));
+        final List<String> lista = this.getValues(ctx.expr());
+        this.setValue(ctx, M.list2String(lista));
     }
 
     @Override
     public void exitExpr2(final Expr2Context ctx) {
-        final List<String> a = this.getValues(ctx.expr());
-        this.setValue(ctx, M.list2String(a));
+        final List<String> resposta = this.getValues(ctx.expr());
+        this.setValue(ctx, M.list2String(resposta));
         if (ctx.getParent().getRuleIndex() == potigolParser.RULE_expr) {
             this.setValue(ctx,
                     // "Tupla"+ctx.expr().size()+"("+
@@ -513,7 +512,7 @@ public class Listener extends potigolBaseListener {
     public void exitFaixas(final FaixasContext ctx) {
         final StringBuilder resposta = new StringBuilder();
         for (final FaixaContext f : ctx.faixa()) {
-            String faixa = this.getValue(f);
+            final String faixa = this.getValue(f);
             if (f != ctx.faixa(0)) {
                 resposta.append(K.SEMI);
             }
@@ -529,14 +528,14 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitId1(final Id1Context ctx) {
-        final List<String> a = this.getValues(ctx.ID());
-        this.setValue(ctx, M.list2String(a));
+        final List<String> lista = this.getValues(ctx.ID());
+        this.setValue(ctx, M.list2String(lista));
     }
 
     @Override
     public void exitId2(final Id2Context ctx) {
-        final List<String> a = this.getValues(ctx.ID());
-        this.setValue(ctx, M.list2String(a));
+        final List<String> lista = this.getValues(ctx.ID());
+        this.setValue(ctx, M.list2String(lista));
     }
 
     @Override
@@ -700,7 +699,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitTexto(final TextoContext ctx) {
         final String texto = ctx.getText();
-        String resposta = M.texto(texto);
+        final String resposta = M.texto(texto);
         this.setValue(ctx, resposta);
     }
 
@@ -734,7 +733,7 @@ public class Listener extends potigolBaseListener {
     public void exitTupla(final TuplaContext ctx) {
         final String exp = this.getValue(ctx.expr2());
         final int tamanho = ctx.expr2().expr().size();
-        String resposta = M.tupla(tamanho, exp);
+        final String resposta = M.tupla(tamanho, exp);
         this.setValue(ctx, resposta);
     }
 
@@ -797,10 +796,10 @@ public class Listener extends potigolBaseListener {
     }
 
     private List<String> valores() {
-        final List<String> a = new ArrayList<String>();
+        final List<String> lista = new ArrayList<String>();
         for (final List<String> declaracao : this.declaracoes) {
-            a.addAll(declaracao);
+            lista.addAll(declaracao);
         }
-        return a;
+        return lista;
     }
 }

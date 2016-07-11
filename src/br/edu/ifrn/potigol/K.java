@@ -45,11 +45,15 @@ public final class K {
 
     public static final String RIGHTBRACE = "}";
 
+    public static final String OPENBRACKET = "(";
+    
+    public static final String CLOSEBRACKET = ")";
+    
     private K() {
     }
 
     public static String bloco(final String corpo) {
-        return "{" + NEWLINE + corpo + NEWLINE + "}";
+        return LEFTBRACE + NEWLINE + corpo + NEWLINE + RIGHTBRACE;
     }
 
     public static String generico(final String tipo) {
@@ -57,11 +61,11 @@ public final class K {
     }
 
     public static String exp(final String expr) {
-        return "(" + expr + ")";
+        return OPENBRACKET + expr + CLOSEBRACKET;
     }
 
     public static String param(final String expr) {
-        return "(" + expr + ")";
+        return OPENBRACKET + expr + CLOSEBRACKET;
     }
 
     public static String formato(final String expr, final String fmt) {

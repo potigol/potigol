@@ -110,7 +110,7 @@ object Erros {
     }
   }
   def traduzir(texto: String): String = {
-    val inicio = texto.indexOf("error:")
+    val inicio = texto.indexOf("error:", 0)
     val s = texto.drop(inicio).split('^')(0).split(": ", 3).drop(1)(1)
     mensagens(s)
   }

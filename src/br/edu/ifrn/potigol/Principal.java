@@ -47,9 +47,9 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
+    final String versao = "0.9.7";
 
-    public static void main(final String... args) {
-        final String versao = "0.9.7";
+    public void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versão " + versao
                     + " Copyright (C) 2016 Leonardo Lucena" + "\n\n"
@@ -59,10 +59,8 @@ public class Principal {
 
         final String arq = args[args.length - 1];
         final List<String> argList = Arrays.asList(args);
-        final boolean debug = argument(argList, "-d");
-        final boolean wait = argument(argList, "-w");
-        final boolean color = argument(argList, "-c");
         try {
+            final boolean wait = argument(argList, "-w");
             if (wait) {
                 System.out.print("Aguarde...");
             }
@@ -71,7 +69,9 @@ public class Principal {
             final String saida = listener.getSaida();
 
             if (saida.trim().length() > 40) {
+                final boolean debug = argument(argList, "-d");
                 final Compilador compilador = new Compilador(debug, wait);
+                final boolean color = argument(argList, "-c");
                 compilador.executar(saida, lerArquivo(arq), color);
             }
         } catch (IOException e) {
@@ -101,6 +101,9 @@ public class Principal {
             conteudo.append(linha).append('\n');
         }
         return conteudo.toString();
+    }
+
+    public Principal() {
     }
 
     private static boolean argument(final List<String> list,

@@ -31,7 +31,7 @@
 
 package br.edu.ifrn.potigol
 
-import util.{ Failure, Success, Try }
+import scala.util.{ Failure, Success, Try }
 
 import com.twitter.util.Eval
 
