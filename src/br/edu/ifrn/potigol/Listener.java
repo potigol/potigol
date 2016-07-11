@@ -181,7 +181,7 @@ public class Listener extends potigolBaseListener {
         final StringBuilder s = new StringBuilder(id);
         for (final String ind : indices)
             s.append(K.param(ind + " -1"));
-        s.append(K.igual).append(exp);
+        s.append(K.IGUAL).append(exp);
         this.setValue(ctx, s.toString());
     }
 
@@ -257,10 +257,10 @@ public class Listener extends potigolBaseListener {
             s = s.substring(0, p);
             // String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
             // "").substring(2);
-            exps = K.val + s + K.igual + "Lista(a$" + s + "$)" + K.semi
+            exps = K.VAL + s + K.IGUAL + "Lista(a$" + s + "$)" + K.SEMI
                     + exps.substring(1);
         }
-        String s = "case " + exp + K.guarda(cond) + K.arrow + exps;
+        String s = "case " + exp + K.guarda(cond) + K.ARROW + exps;
         this.setValue(ctx, s);
     }
 
@@ -294,23 +294,24 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
-        String s = "case class " + M.escapeID(id) + "(";
+        StringBuilder s = new StringBuilder();
+        s.append("case class " + M.escapeID(id) + "(");
         for (int i = 2; i < ctx.children.size() - 1; i++) {
             ParseTree d = ctx.children.get(i);
-            s += "  " + this.getValue(d);
+            s.append("  " + this.getValue(d));
             if (i < ctx.children.size() - 2) {
-                s += K.virgula;
+                s.append(K.VIRGULA);
             }
         }
-        s += ")";
-        this.setValue(ctx, s);
+        s.append(")");
+        this.setValue(ctx, s.toString());
     }
 
     @Override
     public void enterProg(final ProgContext ctx) {
         String pacote = "import br.edu.ifrn.potigol.";
-        saida += pacote + "Potigolutil._" + K.NL;
-        saida += pacote + "Matematica._" + K.NL;
+        saida += pacote + "Potigolutil._" + K.NEWLINE;
+        saida += pacote + "Matematica._" + K.NEWLINE;
         this.declaracoes.push(new ArrayList<String>());
     }
 
@@ -365,7 +366,7 @@ public class Listener extends potigolBaseListener {
     public void exitDcl(final DclContext ctx) {
         final String id = this.getValue(ctx.id1());
         final String tipo = this.getValue(ctx.tipo());
-        String s = id.replaceAll(K.virgula, ": " + tipo + K.virgula) + ": "
+        String s = id.replaceAll(K.VIRGULA, ": " + tipo + K.VIRGULA) + ": "
                 + tipo;
         if (ctx.parent.getRuleIndex() == potigolParser.RULE_decl_tipo) {
             s = "" + s;
@@ -383,7 +384,7 @@ public class Listener extends potigolBaseListener {
     public void exitDecl(final DeclContext ctx) {
         String s = "";
         for (final ParseTree i : ctx.children) {
-            s += K.NL + this.getValue(i);
+            s += K.NEWLINE + this.getValue(i);
         }
         this.setValue(ctx, s);
     }
@@ -391,12 +392,12 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDecl_var_multipla(Decl_var_multiplaContext ctx) {
         final String id = this.getValue(ctx.id2());
-        final String[] ids = id.split(K.virgula);
+        final String[] ids = id.split(K.VIRGULA);
         final String exp = this.getValue(ctx.expr2());
-        final String[] exps = exp.split(K.virgula);
+        final String[] exps = exp.split(K.VIRGULA);
         String s = "";
         for (int i = 0; i < ids.length; i++) {
-            s += K.var + ids[i] + K.igual + exps[i] + K.NL;
+            s += K.VAR + ids[i] + K.IGUAL + exps[i] + K.NEWLINE;
         }
         this.setValue(ctx, s);
     }
@@ -433,7 +434,7 @@ public class Listener extends potigolBaseListener {
     public void exitE_logico(final E_logicoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
-        final String s = M.operacaoBin(exp1, K.and, exp2);
+        final String s = M.operacaoBin(exp1, K.AND, exp2);
         this.setValue(ctx, s);
     }
 
@@ -487,9 +488,9 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitExprlist(final ExprlistContext ctx) {
-        String s = K.NL;
+        String s = K.NEWLINE;
         for (final InstContext i : ctx.inst()) {
-            s += "  " + this.getValue(i) + K.NL;
+            s += "  " + this.getValue(i) + K.NEWLINE;
         }
         this.setValue(ctx, s);
         this.declaracoes.pop();
@@ -509,7 +510,7 @@ public class Listener extends potigolBaseListener {
         for (final FaixaContext f : ctx.faixa()) {
             String faixa = this.getValue(f);
             if (f != ctx.faixa(0)) {
-                s.append(K.semi);
+                s.append(K.SEMI);
             }
             s.append(faixa);
         }
@@ -549,8 +550,8 @@ public class Listener extends potigolBaseListener {
         // " .. " +
         // ctx.getSourceInterval().b;
         for (final ParseTree i : ctx.children) {
-            s.append("/*Codigo: ").append(codigo).append(" */").append(K.NL)
-                    .append(this.getValue(i)).append(K.NL);
+            s.append("/*Codigo: ").append(codigo).append(" */").append(K.NEWLINE)
+                    .append(this.getValue(i)).append(K.NEWLINE);
         }
         this.setValue(ctx, s.toString());
     }
@@ -600,7 +601,7 @@ public class Listener extends potigolBaseListener {
     public void exitOu_logico(final Ou_logicoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
-        final String s = M.operacaoBin(exp1, K.or, exp2);
+        final String s = M.operacaoBin(exp1, K.OR, exp2);
         this.setValue(ctx, s);
     }
 
@@ -632,13 +633,13 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitProg(final ProgContext ctx) {
         if (!this.warnings.isEmpty()) {
-            saida += "escreva(\"===[ATENCAO]===\")" + K.NL;
+            saida += "escreva(\"===[ATENCAO]===\")" + K.NEWLINE;
             saida += "escreva(\"" + this.warnings.get(0) + "\")";
         }
         for (final InstContext i : ctx.inst()) {
             saida += this.getValue(i);
         }
-        saida += K.NL + "()" + K.NL;
+        saida += K.NEWLINE + "()" + K.NEWLINE;
         this.setValue(ctx, saida);
         this.declaracoes.pop();
     }
@@ -699,20 +700,21 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
-        String s = ctx.BS().getText().replace("{", "${");
-        s = s + this.getValue(ctx.expr(0));
+        StringBuilder s = new StringBuilder();
+        s.append(ctx.BS().getText().replace("{", "${"));
+        s.append(this.getValue(ctx.expr(0)));
         int i = 1;
         for (final TerminalNode x : ctx.MS()) {
-            s = s + x.getText().replace("{", "${");
-            s = s + this.getValue(ctx.expr(i));
+            s.append(x.getText().replace("{", "${"));
+            s.append(this.getValue(ctx.expr(i)));
             i++;
         }
-        s = s + ctx.ES().getText();
-        if (s.contains("\n")) {
-            s = "\"\"" + s + "\"\".stripMargin('|')";
+        s.append(ctx.ES().getText());
+        if (s.toString().contains("\n")) {
+            s.insert(0, "\"\"").append("\"\".stripMargin('|')");
         }
-        s = "s" + s;
-        this.setValue(ctx, s);
+        s.insert(0, "s");
+        this.setValue(ctx, s.toString());
     }
 
     @Override
@@ -776,7 +778,7 @@ public class Listener extends potigolBaseListener {
     }
 
     public String getSaida() {
-        return saida.replaceAll(K.NL2, K.NL).replaceAll(K.NL2, K.NL);
+        return saida.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2, K.NEWLINE);
     }
 
     private void verificarDuplicados(final List<String> ids) {

@@ -31,7 +31,7 @@ public final class M {
     }
 
     public static String lambda(final String param, final String corpo) {
-        return " (" + param + ")" + K.arrow + K.bloco(corpo);
+        return " (" + param + ")" + K.ARROW + K.bloco(corpo);
     }
 
     public static String tipoGenerico(final String id, final String tipo) {
@@ -39,11 +39,11 @@ public final class M {
     }
 
     public static String tipoFuncao(final String esq, final String dir) {
-        return K.exp(esq + K.arrow + dir);
+        return K.exp(esq + K.ARROW + dir);
     }
 
     public static String tipoTupla(final int tamanho, final String tipo) {
-        return K.tupla + tamanho + K.generico(tipo);
+        return K.TUPLA + tamanho + K.generico(tipo);
     }
 
     public static String chamadaFuncao(final String nome, final String param) {
@@ -61,19 +61,19 @@ public final class M {
     }
 
     public static String expoente(final String base, final String exp) {
-        return K.exp("Math.pow(" + base + K.virgula + exp + ")");
+        return K.exp("Math.pow(" + base + K.VIRGULA + exp + ")");
     }
 
     public static String escolha(final String exp, final List<String> casos) {
         String corpo = "";
         for (final String caso : casos) {
-            corpo += "  " + caso + K.NL;
+            corpo += "  " + caso + K.NEWLINE;
         }
         return K.exp(exp) + " match " + K.bloco(corpo);
     }
 
     public static String enquanto(final String exp, final String bloco) {
-        return K.enquanto + K.exp(exp) + bloco;
+        return K.ENQUANTO + K.exp(exp) + bloco;
     }
 
     public static String chamadaMetodo(final String objeto, final String metodo,
@@ -86,7 +86,7 @@ public final class M {
     }
 
     public static String aliasTipo(final String id, final String tipo) {
-        return K.type + escapeID(id) + K.igual + tipo;
+        return K.TYPE + escapeID(id) + K.IGUAL + tipo;
     }
 
     public static String bloco(final String exp) {
@@ -110,26 +110,26 @@ public final class M {
     }
 
     public static String senaoSe(final String cond, final String entao) {
-        return K.se + cond + K.entao + entao + K.NL;
+        return K.SE + cond + K.ENTAO + entao + K.NEWLINE;
     }
 
     public static String se(final String cond, final String entao,
             final List<String> senaose, final String senao) {
-        String s = "1 match {" + K.NL;
-        s += K.se + cond + K.entao + entao + K.NL;
+        String s = "1 match {" + K.NEWLINE;
+        s += K.SE + cond + K.ENTAO + entao + K.NEWLINE;
         for (final String c : senaose) {
-            s += c + K.NL;
+            s += c + K.NEWLINE;
         }
-        s += K.senao + senao + K.NL + "}";
+        s += K.SENAO + senao + K.NEWLINE + "}";
         return s;
     }
 
     public static String atribSimples(final List<String> ids,
             final String exp) {
         final String var = nextVar();
-        String s = K.def + var + K.igual + exp + K.semi;
+        String s = K.DEF + var + K.IGUAL + exp + K.SEMI;
         for (final String id : ids) {
-            s += id + K.igual + var + K.semi;
+            s += id + K.IGUAL + var + K.SEMI;
         }
         return s;
     }
@@ -148,27 +148,27 @@ public final class M {
             s = a.get(0);
         }
         for (int i = 1; i < a.size(); i++) {
-            s += K.virgula + a.get(i);
+            s += K.VIRGULA + a.get(i);
         }
         return s;
     }
 
     public static List<String> string2List(final String s) {
-        return Arrays.asList(s.split(K.virgula));
+        return Arrays.asList(s.split(K.VIRGULA));
     }
 
     public static String DefFuncao(final String id, final String param,
             final String tipo, final String corpo) {
-        return K.def + id + K.param(param) + K.tipo(tipo) + K.igual
-                + K.bloco(corpo) + K.NL;
+        return K.DEF + id + K.param(param) + K.tipo(tipo) + K.IGUAL
+                + K.bloco(corpo) + K.NEWLINE;
     }
 
     public static String declVariavel(final String id, final String exp) {
-        return K.var + id + K.igual + exp;
+        return K.VAR + id + K.IGUAL + exp;
     }
 
     public static String tupla(final int tamanho, final String exp) {
-        return K.tupla + tamanho + K.param(exp);
+        return K.TUPLA + tamanho + K.param(exp);
     }
 
     public static String lista(final String exp) {
@@ -186,7 +186,7 @@ public final class M {
     }
 
     public static String declValor(final String id, final String exp) {
-        return K.val + id + K.igual + exp + K.semi;
+        return K.VAL + id + K.IGUAL + exp + K.SEMI;
     }
 
     public static String atribMultipla(final List<String> ids,
@@ -195,10 +195,10 @@ public final class M {
         final StringBuilder s = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             aux[i] = nextVar();
-            s.append(K.val + aux[i] + K.igual + exps.get(i) + K.semi);
+            s.append(K.VAL + aux[i] + K.IGUAL + exps.get(i) + K.SEMI);
         }
         for (int i = 0; i < ids.size(); i++) {
-            s.append(ids.get(i) + K.igual + aux[i] + K.semi);
+            s.append(ids.get(i) + K.IGUAL + aux[i] + K.SEMI);
         }
         return s.toString();
     }
@@ -226,7 +226,7 @@ public final class M {
             s = s.replace("$", "$$");
         }
         s = s.replace("{", "${");
-        if (s.contains(K.NL)) {
+        if (s.contains(K.NEWLINE)) {
             s = "\"\"" + s + "\"\".stripMargin('|')";
         }
         if (s.contains("{")) {

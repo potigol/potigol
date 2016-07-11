@@ -31,16 +31,13 @@
 
 package br.edu.ifrn.potigol
 
-import java.util.regex.PatternSyntaxException
-
-import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.{ Seq => MSeq }
-import scala.io.StdIn
-import scala.util.{ Failure, Success, Try }
-
-import br.edu.ifrn.potigol.Potigolutil.{ Inteiro, Matriz, Vetor }
+import collection.generic.CanBuildFrom
+import collection.mutable.{ Seq => MSeq }
+import io.StdIn
+import util.{ Failure, Success, Try }
 
 object Potigolutil {
+  private[this] val since094 = "0.9.4"
   // Tipos
   type Texto = String
   type Inteiro = Int
@@ -82,7 +79,7 @@ object Potigolutil {
     def ultimo: T = lista.last
     def injete[A >: T](f: (A, T) => A): A = lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, T) => A): A = lista.foldLeft(neutro)(f)
-    def ache(p: T => Logico): Option[T] = lista.find(p)
+    def ache(p: T => Lógico): Option[T] = lista.find(p)
     def contém: T => Lógico = contem
     def cabeça: T = cabeca
     def primeiro: T = cabeca
@@ -99,20 +96,20 @@ object Potigolutil {
     def cauda: Lista[T] = Lista(lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
     def inverta: Lista[T] = Lista(lista.reverse)
-    @deprecated("Use 'selecione'", "0.9.4") def filtre(p: T => Lógico): Lista[T] = Lista(lista.filter(p))
+    @deprecated("Use 'selecione'", since094) def filtre(p: T => Lógico): Lista[T] = Lista(lista.filter(p))
     def selecione: (T => Lógico) => Lista[T] = filtre
     def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
     def pegue_enquanto(p: T => Lógico): Lista[T] = Lista(lista.takeWhile(p))
-    @deprecated("Use 'descarte_enquanto'", "0.9.4") def passe_enquanto(p: T => Lógico): Lista[T] = Lista(lista.dropWhile(p))
+    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto(p: T => Lógico): Lista[T] = Lista(lista.dropWhile(p))
     def descarte_enquanto: (T => Lógico) => Lista[T] = passe_enquanto
-    @deprecated("Use 'descarte'", "0.9.4") def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
+    @deprecated("Use 'descarte'", since094) def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
     def descarte: Inteiro => Lista[T] = passe _
     def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
     def +(outra: Lista[T]): Lista[T] = Lista(lista ::: outra.lista)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
     def remova(i: Inteiro): Lista[T] = Lista(lista.take(i - 1) ::: lista.drop(i))
     def insira(i: Inteiro, valor: T): Lista[T] = Lista(lista.take(i - 1) ::: valor :: lista.drop(i - 1))
-    def divida_quando(f: (T, T) => Logico): Matriz[T] = Lista(lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
+    def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     })
   }
@@ -155,7 +152,7 @@ object Potigolutil {
     def cauda: Vetor[T] = Vetor(lista.tail)
     def inverta: Vetor[T] = Vetor(lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
-    @deprecated def filtre(p: T => Logico): Vetor[T] = Vetor(lista.filter(p))
+    @deprecated def filtre(p: T => Lógico): Vetor[T] = Vetor(lista.filter(p))
     def selecione: (T => Lógico) => Vetor[T] = filtre
     def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(lista.map(f))
     def pegue(a: Inteiro): Vetor[T] = Vetor(lista.take(a))
@@ -181,7 +178,7 @@ object Potigolutil {
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
-    def divida_quando(f: (Caractere, Caractere) => Logico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
+    def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     }).map(_.junte("")))
     def contem(a: Caractere): Lógico = lista.contains(a)
@@ -198,8 +195,8 @@ object Potigolutil {
     def injete[A](neutro: A)(f: (A, Caractere) => A): A = lista.foldLeft(neutro)(f)
     def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
     def ache(p: Caractere => Lógico): Option[Caractere] = lista.find(p)
-    def pegue_enquanto(p: Caractere => Logico): Texto = lista.takeWhile(p)
-    @deprecated def passe_enquanto(p: Caractere => Logico): Texto = lista.dropWhile(p)
+    def pegue_enquanto(p: Caractere => Lógico): Texto = lista.takeWhile(p)
+    @deprecated def passe_enquanto(p: Caractere => Lógico): Texto = lista.dropWhile(p)
     def descarte_enquanto: (Caractere => Lógico) => Texto = passe_enquanto
     def para_lista: Lista[Caractere] = Lista(lista.toList)
     def contém: Caractere => Lógico = contem

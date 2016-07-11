@@ -1,69 +1,69 @@
 package br.edu.ifrn.potigol;
 
 public final class K {
-    public static final String val = "val ";
+    public static final String VAL = "val ";
 
-    public static final String def = "def ";
+    public static final String DEF = "def ";
 
-    public static final String semi = " ;\n";
+    public static final String SEMI = " ;\n";
 
-    public static final String NL = "\n";
+    public static final String NEWLINE = "\n";
 
     public static final String NL2 = "\n\n";
 
-    public static final String igual = " = ";
+    public static final String IGUAL = " = ";
 
-    public static final String virgula = ",";
+    public static final String VIRGULA = ",";
 
-    public static final String var = "var ";
+    public static final String VAR = "var ";
 
-    public static final String and = " && ";
+    public static final String AND = " && ";
 
-    public static final String or = " || ";
+    public static final String OR = " || ";
 
-    public static final String enquanto = "while ";
+    public static final String ENQUANTO = "while ";
 
-    public static final String type = "type ";
+    public static final String TYPE = "type ";
 
-    public static final String tupla = "Tupla";
+    public static final String TUPLA = "Tupla";
 
-    public static final String arrow = " => ";
+    public static final String ARROW = " => ";
 
-    public static final String se = "case _ if (";
+    public static final String SE = "case _ if (";
 
-    public static final String senao = "case _ => ";
+    public static final String SENAO = "case _ => ";
 
-    public static final String entao = ") => ";
+    public static final String ENTAO = ") => ";
 
     private K() {
     }
 
     public static String bloco(final String corpo) {
-        return "{" + NL + corpo + NL + "}";
+        return "{" + NEWLINE + corpo + NEWLINE + "}";
     }
 
-    public static String generico(final String s) {
-        return "[" + s + "]";
+    public static String generico(final String tipo) {
+        return "[" + tipo + "]";
     }
 
-    public static String exp(final String s) {
-        return "(" + s + ")";
+    public static String exp(final String expr) {
+        return "(" + expr + ")";
     }
 
-    public static String param(final String s) {
-        return "(" + s + ")";
+    public static String param(final String expr) {
+        return "(" + expr + ")";
     }
 
-    public static String formato(final String s, final String fmt) {
-        return exp(s) + ".format" + param(fmt);
+    public static String formato(final String expr, final String fmt) {
+        return exp(expr) + ".format" + param(fmt);
     }
 
-    public static String escreva(final String s) {
-        return "escreva(" + s + ")";
+    public static String escreva(final String expr) {
+        return "escreva(" + expr + ")";
     }
 
-    public static String imprima(final String s) {
-        return "imprima(" + s + ")";
+    public static String imprima(final String expr) {
+        return "imprima(" + expr + ")";
     }
 
     public static String lista(final String exp) {
@@ -71,17 +71,22 @@ public final class K {
     }
 
     public static String guarda(final String cond) {
+        final String resp;
         if (!cond.isEmpty()) {
-            return " if " + cond;
+            resp = " if " + cond;
+        } else {
+            resp = " ";
         }
-        return " ";
+        return resp;
     }
 
-    public static String tipo(final String s) {
-        if (s.isEmpty()) {
-            return "";
+    public static String tipo(final String valor) {
+        final String resp;
+        if (valor.isEmpty()) {
+            resp =  "";
         } else {
-            return ": " + s;
+            resp =  ": " + valor;
         }
+        return resp;
     }
 }
