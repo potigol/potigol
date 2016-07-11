@@ -34,10 +34,16 @@ public final class K {
     public static final String SENAO = "case _ => ";
 
     public static final String ENTAO = ") => ";
-    
+
     public static final String ATE = " to ";
 
     public static final String PASSO = " by ";
+
+    public static final String GRAVE = "`";
+
+    public static final String LEFTBRACE = "{";
+
+    public static final String RIGHTBRACE = "}";
 
     private K() {
     }

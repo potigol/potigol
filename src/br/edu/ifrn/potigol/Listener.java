@@ -111,7 +111,7 @@ import br.edu.ifrn.potigol.parser.potigolParser.Valor_simplesContext;
 
 public class Listener extends potigolBaseListener {
 
-    private final ParseTreeProperty<String> values = new ParseTreeProperty<String>();
+    private final ParseTreeProperty<String> values = new ParseTreeProperty<>();
 
     private final Stack<List<String>> declaracoes = new Stack<List<String>>();
 
@@ -135,39 +135,39 @@ public class Listener extends potigolBaseListener {
         return a;
     }
 
-    private String getOrElse(final ParseTree node, final String s) {
+    private String getOrElse(final ParseTree node, final String defaultValue) {
         final String value = this.getValue(node);
         if (value == null) {
-            return s;
+            return defaultValue;
         }
         return value;
     }
 
     @Override
     public void exitChar(final CharContext ctx) {
-        final String s = ctx.CHAR().getText();
-        this.setValue(ctx, s);
+        final String resposta = ctx.CHAR().getText();
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitGet_vetor(final Get_vetorContext ctx) {
         final String id = this.getValue(ctx.expr(0));
         final String indice = this.getValue(ctx.expr(1));
-        final String s = M.getVetor(id, indice);
-        this.setValue(ctx, s);
+        final String resposta = M.getVetor(id, indice);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitDcl1(final Dcl1Context ctx) {
-        final ParseTree p;
+        final ParseTree tree;
         if (ctx.ID() != null) {
-            p = ctx.ID();
+            tree = ctx.ID();
         } else if (ctx.expr2() != null) {
-            p = ctx.expr2();
+            tree = ctx.expr2();
         } else {
-            p = ctx.dcls();
+            tree = ctx.dcls();
         }
-        this.setValue(ctx, this.getValue(p));
+        this.setValue(ctx, this.getValue(tree));
     }
 
     @Override
@@ -175,74 +175,78 @@ public class Listener extends potigolBaseListener {
         final String id = ctx.ID().getText();
         final int dim = ctx.expr().size() - 1;
         final String[] indices = new String[dim];
-        for (int i = 0; i < dim; i++)
+        for (int i = 0; i < dim; i++) {
             indices[i] = this.getValue(ctx.expr(i));
+        }
         final String exp = this.getValue(ctx.expr(dim));
-        final StringBuilder s = new StringBuilder(id);
-        for (final String ind : indices)
-            s.append(K.param(ind + " -1"));
-        s.append(K.IGUAL).append(exp);
-        this.setValue(ctx, s.toString());
+        final StringBuilder resposta = new StringBuilder(id);
+        for (final String ind : indices) {
+            resposta.append(K.param(ind + " -1"));
+
+        }
+        resposta.append(K.IGUAL).append(exp);
+        this.setValue(ctx, resposta.toString());
     }
 
     @Override
     public void exitLambda(final LambdaContext ctx) {
         final String param = this.getValue(ctx.dcl1());
         final String corpo = this.getValue(ctx.inst());
-        final String s = M.lambda(param, corpo);
-        this.setValue(ctx, s);
+        final String resposta = M.lambda(param, corpo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTipo_generico(final Tipo_genericoContext ctx) {
         final String id = this.getValue(ctx.ID());
         final String tipo = this.getValue(ctx.tipo());
-        final String s = M.tipoGenerico(id, tipo);
-        this.setValue(ctx, s);
+        final String resposta = M.tipoGenerico(id, tipo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTipo_funcao(final Tipo_funcaoContext ctx) {
         final String esq = this.getValue(ctx.tipo(0));
         final String dir = this.getValue(ctx.tipo(1));
-        final String s = M.tipoFuncao(esq, dir);
-        this.setValue(ctx, s);
+        final String resposta = M.tipoFuncao(esq, dir);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTipo2(final Tipo2Context ctx) {
         final List<String> lista = this.getValues(ctx.tipo());
-        String s = M.list2String(lista);
-        this.setValue(ctx, s);
+        final String resposta = M.list2String(lista);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTipo_tupla(final Tipo_tuplaContext ctx) {
         final int tamanho = ctx.tipo2().tipo().size();
         final String tipo = this.getValue(ctx.tipo2());
-        final String s = M.tipoTupla(tamanho, tipo);
-        this.setValue(ctx, s);
+        final String resposta = M.tipoTupla(tamanho, tipo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitCons(final ConsContext ctx) {
         final String a = this.getValue(ctx.expr(0));
         final String as = this.getValue(ctx.expr(1));
-        final String s;
+        final String resposta;
         if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
-            s = "Lista(collection.immutable.::( " + a + ", a$" + as + "$))";
+            resposta = "Lista(collection.immutable.::( " + a + ", a$" + as
+                    + "$))";
         } else {
-            s = K.bloco(a + "::" + as);
+            resposta = K.bloco(a + "::" + as);
         }
-        this.setValue(ctx, s);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitExpoente(final ExpoenteContext ctx) {
         final String base = this.getValue(ctx.expr(0));
         final String exp = this.getValue(ctx.expr(1));
-        final String s = M.expoente(base, exp);
-        this.setValue(ctx, s);
+        final String resposta = M.expoente(base, exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -252,16 +256,17 @@ public class Listener extends potigolBaseListener {
         String exps = this.getValue(ctx.exprlist());
         int p = exp.indexOf("a$", 0);
         if (p >= 0) {
-            String s = exp.substring(p + 2);
-            p = s.indexOf('$', 0);
-            s = s.substring(0, p);
-            // String s = exp.split("if")[0].split("::")[1].replaceAll(" ",
+            String resposta = exp.substring(p + 2);
+            p = resposta.indexOf('$', 0);
+            resposta = resposta.substring(0, p);
+            // String resposta = exp.split("if")[0].split("::")[1].replaceAll("
+            // ",
             // "").substring(2);
-            exps = K.VAL + s + K.IGUAL + "Lista(a$" + s + "$)" + K.SEMI
-                    + exps.substring(1);
+            exps = K.VAL + resposta + K.IGUAL + "Lista(a$" + resposta + "$)"
+                    + K.SEMI + exps.substring(1);
         }
-        String s = "case " + exp + K.guarda(cond) + K.ARROW + exps;
-        this.setValue(ctx, s);
+        final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -271,47 +276,47 @@ public class Listener extends potigolBaseListener {
         for (final CasoContext caso : ctx.caso()) {
             casos.add(this.getValue(caso));
         }
-        final String s = M.escolha(exp, casos);
-        this.setValue(ctx, s);
+        final String resposta = M.escolha(exp, casos);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitFormato(final FormatoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String fmt = this.getValue(ctx.expr(1));
-        final String s = M.formato(exp1, fmt);
-        this.setValue(ctx, s);
+        final String resposta = M.formato(exp1, fmt);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitAlias(final AliasContext ctx) {
         final String id = ctx.ID().getText();
         final String tipo = this.getValue(ctx.tipo());
-        final String s = M.aliasTipo(id, tipo);
-        this.setValue(ctx, s);
+        final String resposta = M.aliasTipo(id, tipo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
-        StringBuilder s = new StringBuilder();
-        s.append("case class " + M.escapeID(id) + "(");
+        final StringBuilder resposta = new StringBuilder();
+        resposta.append("case class " + M.escapeID(id) + "(");
         for (int i = 2; i < ctx.children.size() - 1; i++) {
             ParseTree d = ctx.children.get(i);
-            s.append("  " + this.getValue(d));
+            resposta.append("  " + this.getValue(d));
             if (i < ctx.children.size() - 2) {
-                s.append(K.VIRGULA);
+                resposta.append(K.VIRGULA);
             }
         }
-        s.append(")");
-        this.setValue(ctx, s.toString());
+        resposta.append(")");
+        this.setValue(ctx, resposta.toString());
     }
 
     @Override
     public void enterProg(final ProgContext ctx) {
-        String pacote = "import br.edu.ifrn.potigol.";
-        saida += pacote + "Potigolutil._" + K.NEWLINE;
-        saida += pacote + "Matematica._" + K.NEWLINE;
+        final String pacote = "import br.edu.ifrn.potigol.";
+        this.saida += pacote + "Potigolutil._" + K.NEWLINE;
+        this.saida += pacote + "Matematica._" + K.NEWLINE;
         this.declaracoes.push(new ArrayList<String>());
     }
 
@@ -324,24 +329,24 @@ public class Listener extends potigolBaseListener {
     public void exitAtrib_multipla(final Atrib_multiplaContext ctx) {
         final List<String> ids = M.string2List(this.getValue(ctx.id2()));
         final List<String> exps = M.string2List(this.getValue(ctx.expr2()));
-        final String s = M.atribMultipla(ids, exps);
-        this.setValue(ctx, s);
+        final String resposta = M.atribMultipla(ids, exps);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitAtrib_simples(final Atrib_simplesContext ctx) {
         final List<String> ids = M.string2List(this.getValue(ctx.id1()));
         final String exp = this.getValue(ctx.expr());
-        final String s = M.atribSimples(ids, exp);
-        this.setValue(ctx, s);
+        final String resposta = M.atribSimples(ids, exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitChamada_funcao(final Chamada_funcaoContext ctx) {
         final String nome = this.getValue(ctx.expr());
         final String param = this.getValue(ctx.expr1());
-        final String s = M.chamadaFuncao(nome, param);
-        this.setValue(ctx, s);
+        final String resposta = M.chamadaFuncao(nome, param);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -349,8 +354,8 @@ public class Listener extends potigolBaseListener {
         final String objeto = this.getValue(ctx.expr());
         final String metodo = this.getValue(ctx.ID());
         final String param = this.getOrElse(ctx.expr1(), "");
-        final String s = M.chamadaMetodo(objeto, metodo, param);
-        this.setValue(ctx, s);
+        final String resposta = M.chamadaMetodo(objeto, metodo, param);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -358,20 +363,20 @@ public class Listener extends potigolBaseListener {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
         String op = ctx.getChild(1).getText().replace("<>", "!=");
-        final String s = M.operacaoBin(exp1, op, exp2);
-        this.setValue(ctx, s);
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitDcl(final DclContext ctx) {
         final String id = this.getValue(ctx.id1());
         final String tipo = this.getValue(ctx.tipo());
-        String s = id.replaceAll(K.VIRGULA, ": " + tipo + K.VIRGULA) + ": "
-                + tipo;
+        String resposta = id.replaceAll(K.VIRGULA, ": " + tipo + K.VIRGULA)
+                + ": " + tipo;
         if (ctx.parent.getRuleIndex() == potigolParser.RULE_decl_tipo) {
-            s = "" + s;
+            resposta = "" + resposta;
         }
-        this.setValue(ctx, s);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -382,11 +387,11 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitDecl(final DeclContext ctx) {
-        String s = "";
+        String resposta = "";
         for (final ParseTree i : ctx.children) {
-            s += K.NEWLINE + this.getValue(i);
+            resposta += K.NEWLINE + this.getValue(i);
         }
-        this.setValue(ctx, s);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -395,19 +400,19 @@ public class Listener extends potigolBaseListener {
         final String[] ids = id.split(K.VIRGULA);
         final String exp = this.getValue(ctx.expr2());
         final String[] exps = exp.split(K.VIRGULA);
-        String s = "";
+        String resposta = "";
         for (int i = 0; i < ids.length; i++) {
-            s += K.VAR + ids[i] + K.IGUAL + exps[i] + K.NEWLINE;
+            resposta += K.VAR + ids[i] + K.IGUAL + exps[i] + K.NEWLINE;
         }
-        this.setValue(ctx, s);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitDecl_var_simples(final Decl_var_simplesContext ctx) {
         final String id = this.getValue(ctx.id1());
         final String exp = this.getValue(ctx.expr());
-        final String s = M.declVariavel(id, exp);
-        this.setValue(ctx, s);
+        final String resposta = M.declVariavel(id, exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -416,8 +421,8 @@ public class Listener extends potigolBaseListener {
         final String param = this.getValue(ctx.dcls());
         final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.expr());
-        final String s = M.defFuncao(id, param, tipo, corpo);
-        this.setValue(ctx, s);
+        final String resposta = M.defFuncao(id, param, tipo, corpo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -426,38 +431,38 @@ public class Listener extends potigolBaseListener {
         final String param = this.getValue(ctx.dcls());
         final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.exprlist());
-        final String s = M.defFuncao(id, param, tipo, corpo);
-        this.setValue(ctx, s);
+        final String resposta = M.defFuncao(id, param, tipo, corpo);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitE_logico(final E_logicoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
-        final String s = M.operacaoBin(exp1, K.AND, exp2);
-        this.setValue(ctx, s);
+        final String resposta = M.operacaoBin(exp1, K.AND, exp2);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitEnquanto(final EnquantoContext ctx) {
         final String exp = this.getValue(ctx.expr());
         final String bloco = this.getValue(ctx.bloco());
-        final String s = M.enquanto(exp, bloco);
-        this.setValue(ctx, s);
+        final String resposta = M.enquanto(exp, bloco);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitBloco(final BlocoContext ctx) {
         final String exp = this.getValue(ctx.exprlist());
-        final String s = M.bloco(exp);
-        this.setValue(ctx, s);
+        final String resposta = M.bloco(exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitEscreva(final EscrevaContext ctx) {
         final String exp = this.getValue(ctx.expr());
-        final String s = M.escreva(exp, true);
-        this.setValue(ctx, s);
+        final String resposta = M.escreva(exp, true);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -488,11 +493,11 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitExprlist(final ExprlistContext ctx) {
-        String s = K.NEWLINE;
+        String resposta = K.NEWLINE;
         for (final InstContext i : ctx.inst()) {
-            s += "  " + this.getValue(i) + K.NEWLINE;
+            resposta += "  " + this.getValue(i) + K.NEWLINE;
         }
-        this.setValue(ctx, s);
+        this.setValue(ctx, resposta);
         this.declaracoes.pop();
     }
 
@@ -500,21 +505,21 @@ public class Listener extends potigolBaseListener {
     public void exitFaixa(final FaixaContext ctx) {
         final String id = this.getValue(ctx.ID());
         final List<String> exps = this.getValues(ctx.expr());
-        final String s = M.faixa(id, exps);
-        this.setValue(ctx, s);
+        final String resposta = M.faixa(id, exps);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitFaixas(final FaixasContext ctx) {
-        final StringBuilder s = new StringBuilder();
+        final StringBuilder resposta = new StringBuilder();
         for (final FaixaContext f : ctx.faixa()) {
             String faixa = this.getValue(f);
             if (f != ctx.faixa(0)) {
-                s.append(K.SEMI);
+                resposta.append(K.SEMI);
             }
-            s.append(faixa);
+            resposta.append(faixa);
         }
-        this.setValue(ctx, s.toString());
+        this.setValue(ctx, resposta.toString());
     }
 
     @Override
@@ -537,23 +542,24 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitImprima(final ImprimaContext ctx) {
         final String exp = this.getValue(ctx.expr());
-        final String s = M.escreva(exp, false);
-        this.setValue(ctx, s);
+        final String resposta = M.escreva(exp, false);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitInst(final InstContext ctx) {
-        final StringBuilder s = new StringBuilder("");
+        final StringBuilder resposta = new StringBuilder("");
         // String codigo = ctx.start.getText();
         final int codigo = ctx.getStart().getLine();// ctx.getSourceInterval().a
                                                     // +
         // " .. " +
         // ctx.getSourceInterval().b;
         for (final ParseTree i : ctx.children) {
-            s.append("/*Codigo: ").append(codigo).append(" */").append(K.NEWLINE)
-                    .append(this.getValue(i)).append(K.NEWLINE);
+            resposta.append("/*Codigo: ").append(codigo).append(" */")
+                    .append(K.NEWLINE).append(this.getValue(i))
+                    .append(K.NEWLINE);
         }
-        this.setValue(ctx, s.toString());
+        this.setValue(ctx, resposta.toString());
     }
 
     @Override
@@ -564,8 +570,8 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitLista(final ListaContext ctx) {
         final String exp = this.getValue(ctx.expr1());
-        final String s = M.lista(exp);
-        this.setValue(ctx, s);
+        final String resposta = M.lista(exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -587,22 +593,22 @@ public class Listener extends potigolBaseListener {
         } else if ("div".equals(op)) {
             op = "/";
         }
-        final String s = M.operacaoBin(exp1, op, exp2);
-        this.setValue(ctx, s);
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitNao_logico(final Nao_logicoContext ctx) {
         final String exp = this.getValue(ctx.expr());
-        this.setValue(ctx, "{!" + exp + "}");
+        this.setValue(ctx, K.LEFTBRACE + "!" + exp + K.RIGHTBRACE);
     }
 
     @Override
     public void exitOu_logico(final Ou_logicoContext ctx) {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
-        final String s = M.operacaoBin(exp1, K.OR, exp2);
-        this.setValue(ctx, s);
+        final String resposta = M.operacaoBin(exp1, K.OR, exp2);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -610,8 +616,8 @@ public class Listener extends potigolBaseListener {
         final String faixas = this.getValue(ctx.faixas());
         final String guarda = this.getOrElse(ctx.expr(), "");
         final String bloco = this.getValue(ctx.bloco());
-        final String s = M.paraFaca(faixas, guarda, bloco);
-        this.setValue(ctx, s);
+        final String resposta = M.paraFaca(faixas, guarda, bloco);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -619,28 +625,28 @@ public class Listener extends potigolBaseListener {
         final String faixas = this.getValue(ctx.faixas());
         final String se = this.getOrElse(ctx.expr(), "");
         final String gere = this.getValue(ctx.exprlist());
-        final String s = M.paraGere(faixas, se, gere);
-        this.setValue(ctx, s);
+        final String resposta = M.paraGere(faixas, se, gere);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitParen(final ParenContext ctx) {
         final String exp = this.getValue(ctx.expr());
-        final String s = K.exp(exp);
-        this.setValue(ctx, s);
+        final String resposta = K.exp(exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitProg(final ProgContext ctx) {
         if (!this.warnings.isEmpty()) {
-            saida += "escreva(\"===[ATENCAO]===\")" + K.NEWLINE;
-            saida += "escreva(\"" + this.warnings.get(0) + "\")";
+            this.saida += "escreva(\"===[ATENCAO]===\")" + K.NEWLINE;
+            this.saida += "escreva(\"" + this.warnings.get(0) + "\")";
         }
         for (final InstContext i : ctx.inst()) {
-            saida += this.getValue(i);
+            this.saida += this.getValue(i);
         }
-        saida += K.NEWLINE + "()" + K.NEWLINE;
-        this.setValue(ctx, saida);
+        this.saida += K.NEWLINE + "()" + K.NEWLINE;
+        this.setValue(ctx, this.saida);
         this.declaracoes.pop();
     }
 
@@ -658,28 +664,28 @@ public class Listener extends potigolBaseListener {
         for (final SenaoseContext c : ctx.senaose()) {
             senaose.add(this.getValue(c));
         }
-        final String s = M.se(cond, entao, senaose, senao);
-        this.setValue(ctx, s);
+        final String resposta = M.se(cond, entao, senaose, senao);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitEntao(final EntaoContext ctx) {
-        final String s = this.getValue(ctx.exprlist());
-        this.setValue(ctx, s);
+        final String resposta = this.getValue(ctx.exprlist());
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitSenao(final SenaoContext ctx) {
-        final String s = this.getValue(ctx.exprlist());
-        this.setValue(ctx, s);
+        final String resposta = this.getValue(ctx.exprlist());
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitSenaose(final SenaoseContext ctx) {
         final String cond = this.getValue(ctx.expr());
         final String entao = this.getValue(ctx.entao());
-        final String s = M.senaoSe(cond, entao);
-        this.setValue(ctx, s);
+        final String resposta = M.senaoSe(cond, entao);
+        this.setValue(ctx, resposta);
     }
 
     @Override
@@ -687,63 +693,63 @@ public class Listener extends potigolBaseListener {
         final String exp1 = this.getValue(ctx.expr(0));
         final String exp2 = this.getValue(ctx.expr(1));
         final String op = ctx.getChild(1).getText();
-        final String s = M.operacaoBin(exp1, op, exp2);
-        this.setValue(ctx, s);
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTexto(final TextoContext ctx) {
         final String texto = ctx.getText();
-        String s = M.texto(texto);
-        this.setValue(ctx, s);
+        String resposta = M.texto(texto);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
-        StringBuilder s = new StringBuilder();
-        s.append(ctx.BS().getText().replace("{", "${"));
-        s.append(this.getValue(ctx.expr(0)));
+        final StringBuilder resposta = new StringBuilder();
+        resposta.append(ctx.BS().getText().replace(K.LEFTBRACE, "${"));
+        resposta.append(this.getValue(ctx.expr(0)));
         int i = 1;
         for (final TerminalNode x : ctx.MS()) {
-            s.append(x.getText().replace("{", "${"));
-            s.append(this.getValue(ctx.expr(i)));
+            resposta.append(x.getText().replace(K.LEFTBRACE, "${"));
+            resposta.append(this.getValue(ctx.expr(i)));
             i++;
         }
-        s.append(ctx.ES().getText());
-        if (s.toString().contains("\n")) {
-            s.insert(0, "\"\"").append("\"\".stripMargin('|')");
+        resposta.append(ctx.ES().getText());
+        if (resposta.toString().contains("\n")) {
+            resposta.insert(0, "\"\"").append("\"\".stripMargin('|')");
         }
-        s.insert(0, "s");
-        this.setValue(ctx, s.toString());
+        resposta.insert(0, "s");
+        this.setValue(ctx, resposta.toString());
     }
 
     @Override
     public void exitDecl_uso(final Decl_usoContext ctx) {
         final String uso = this.getValue(ctx.STRING());
-        final String s = M.uso(uso);
-        this.setValue(ctx, s);
+        final String resposta = M.uso(uso);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitTupla(final TuplaContext ctx) {
         final String exp = this.getValue(ctx.expr2());
         final int tamanho = ctx.expr2().expr().size();
-        String s = M.tupla(tamanho, exp);
-        this.setValue(ctx, s);
+        String resposta = M.tupla(tamanho, exp);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void exitValor_multiplo(final Valor_multiploContext ctx) {
         final List<String> ids = M.string2List(this.getValue(ctx.id2()));
         final List<String> exps = M.string2List(this.getValue(ctx.expr2()));
-        final StringBuilder s = new StringBuilder();
+        final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             final String id = ids.get(i);
             final String exp = exps.get(i);
-            s.append(M.declValor(id, exp));
+            resposta.append(M.declValor(id, exp));
         }
-        this.setValue(ctx, s.toString());
-        verificarDuplicados(ids);
+        this.setValue(ctx, resposta.toString());
+        this.verificarDuplicados(ids);
     }
 
     @Override
@@ -751,30 +757,30 @@ public class Listener extends potigolBaseListener {
         final String id = this.getValue(ctx.id1());
         final String exp = this.getValue(ctx.expr());
         final List<String> ids = M.string2List(id);
-        final String s = M.declValor(id, exp);
-        this.setValue(ctx, s);
-        verificarDuplicados(ids);
+        final String resposta = M.declValor(id, exp);
+        this.setValue(ctx, resposta);
+        this.verificarDuplicados(ids);
     }
 
     @Override
     public void exitBooleano(final BooleanoContext ctx) {
         final String bool = ctx.BOOLEANO().getText();
-        final String s = M.booleano(bool);
-        this.setValue(ctx, s);
+        final String resposta = M.booleano(bool);
+        this.setValue(ctx, resposta);
     }
 
     @Override
     public void visitTerminal(final TerminalNode node) {
-        final String s;
+        final String resposta;
         switch (node.getSymbol().getType()) {
             case potigolLexer.ID:
-                s = M.escapeID(node.getText());
+                resposta = M.escapeID(node.getText());
                 break;
             default:
-                s = node.getText();
+                resposta = node.getText();
                 break;
         }
-        this.setValue(node, s);
+        this.setValue(node, resposta);
     }
 
     public String getSaida() {
@@ -792,8 +798,8 @@ public class Listener extends potigolBaseListener {
 
     private List<String> valores() {
         final List<String> a = new ArrayList<String>();
-        for (final List<String> s : this.declaracoes) {
-            a.addAll(s);
+        for (final List<String> declaracao : this.declaracoes) {
+            a.addAll(declaracao);
         }
         return a;
     }

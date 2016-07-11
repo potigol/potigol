@@ -49,9 +49,11 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 public class Principal {
 
     public static void main(final String... args) {
+        final String versao = "0.9.7";
         if (args.length == 0) {
-            System.out.println(
-                    "Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
+            System.out.println("Potigol versão " + versao
+                    + " Copyright (C) 2016 Leonardo Lucena" + "\n\n"
+                    + "Uso: potigol [arquivo.poti]\n");
             return;
         }
 

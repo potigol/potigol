@@ -31,13 +31,17 @@
 
 package br.edu.ifrn.potigol
 
-import scala.util.{ Failure, Success, Try }
+import util.{ Failure, Success, Try }
 
 import com.twitter.util.Eval
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   val NL = "\n"
-  def clean(): Unit = print("\b\b\b\b\b\b\b\b\b\b          \b\b\b\b\b\b\b\b\b\b")
+  def clean(): Unit = {
+    val back = "\b" * 10
+    val space = " " * 10
+    print(back + space + back)
+  }
 
   def executar(code: String, codigoPotigol: String, cor: Boolean = false): Unit = {
     val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor}") ++
@@ -102,9 +106,8 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   def imprimirCodigo(code: String, inicio: Int = 0): Unit = {
     val linhas = code.split('\n')
     println()
-    for { line <- linhas.zipWithIndex } {
-      val numero = (line._2 + 1 + inicio)
-      val linha = line._1
+    for { (linha, n) <- linhas.zipWithIndex } {
+      val numero = (n + 1 + inicio)
       println(s"${numero.formatted("%4d")} | ${linha}")
     }
   }

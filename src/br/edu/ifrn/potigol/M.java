@@ -20,18 +20,21 @@ public final class M {
     }
 
     public static String escapeID(final String id) {
+        final String resposta;
         if (scalawords.contains(id)) {
-            return "`" + id + "`";
+            resposta = K.GRAVE + id + K.GRAVE;
+        } else {
+            resposta = id;
         }
-        return id;
+        return resposta;
     }
 
     public static String getVetor(final String id, final String indice) {
-        return id + ".get(" + indice + ")";
+        return id + ".get" + K.param(indice);
     }
 
     public static String lambda(final String param, final String corpo) {
-        return " (" + param + ")" + K.ARROW + K.bloco(corpo);
+        return " " + K.param(param) + K.ARROW + K.bloco(corpo);
     }
 
     public static String tipoGenerico(final String id, final String tipo) {
@@ -57,7 +60,7 @@ public final class M {
 
     public static String paraFaca(final String faixas, final String guarda,
             final String bloco) {
-        return "for{" + faixas + K.guarda(guarda) + "} " + bloco;
+        return "for" + K.bloco(faixas + K.guarda(guarda)) + " " + bloco;
     }
 
     public static String expoente(final String base, final String exp) {
@@ -105,7 +108,7 @@ public final class M {
 
     public static String paraGere(final String faixas, final String guarda,
             final String gere) {
-        return "Lista((for{" + faixas + K.guarda(guarda) + "} yield "
+        return "Lista((for" + K.bloco(faixas + K.guarda(guarda)) + " yield "
                 + K.bloco(gere) + ").toList)";
     }
 
@@ -147,7 +150,7 @@ public final class M {
 
     public static String list2String(final List<String> lista) {
         final StringBuilder resposta = new StringBuilder();
-        if (lista.size() > 0) {
+        if (!lista.isEmpty()) {
             resposta.append(lista.get(0));
         }
         for (int i = 1; i < lista.size(); i++) {
