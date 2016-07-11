@@ -116,8 +116,8 @@ public final class M {
     public static String se(final String cond, final String entao,
             final List<String> senaose, final String senao) {
         final StringBuilder resposta = new StringBuilder();
-        resposta.append("1 match {" + K.NEWLINE);
-        resposta.append(K.SE + cond + K.ENTAO + entao + K.NEWLINE);
+        resposta.append("1 match {").append(K.NEWLINE).append(K.SE).append(cond)
+                .append(K.ENTAO).append(entao).append(K.NEWLINE);
         for (final String c : senaose) {
             resposta.append(c + K.NEWLINE);
         }
@@ -129,9 +129,10 @@ public final class M {
             final String exp) {
         final String var = nextVar();
         final StringBuilder resposta = new StringBuilder();
-        resposta.append(K.DEF + var + K.IGUAL + exp + K.SEMI);
+        resposta.append(K.DEF).append(var).append(K.IGUAL).append(exp)
+                .append(K.SEMI);
         for (final String id : ids) {
-            resposta.append(id + K.IGUAL + var + K.SEMI);
+            resposta.append(id).append(K.IGUAL).append(var).append(K.SEMI);
         }
         return resposta.toString();
     }
@@ -150,7 +151,7 @@ public final class M {
             resposta.append(lista.get(0));
         }
         for (int i = 1; i < lista.size(); i++) {
-            resposta.append(K.VIRGULA + lista.get(i));
+            resposta.append(K.VIRGULA).append(lista.get(i));
         }
         return resposta.toString();
     }
@@ -197,10 +198,12 @@ public final class M {
         final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             aux[i] = nextVar();
-            resposta.append(K.VAL + aux[i] + K.IGUAL + exps.get(i) + K.SEMI);
+            resposta.append(K.VAL).append(aux[i]).append(K.IGUAL)
+                    .append(exps.get(i)).append(K.SEMI);
         }
         for (int i = 0; i < ids.size(); i++) {
-            resposta.append(ids.get(i) + K.IGUAL + aux[i] + K.SEMI);
+            resposta.append(ids.get(i)).append(K.IGUAL).append(aux[i])
+                    .append(K.SEMI);
         }
         return resposta.toString();
     }
