@@ -34,6 +34,10 @@ public final class K {
     public static final String SENAO = "case _ => ";
 
     public static final String ENTAO = ") => ";
+    
+    public static final String ATE = " to ";
+
+    public static final String PASSO = " by ";
 
     private K() {
     }
@@ -72,10 +76,10 @@ public final class K {
 
     public static String guarda(final String cond) {
         final String resp;
-        if (!cond.isEmpty()) {
-            resp = " if " + cond;
-        } else {
+        if (cond.isEmpty()) {
             resp = " ";
+        } else {
+            resp = " if " + cond;
         }
         return resp;
     }
@@ -83,9 +87,9 @@ public final class K {
     public static String tipo(final String valor) {
         final String resp;
         if (valor.isEmpty()) {
-            resp =  "";
+            resp = "";
         } else {
-            resp =  ": " + valor;
+            resp = ": " + valor;
         }
         return resp;
     }

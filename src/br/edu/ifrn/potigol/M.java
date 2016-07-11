@@ -93,9 +93,9 @@ public final class M {
         return K.bloco(exp);
     }
 
-    public static String escreva(final String exp, final boolean nl) {
+    public static String escreva(final String exp, final boolean newline) {
         final String s;
-        if (nl) {
+        if (newline) {
             s = K.escreva(exp);
         } else {
             s = K.imprima(exp);
@@ -103,9 +103,9 @@ public final class M {
         return s;
     }
 
-    public static String paraGere(final String faixas, final String se,
+    public static String paraGere(final String faixas, final String guarda,
             final String gere) {
-        return "Lista((for{" + faixas + K.guarda(se) + "} yield "
+        return "Lista((for{" + faixas + K.guarda(guarda) + "} yield "
                 + K.bloco(gere) + ").toList)";
     }
 
@@ -115,49 +115,51 @@ public final class M {
 
     public static String se(final String cond, final String entao,
             final List<String> senaose, final String senao) {
-        String s = "1 match {" + K.NEWLINE;
-        s += K.SE + cond + K.ENTAO + entao + K.NEWLINE;
+        final StringBuilder resposta = new StringBuilder();
+        resposta.append("1 match {" + K.NEWLINE);
+        resposta.append(K.SE + cond + K.ENTAO + entao + K.NEWLINE);
         for (final String c : senaose) {
-            s += c + K.NEWLINE;
+            resposta.append(c + K.NEWLINE);
         }
-        s += K.SENAO + senao + K.NEWLINE + "}";
-        return s;
+        resposta.append(K.SENAO + senao + K.NEWLINE + "}");
+        return resposta.toString();
     }
 
     public static String atribSimples(final List<String> ids,
             final String exp) {
         final String var = nextVar();
-        String s = K.DEF + var + K.IGUAL + exp + K.SEMI;
+        final StringBuilder resposta = new StringBuilder();
+        resposta.append(K.DEF + var + K.IGUAL + exp + K.SEMI);
         for (final String id : ids) {
-            s += id + K.IGUAL + var + K.SEMI;
+            resposta.append(id + K.IGUAL + var + K.SEMI);
         }
-        return s;
+        return resposta.toString();
     }
 
     public static String uso(final String uso) {
         return "import " + stripString(uso) + "._";
     }
 
-    public static String stripString(final String s) {
-        return s.replace("\"", "");
+    public static String stripString(final String texto) {
+        return texto.replace("\"", "");
     }
 
-    public static String list2String(final List<String> a) {
-        String s = "";
-        if (a.size() > 0) {
-            s = a.get(0);
+    public static String list2String(final List<String> lista) {
+        final StringBuilder resposta = new StringBuilder();
+        if (lista.size() > 0) {
+            resposta.append(lista.get(0));
         }
-        for (int i = 1; i < a.size(); i++) {
-            s += K.VIRGULA + a.get(i);
+        for (int i = 1; i < lista.size(); i++) {
+            resposta.append(K.VIRGULA + lista.get(i));
         }
-        return s;
+        return resposta.toString();
     }
 
-    public static List<String> string2List(final String s) {
-        return Arrays.asList(s.split(K.VIRGULA));
+    public static List<String> string2List(final String texto) {
+        return Arrays.asList(texto.split(K.VIRGULA));
     }
 
-    public static String DefFuncao(final String id, final String param,
+    public static String defFuncao(final String id, final String param,
             final String tipo, final String corpo) {
         return K.DEF + id + K.param(param) + K.tipo(tipo) + K.IGUAL
                 + K.bloco(corpo) + K.NEWLINE;
@@ -192,47 +194,47 @@ public final class M {
     public static String atribMultipla(final List<String> ids,
             final List<String> exps) {
         final String[] aux = new String[ids.size()];
-        final StringBuilder s = new StringBuilder();
+        final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             aux[i] = nextVar();
-            s.append(K.VAL + aux[i] + K.IGUAL + exps.get(i) + K.SEMI);
+            resposta.append(K.VAL + aux[i] + K.IGUAL + exps.get(i) + K.SEMI);
         }
         for (int i = 0; i < ids.size(); i++) {
-            s.append(ids.get(i) + K.IGUAL + aux[i] + K.SEMI);
+            resposta.append(ids.get(i) + K.IGUAL + aux[i] + K.SEMI);
         }
-        return s.toString();
+        return resposta.toString();
     }
 
     public static String faixa(final String id, final List<String> exps) {
         final int tamanho = exps.size();
         final String inicio = exps.get(0);
-        final String s;
+        final String resposta;
         if (tamanho == 1) {
-            s = inicio;
+            resposta = inicio;
         } else if (tamanho == 2) {
             final String fim = exps.get(1);
-            s = inicio + " to " + fim;
+            resposta = inicio + K.ATE + fim;
         } else {
             final String fim = exps.get(1);
             final String passo = exps.get(2);
-            s = inicio + " to " + fim + " by " + passo;
+            resposta = inicio + K.ATE + fim + K.PASSO + passo;
         }
-        return id + " <- " + s;
+        return id + " <- " + resposta;
     }
 
     public static String texto(final String texto) {
-        String s = texto;
-        if (s.contains("{")) {
-            s = s.replace("$", "$$");
+        String resposta = texto;
+        if (resposta.contains("{")) {
+            resposta = resposta.replace("$", "$$");
         }
-        s = s.replace("{", "${");
-        if (s.contains(K.NEWLINE)) {
-            s = "\"\"" + s + "\"\".stripMargin('|')";
+        resposta = resposta.replace("{", "${");
+        if (resposta.contains(K.NEWLINE)) {
+            resposta = "\"\"" + resposta + "\"\".stripMargin('|')";
         }
-        if (s.contains("{")) {
-            s = "s" + s;
+        if (resposta.contains("{")) {
+            resposta = "s" + resposta;
         }
-        return s;
+        return resposta;
     }
 
     private M() {

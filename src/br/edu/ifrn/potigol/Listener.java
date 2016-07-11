@@ -416,7 +416,7 @@ public class Listener extends potigolBaseListener {
         final String param = this.getValue(ctx.dcls());
         final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.expr());
-        final String s = M.DefFuncao(id, param, tipo, corpo);
+        final String s = M.defFuncao(id, param, tipo, corpo);
         this.setValue(ctx, s);
     }
 
@@ -426,7 +426,7 @@ public class Listener extends potigolBaseListener {
         final String param = this.getValue(ctx.dcls());
         final String tipo = this.getOrElse(ctx.tipo(), "");
         final String corpo = this.getValue(ctx.exprlist());
-        final String s = M.DefFuncao(id, param, tipo, corpo);
+        final String s = M.defFuncao(id, param, tipo, corpo);
         this.setValue(ctx, s);
     }
 

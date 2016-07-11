@@ -48,7 +48,7 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
 
-    public static void main(final String ... args) {
+    public static void main(final String... args) {
         if (args.length == 0) {
             System.out.println(
                     "Potigol versão 0.9.7 Copyright (C) 2016 Leonardo Lucena\n\nUso: potigol [arquivo.poti]\n");
@@ -69,8 +69,8 @@ public class Principal {
             final String saida = listener.getSaida();
 
             if (saida.trim().length() > 40) {
-                final Compilador c = new Compilador(debug, wait);
-                c.executar(saida, lerArquivo(arq), color);
+                final Compilador compilador = new Compilador(debug, wait);
+                compilador.executar(saida, lerArquivo(arq), color);
             }
         } catch (IOException e) {
             System.out.println("Erro: Arquivo " + arq + " não encontrado.");
@@ -78,8 +78,8 @@ public class Principal {
     }
 
     public static Listener getListner(final String arq) throws IOException {
-        final String r = lerArquivo(arq);
-        final ANTLRInputStream input = new ANTLRInputStream(r);
+        final String file = lerArquivo(arq);
+        final ANTLRInputStream input = new ANTLRInputStream(file);
         final potigolLexer lexer = new potigolLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final potigolParser parser = new potigolParser(tokens);
@@ -92,20 +92,23 @@ public class Principal {
 
     public static String lerArquivo(final String arq) throws IOException {
         final Path path = Paths.get(arq);
-        final List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
-        final StringBuffer s = new StringBuffer();
+        final List<String> linhas = Files.readAllLines(path,
+                StandardCharsets.UTF_8);
+        final StringBuffer conteudo = new StringBuffer();
         for (final String linha : linhas) {
-            s.append(linha).append('\n');
+            conteudo.append(linha).append('\n');
         }
-        return s.toString();
+        return conteudo.toString();
     }
 
-    private static boolean argument(final List<String> list, final String value) {
+    private static boolean argument(final List<String> list,
+            final String value) {
+        boolean resposta = false;
         for (final String a : list) {
             if (a.startsWith(value)) {
-                return true;
+                resposta = true;
             }
         }
-        return false;
+        return resposta;
     }
 }
