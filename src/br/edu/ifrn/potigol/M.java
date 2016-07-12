@@ -12,8 +12,8 @@ public final class M {
             "super", "class", "case", "package", "default", "try", "this",
             "match", "continue", "throws");
 
-    private static int num = 0;
-
+    private static int num;
+    
     private static String nextVar() {
         num++;
         return "$a" + num;

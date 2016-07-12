@@ -172,17 +172,17 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitSet_vetor(final Set_vetorContext ctx) {
-        final String id = ctx.ID().getText();
         final int dim = ctx.expr().size() - 1;
         final String[] indices = new String[dim];
         for (int i = 0; i < dim; i++) {
             indices[i] = this.getValue(ctx.expr(i));
         }
-        final String exp = this.getValue(ctx.expr(dim));
+        final String id = ctx.ID().getText();
         final StringBuilder resposta = new StringBuilder(id);
         for (final String ind : indices) {
             resposta.append(K.param(ind + " -1"));
         }
+        final String exp = this.getValue(ctx.expr(dim));
         resposta.append(K.IGUAL).append(exp);
         this.setValue(ctx, resposta.toString());
     }
@@ -251,7 +251,6 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitCaso(final CasoContext ctx) {
         final String exp = this.getValue(ctx.expr(0));
-        final String cond = this.getOrElse(ctx.expr(1), "");
         String exps = this.getValue(ctx.exprlist());
         int posicao = exp.indexOf("a$", 0);
         if (posicao >= 0) {
@@ -264,6 +263,7 @@ public class Listener extends potigolBaseListener {
             exps = K.VAL + resposta + K.IGUAL + "Lista(a$" + resposta + "$)"
                     + K.SEMI + exps.substring(1);
         }
+        final String cond = this.getOrElse(ctx.expr(1), "");
         final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
         this.setValue(ctx, resposta);
     }
@@ -301,7 +301,7 @@ public class Listener extends potigolBaseListener {
         final StringBuilder resposta = new StringBuilder();
         resposta.append("case class " + M.escapeID(id) + "(");
         for (int i = 2; i < ctx.children.size() - 1; i++) {
-            ParseTree tree = ctx.children.get(i);
+            final ParseTree tree = ctx.children.get(i);
             resposta.append("  " + this.getValue(tree));
             if (i < ctx.children.size() - 2) {
                 resposta.append(K.VIRGULA);
@@ -387,8 +387,8 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDecl(final DeclContext ctx) {
         String resposta = "";
-        for (final ParseTree i : ctx.children) {
-            resposta += K.NEWLINE + this.getValue(i);
+        for (final ParseTree tree : ctx.children) {
+            resposta += K.NEWLINE + this.getValue(tree);
         }
         this.setValue(ctx, resposta);
     }
@@ -493,8 +493,8 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitExprlist(final ExprlistContext ctx) {
         String resposta = K.NEWLINE;
-        for (final InstContext i : ctx.inst()) {
-            resposta += "  " + this.getValue(i) + K.NEWLINE;
+        for (final InstContext item : ctx.inst()) {
+            resposta += "  " + this.getValue(item) + K.NEWLINE;
         }
         this.setValue(ctx, resposta);
         this.declaracoes.pop();
@@ -511,11 +511,11 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitFaixas(final FaixasContext ctx) {
         final StringBuilder resposta = new StringBuilder();
-        for (final FaixaContext f : ctx.faixa()) {
-            final String faixa = this.getValue(f);
-            if (f != ctx.faixa(0)) {
+        for (final FaixaContext item : ctx.faixa()) {
+            if (item != ctx.faixa(0)) {
                 resposta.append(K.SEMI);
             }
+            final String faixa = this.getValue(item);
             resposta.append(faixa);
         }
         this.setValue(ctx, resposta.toString());
@@ -549,13 +549,13 @@ public class Listener extends potigolBaseListener {
     public void exitInst(final InstContext ctx) {
         final StringBuilder resposta = new StringBuilder("");
         // String codigo = ctx.start.getText();
-        final int codigo = ctx.getStart().getLine();// ctx.getSourceInterval().a
-                                                    // +
+        final int codigo = ctx.getStart().getLine(); // ctx.getSourceInterval().a
+                                                     // +
         // " .. " +
         // ctx.getSourceInterval().b;
-        for (final ParseTree i : ctx.children) {
+        for (final ParseTree tree : ctx.children) {
             resposta.append("/*Codigo: ").append(codigo).append(" */")
-                    .append(K.NEWLINE).append(this.getValue(i))
+                    .append(K.NEWLINE).append(this.getValue(tree))
                     .append(K.NEWLINE);
         }
         this.setValue(ctx, resposta.toString());
@@ -641,8 +641,8 @@ public class Listener extends potigolBaseListener {
             this.saida += "escreva(\"===[ATENCAO]===\")" + K.NEWLINE;
             this.saida += "escreva(\"" + this.warnings.get(0) + "\")";
         }
-        for (final InstContext i : ctx.inst()) {
-            this.saida += this.getValue(i);
+        for (final InstContext item : ctx.inst()) {
+            this.saida += this.getValue(item);
         }
         this.saida += K.NEWLINE + "()" + K.NEWLINE;
         this.setValue(ctx, this.saida);
@@ -656,13 +656,13 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitSe(final SeContext ctx) {
-        final String cond = this.getValue(ctx.expr());
-        final String entao = this.getValue(ctx.entao());
-        final String senao = this.getOrElse(ctx.senao(), "");
         final List<String> senaose = new ArrayList<String>();
         for (final SenaoseContext c : ctx.senaose()) {
             senaose.add(this.getValue(c));
         }
+        final String cond = this.getValue(ctx.expr());
+        final String entao = this.getValue(ctx.entao());
+        final String senao = this.getOrElse(ctx.senao(), "");
         final String resposta = M.se(cond, entao, senaose, senao);
         this.setValue(ctx, resposta);
     }
@@ -709,8 +709,8 @@ public class Listener extends potigolBaseListener {
                 .append(ctx.BS().getText().replace(K.LEFTBRACE, "${"))
                 .append(this.getValue(ctx.expr(0)));
         int i = 1;
-        for (final TerminalNode x : ctx.MS()) {
-            resposta.append(x.getText().replace(K.LEFTBRACE, "${"))
+        for (final TerminalNode node : ctx.MS()) {
+            resposta.append(node.getText().replace(K.LEFTBRACE, "${"))
                     .append(this.getValue(ctx.expr(i)));
             i++;
         }
@@ -783,7 +783,8 @@ public class Listener extends potigolBaseListener {
     }
 
     public String getSaida() {
-        return this.saida.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2, K.NEWLINE);
+        return this.saida.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2,
+                K.NEWLINE);
     }
 
     private void verificarDuplicados(final List<String> ids) {
