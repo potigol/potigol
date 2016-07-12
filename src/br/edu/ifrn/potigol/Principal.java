@@ -47,35 +47,35 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    final String versao = "0.9.7";
+    private final String versao = "0.9.7";
+    private final int saidaMinima = 40;
 
     public void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versão " + versao
                     + " Copyright (C) 2016 Leonardo Lucena" + "\n\n"
                     + "Uso: potigol [arquivo.poti]\n");
-            return;
-        }
+        } else {
+            final String arq = args[args.length - 1];
+            final List<String> argList = Arrays.asList(args);
+            try {
+                final boolean wait = argument(argList, "-w");
+                if (wait) {
+                    System.out.print("Aguarde...");
+                }
 
-        final String arq = args[args.length - 1];
-        final List<String> argList = Arrays.asList(args);
-        try {
-            final boolean wait = argument(argList, "-w");
-            if (wait) {
-                System.out.print("Aguarde...");
+                final Listener listener = getListner(arq);
+                final String saida = listener.getSaida();
+
+                if (saida.trim().length() > saidaMinima) {
+                    final boolean debug = argument(argList, "-d");
+                    final Compilador compilador = new Compilador(debug, wait);
+                    final boolean color = argument(argList, "-c");
+                    compilador.executar(saida, lerArquivo(arq), color);
+                }
+            } catch (IOException e) {
+                System.out.println("Erro: Arquivo " + arq + " não encontrado.");
             }
-
-            final Listener listener = getListner(arq);
-            final String saida = listener.getSaida();
-
-            if (saida.trim().length() > 40) {
-                final boolean debug = argument(argList, "-d");
-                final Compilador compilador = new Compilador(debug, wait);
-                final boolean color = argument(argList, "-c");
-                compilador.executar(saida, lerArquivo(arq), color);
-            }
-        } catch (IOException e) {
-            System.out.println("Erro: Arquivo " + arq + " não encontrado.");
         }
     }
 

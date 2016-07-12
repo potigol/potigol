@@ -128,11 +128,11 @@ public class Listener extends potigolBaseListener {
     }
 
     private List<String> getValues(final List<? extends ParseTree> list) {
-        final List<String> values = new ArrayList<String>();
+        final List<String> valores = new ArrayList<String>();
         for (final ParseTree id : list) {
-            values.add(this.getValue(id));
+            valores.add(this.getValue(id));
         }
-        return values;
+        return valores;
     }
 
     private String getOrElse(final ParseTree node, final String defaultValue) {
@@ -270,11 +270,11 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitEscolha(final EscolhaContext ctx) {
-        final String exp = this.getValue(ctx.expr());
         final List<String> casos = new ArrayList<String>();
         for (final CasoContext caso : ctx.caso()) {
             casos.add(this.getValue(caso));
         }
+        final String exp = this.getValue(ctx.expr());
         final String resposta = M.escolha(exp, casos);
         this.setValue(ctx, resposta);
     }
@@ -301,13 +301,13 @@ public class Listener extends potigolBaseListener {
         final StringBuilder resposta = new StringBuilder();
         resposta.append("case class " + M.escapeID(id) + "(");
         for (int i = 2; i < ctx.children.size() - 1; i++) {
-            ParseTree d = ctx.children.get(i);
-            resposta.append("  " + this.getValue(d));
+            ParseTree tree = ctx.children.get(i);
+            resposta.append("  " + this.getValue(tree));
             if (i < ctx.children.size() - 2) {
                 resposta.append(K.VIRGULA);
             }
         }
-        resposta.append(")");
+        resposta.append(')');
         this.setValue(ctx, resposta.toString());
     }
 
@@ -394,7 +394,7 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
-    public void exitDecl_var_multipla(Decl_var_multiplaContext ctx) {
+    public void exitDecl_var_multipla(final Decl_var_multiplaContext ctx) {
         final String id = this.getValue(ctx.id2());
         final String[] ids = id.split(K.VIRGULA);
         final String exp = this.getValue(ctx.expr2());
@@ -583,7 +583,6 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitMult_div(final Mult_divContext ctx) {
         String exp1 = this.getValue(ctx.expr(0));
-        final String exp2 = this.getValue(ctx.expr(1));
         String op = ctx.getChild(1).getText();
         if ("mod".equals(op)) {
             op = "%";
@@ -592,6 +591,7 @@ public class Listener extends potigolBaseListener {
         } else if ("div".equals(op)) {
             op = "/";
         }
+        final String exp2 = this.getValue(ctx.expr(1));
         final String resposta = M.operacaoBin(exp1, op, exp2);
         this.setValue(ctx, resposta);
     }
@@ -705,13 +705,13 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
-        final StringBuilder resposta = new StringBuilder();
-        resposta.append(ctx.BS().getText().replace(K.LEFTBRACE, "${"));
-        resposta.append(this.getValue(ctx.expr(0)));
+        final StringBuilder resposta = new StringBuilder()
+                .append(ctx.BS().getText().replace(K.LEFTBRACE, "${"))
+                .append(this.getValue(ctx.expr(0)));
         int i = 1;
         for (final TerminalNode x : ctx.MS()) {
-            resposta.append(x.getText().replace(K.LEFTBRACE, "${"));
-            resposta.append(this.getValue(ctx.expr(i)));
+            resposta.append(x.getText().replace(K.LEFTBRACE, "${"))
+                    .append(this.getValue(ctx.expr(i)));
             i++;
         }
         resposta.append(ctx.ES().getText());
@@ -783,7 +783,7 @@ public class Listener extends potigolBaseListener {
     }
 
     public String getSaida() {
-        return saida.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2, K.NEWLINE);
+        return this.saida.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2, K.NEWLINE);
     }
 
     private void verificarDuplicados(final List<String> ids) {

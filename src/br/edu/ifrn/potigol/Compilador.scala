@@ -37,9 +37,12 @@ import com.twitter.util.Eval
 
 class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   val NL = "\n"
+  val SPACE = " "
+  val COLON = ": "
+
   def clean(): Unit = {
     val back = "\b" * 10
-    val space = " " * 10
+    val space = SPACE * 10
     print(back + space + back)
   }
 
@@ -73,26 +76,20 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     avaliar(code) match {
       case Success(_) => 0
       case Failure(f) =>
-        val linhaScala = f.getMessage.split(": ")(1).split(" ")(1).toInt
+        val linhaScala = f.getMessage.split(COLON)(1).split(SPACE)(1).toInt
         val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile {
           x => !x.contains("/*Codigo")
         }
-        linhaPotigol.headOption.map { l => l.split(" ")(1).toInt }.getOrElse(1)
+        linhaPotigol.headOption.map { l => l.split(SPACE)(1).toInt }.getOrElse(1)
     }
   }
 
   def codigoErro(code: String, erro: String, codigoPotigol: String, cor: Boolean = false): String = {
-    val partes = erro.split(": ")
+    val partes = erro.split(COLON)
     if (partes.size > 2) {
       val err = partes(2)
-      val linha = partes(1).split(" ")(1).toInt
+      val linha = partes(1).split(SPACE)(1).toInt
       val linhaPotigol = code.split(NL).take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
-      /*     val msg = err match {
-        case "not found" if debug => s"${code} - ${erro}"
-        case "not found"          => "Valor não encontrado"
-        case a if debug           => a
-        case _                    => "Erro "
-      } */
       val msg = Erros.traduzir(erro)
       imprimirCodigo((codigoPotigol.split(NL).toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
@@ -104,7 +101,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     }
   }
   def imprimirCodigo(code: String, inicio: Int = 0): Unit = {
-    val linhas = code.split('\n')
+    val linhas = code.split(NL)
     println()
     for { (linha, n) <- linhas.zipWithIndex } {
       val numero = (n + 1 + inicio)
