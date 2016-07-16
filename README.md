@@ -82,6 +82,6 @@ Editores de código para Potigol:
 [Desktop Entry]
 Name=Potigol
 Type=Application
-Exec=java -jar [caminho até a pasta do potigol]/potigol.jar
+Exec=java -jar [caminho até a pasta do potigol]/epotigol.jar
 Icon=[caminho até a pasta do potigol]/potigol.png
 ````
