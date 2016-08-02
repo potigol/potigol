@@ -367,13 +367,13 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDecisao(potigolParser.DecisaoContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#se}.
+	 * Visit a parse tree produced by {@link potigolParser#SE}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSe(potigolParser.SeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#entao}.
+	 * Visit a parse tree produced by {@link potigolParser#ENTAO}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -385,7 +385,7 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSenaose(potigolParser.SenaoseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#senao}.
+	 * Visit a parse tree produced by {@link potigolParser#SENAO}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -421,7 +421,7 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPara_gere(potigolParser.Para_gereContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#enquanto}.
+	 * Visit a parse tree produced by {@link potigolParser#ENQUANTO}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

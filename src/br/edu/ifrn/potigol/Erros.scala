@@ -60,6 +60,7 @@ object Erros {
     val funcaoRecursivaSemTipo = "recursive method (\\S+) needs result type.*".r
     val matrizNaoDeclarada = "value (?:get|update) is not (\\S+) member of.*".r
     val metodoNaoExiste = "value (\\S+) is not a member of (?:\\S*\\.)?(\\S+) .*".r
+    val semParametros = "(.+) does not take parameters.*".r
   }
 
   private[this] object Msg {
@@ -72,6 +73,7 @@ object Erros {
       s"A função '${a}' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '${b}'."
     def parametrosMais(n: Int): String =
       s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas ${n} parâmetro(s)."
+    def semParametros(a: String): String = s"um valor ${a} não deve ter parametros."
   }
 
   private[this] def contar(b: String): Int = b.count(_ == ':')
@@ -106,6 +108,12 @@ object Erros {
       case Erro.metodoNaoExiste(a, C.Char) => Msg.tipoNaoPossuiMetodo(C.Caractere, a)
       case Erro.metodoNaoExiste(a, b) => Msg.tipoNaoPossuiMetodo(b, a)
       case Erro.matrizNaoDeclarada(a) => s"A variável '${a}' não é uma Lista mutável."
+      case Erro.semParametros(C.Int) => Msg.semParametros(C.Inteiro)
+      case Erro.semParametros(C.Double) => Msg.semParametros(C.Real)
+      case Erro.semParametros(C.String) => Msg.semParametros(C.Texto)
+      case Erro.semParametros(C.Boolean) => Msg.semParametros(C.Logico)
+      case Erro.semParametros(a) => Msg.semParametros(a)
+
       case _ => erro
     }
   }

@@ -47,10 +47,10 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    private final String versao = "0.9.7";
-    private final int saidaMinima = 40;
+    private static final String versao = "0.9.8";
+    private static final int saidaMinima = 40;
 
-    public void main(final String... args) {
+    public static void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versão " + versao
                     + " Copyright (C) 2016 Leonardo Lucena" + "\n\n"

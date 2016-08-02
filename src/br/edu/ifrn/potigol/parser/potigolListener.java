@@ -616,22 +616,22 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitDecisao(potigolParser.DecisaoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#se}.
+	 * Enter a parse tree produced by {@link potigolParser#SE}.
 	 * @param ctx the parse tree
 	 */
 	void enterSe(potigolParser.SeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#se}.
+	 * Exit a parse tree produced by {@link potigolParser#SE}.
 	 * @param ctx the parse tree
 	 */
 	void exitSe(potigolParser.SeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#entao}.
+	 * Enter a parse tree produced by {@link potigolParser#ENTAO}.
 	 * @param ctx the parse tree
 	 */
 	void enterEntao(potigolParser.EntaoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#entao}.
+	 * Exit a parse tree produced by {@link potigolParser#ENTAO}.
 	 * @param ctx the parse tree
 	 */
 	void exitEntao(potigolParser.EntaoContext ctx);
@@ -646,12 +646,12 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitSenaose(potigolParser.SenaoseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#senao}.
+	 * Enter a parse tree produced by {@link potigolParser#SENAO}.
 	 * @param ctx the parse tree
 	 */
 	void enterSenao(potigolParser.SenaoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#senao}.
+	 * Exit a parse tree produced by {@link potigolParser#SENAO}.
 	 * @param ctx the parse tree
 	 */
 	void exitSenao(potigolParser.SenaoContext ctx);
@@ -706,12 +706,12 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitPara_gere(potigolParser.Para_gereContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#enquanto}.
+	 * Enter a parse tree produced by {@link potigolParser#ENQUANTO}.
 	 * @param ctx the parse tree
 	 */
 	void enterEnquanto(potigolParser.EnquantoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#enquanto}.
+	 * Exit a parse tree produced by {@link potigolParser#ENQUANTO}.
 	 * @param ctx the parse tree
 	 */
 	void exitEnquanto(potigolParser.EnquantoContext ctx);

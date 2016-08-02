@@ -13,7 +13,7 @@ public final class M {
             "match", "continue", "throws");
 
     private static int num;
-    
+
     private static String nextVar() {
         num++;
         return "$a" + num;
@@ -55,7 +55,25 @@ public final class M {
 
     public static String operacaoBin(final String exp1, final String op,
             final String exp2) {
-        return "{" + exp1 + op + exp2 + "}";
+        final String exp;
+        if ("/".equals(op)) {
+            exp = K.exp(exp1) + ".toDouble";
+        } else {
+            exp = exp1;
+        }
+        return K.LEFTBRACE + exp + K.operador(op) + exp2 + K.RIGHTBRACE;
+    }
+
+    public static String operacaoBinE(final String exp1, final String exp2) {
+        return K.LEFTBRACE + exp1 + K.AND + exp2 + K.RIGHTBRACE;
+    }
+
+    public static String operacaoBinOu(final String exp1, final String exp2) {
+        return K.LEFTBRACE + exp1 + K.OR + exp2 + K.RIGHTBRACE;
+    }
+
+    public static String operacaoUnaria(final String op, final String exp) {
+        return op + exp;
     }
 
     public static String paraFaca(final String faixas, final String guarda,
@@ -70,7 +88,7 @@ public final class M {
     public static String escolha(final String exp, final List<String> casos) {
         String corpo = "";
         for (final String caso : casos) {
-            corpo += "  " + caso + K.NEWLINE;
+            corpo += K.indent(caso);
         }
         return K.exp(exp) + " match " + K.bloco(corpo);
     }
@@ -81,6 +99,9 @@ public final class M {
 
     public static String chamadaMetodo(final String objeto, final String metodo,
             final String param) {
+        if (param.isEmpty()) {
+            return objeto + "." + metodo;
+        }
         return objeto + "." + metodo + K.param(param);
     }
 
@@ -97,13 +118,13 @@ public final class M {
     }
 
     public static String escreva(final String exp, final boolean newline) {
-        final String s;
+        final String resposta;
         if (newline) {
-            s = K.escreva(exp);
+            resposta = K.escreva(exp);
         } else {
-            s = K.imprima(exp);
+            resposta = K.imprima(exp);
         }
-        return s;
+        return resposta;
     }
 
     public static String paraGere(final String faixas, final String guarda,
@@ -121,10 +142,10 @@ public final class M {
         final StringBuilder resposta = new StringBuilder();
         resposta.append("1 match {").append(K.NEWLINE).append(K.SE).append(cond)
                 .append(K.ENTAO).append(entao).append(K.NEWLINE);
-        for (final String c : senaose) {
-            resposta.append(c + K.NEWLINE);
+        for (final String item : senaose) {
+            resposta.append(item + K.NEWLINE);
         }
-        resposta.append(K.SENAO + senao + K.NEWLINE + "}");
+        resposta.append(K.SENAO + senao + K.NEWLINE + K.RIGHTBRACE);
         return resposta.toString();
     }
 
@@ -183,7 +204,7 @@ public final class M {
 
     public static String booleano(final String bool) {
         final String valor;
-        if ("verdadeiro".equals(bool)) {
+        if (K.VERDADEIRO.equals(bool)) {
             valor = Boolean.TRUE.toString();
         } else {
             valor = Boolean.FALSE.toString();
@@ -201,12 +222,13 @@ public final class M {
         final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             aux[i] = nextVar();
-            resposta.append(K.VAL).append(aux[i]).append(K.IGUAL)
-                    .append(exps.get(i)).append(K.SEMI);
+            final String linha = K.VAL + aux[i] + K.IGUAL + exps.get(i)
+                    + K.SEMI;
+            resposta.append(linha);
         }
         for (int i = 0; i < ids.size(); i++) {
-            resposta.append(ids.get(i)).append(K.IGUAL).append(aux[i])
-                    .append(K.SEMI);
+            String linha = ids.get(i) + K.IGUAL + aux[i] + K.SEMI;
+            resposta.append(linha);
         }
         return resposta.toString();
     }
@@ -230,19 +252,133 @@ public final class M {
 
     public static String texto(final String texto) {
         String resposta = texto;
-        if (resposta.contains("{")) {
+        if (resposta.contains(K.LEFTBRACE)) {
             resposta = resposta.replace("$", "$$");
         }
-        resposta = resposta.replace("{", "${");
+        resposta = resposta.replace(K.LEFTBRACE, "${");
         if (resposta.contains(K.NEWLINE)) {
             resposta = "\"\"" + resposta + "\"\".stripMargin('|')";
         }
-        if (resposta.contains("{")) {
+        if (resposta.contains(K.LEFTBRACE)) {
             resposta = "s" + resposta;
         }
         return resposta;
     }
 
+    public static String operacaoUnariaNao(String exp) {
+        return K.LEFTBRACE + "!" + exp + K.RIGHTBRACE;
+    }
+
+    public static String parenteses(String exp) {
+        return K.exp(exp);
+    }
+
+    public static String exprList(List<String> lista) {
+        String resposta = K.NEWLINE;
+        for (final String s : lista) {
+            resposta += K.indent(s);
+        }
+        return resposta;
+    }
+
+    public static String prologo() {
+        final String pacote = "import br.edu.ifrn.potigol.";
+        final String resposta = pacote + "Potigolutil._" + K.NEWLINE + pacote
+                + "Matematica._" + K.NEWLINE;
+        return resposta;
+    }
+
+    public static String organizar(final String programa) {
+        return programa.replaceAll(K.NL2, K.NEWLINE).replaceAll(K.NL2,
+                K.NEWLINE);
+    }
+
+    public static String faixas(List<String> lista) {
+        final StringBuilder resposta = new StringBuilder();
+        for (final String s : lista) {
+            if (s != lista.get(0)) {
+                resposta.append(K.SEMI);
+            }
+            resposta.append(s);
+        }
+        return resposta.toString();
+    }
+
+    public static String valorMultiplo(List<String> ids, List<String> exps) {
+        final StringBuilder resposta = new StringBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            final String id = ids.get(i);
+            final String exp = exps.get(i);
+            resposta.append(M.declValor(id, exp));
+        }
+        return resposta.toString();
+    }
+
+    public static String interpolacao(List<String> string,
+            List<String> interp) {
+        final StringBuilder resposta = new StringBuilder();
+        int i = 0;
+        for (final String exp : interp) {
+            resposta.append(string.get(i).replace(K.LEFTBRACE, "${"))
+                    .append(exp);
+            i = i + 1;
+        }
+        resposta.append(string.get(i));
+        if (resposta.toString().contains("\n")) {
+            resposta.insert(0, "\"\"").append("\"\".stripMargin('|')");
+        }
+        resposta.insert(0, "s");
+        return resposta.toString();
+    }
+
+    public static String saida(List<String> warnings, List<String> items) {
+        String resposta = "";
+        if (!warnings.isEmpty()) {
+            resposta += "escreva(\"===[ATENCAO]===\")\n";
+            resposta += "escreva(\"" + warnings.get(0) + "\")";
+        }
+        for (final String item : items) {
+            resposta += item;
+        }
+        resposta += K.NEWLINE + "()" + K.NEWLINE;
+        return organizar(resposta);
+    }
+
+    public static String inst(int codigo, String inst) {
+        final String resposta = "/*Codigo: " + codigo + " */" + K.NEWLINE + inst
+                + K.NEWLINE;
+        return resposta;
+    }
+
     private M() {
     }
+
+    public static String declaracao(String decl) {
+        final String resposta = K.NEWLINE + decl;
+        return resposta;
+    }
+
+    public static String classe(String id, List<String> params) {
+        final StringBuilder resposta = new StringBuilder();
+        resposta.append("case class " + M.escapeID(id) + "(");
+        for (int i = 2; i < params.size() - 1; i++) {
+            final String param = params.get(i);
+            resposta.append(K.INDENT + param);
+            if (i < params.size() - 2) {
+                resposta.append(K.VIRGULA);
+            }
+        }
+        resposta.append(')');
+        return resposta.toString();
+    }
+
+    public static String setVetor(String id, List<String> idx, String exp) {
+        final StringBuilder resposta = new StringBuilder(id);
+        for (final String ind : idx) {
+            resposta.append(K.param(ind + " -1"));
+        }
+        resposta.append(K.IGUAL).append(exp);
+        return resposta.toString();
+    }
+
 }

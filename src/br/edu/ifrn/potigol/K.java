@@ -46,9 +46,13 @@ public final class K {
     public static final String RIGHTBRACE = "}";
 
     public static final String OPENBRACKET = "(";
-    
+
     public static final String CLOSEBRACKET = ")";
+
+    public static final String VERDADEIRO = "verdadeiro";
     
+    public static final String INDENT = "  ";
+
     private K() {
     }
 
@@ -73,11 +77,11 @@ public final class K {
     }
 
     public static String escreva(final String expr) {
-        return "escreva(" + expr + ")";
+        return "escreva" + OPENBRACKET + expr + CLOSEBRACKET;
     }
 
     public static String imprima(final String expr) {
-        return "imprima(" + expr + ")";
+        return "imprima" + OPENBRACKET + expr + CLOSEBRACKET;
     }
 
     public static String lista(final String exp) {
@@ -103,4 +107,27 @@ public final class K {
         }
         return resp;
     }
+
+    public static String operador(final String valor) {
+        final String op;
+        switch (valor) {
+            case "mod":
+                op = "%";
+                break;
+            case "div":
+                op = "/";
+                break;
+            case "<>":
+                op = "!=";
+                break;
+            default:
+                op = valor;
+        }
+        return op;
+    }
+    
+    public static String indent(final String valor){
+        return K.INDENT + valor + K.NEWLINE;
+    }
+
 }

@@ -29,159 +29,231 @@
  * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
 
+grammar potigol ;
 
-grammar potigol;
+prog
+    : inst* ;
 
-prog: inst* ;
-
-inst: decl | expr | bloco | cmd; 
+inst
+    : decl
+    | expr
+    | bloco
+    | cmd ;
 
 // Comando
-cmd : 'escreva' expr                  # escreva
-    | 'imprima' expr                  # imprima
-    | id1 ':=' expr                   # atrib_simples
-    | id2 ':=' expr2                  # atrib_multipla
-    | ID('['expr']')+ ':=' expr       # set_vetor
-    ;
+cmd
+    : 'escreva' expr                              # escreva
+    | 'imprima' expr                              # imprima
+    | id1 ':=' expr                               # atrib_simples
+    | id2 ':=' expr2                              # atrib_multipla
+    | ID('['expr']')+ ':=' expr                   # set_vetor ;
 
 // Declaracao
-decl: decl_valor | decl_funcao | decl_tipo | decl_uso;
+decl
+    : decl_valor
+    | decl_funcao
+    | decl_tipo
+    | decl_uso ;
 
-decl_valor:
-      id1 '=' expr                    # valor_simples
-    | id2 '=' expr2                   # valor_multiplo
-    | 'var' id1 (':='| '=') expr      # decl_var_simples
-    | 'var' id2 (':='| '=') expr2     # decl_var_multipla
-    ;
+decl_valor
+    : id1 '=' expr                                # valor_simples
+    | id2 '=' expr2                               # valor_multiplo
+    | 'var' id1 (':='| '=') expr                  # decl_var_simples
+    | 'var' id2 (':='| '=') expr2                 # decl_var_multipla ;
 
-decl_funcao:
-      ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
-    | ID '(' dcls ')' (':' tipo)? exprlist 'fim'  # def_funcao_corpo
-    ;
+decl_funcao
+    : ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
+    | ID '(' dcls ')' (':' tipo)? exprlist 'fim'  # def_funcao_corpo ;
 
-decl_tipo:
-      'tipo' ID '=' tipo                  # alias
-    | 'tipo' ID (dcl|decl_funcao)* 'fim'  # classe
-    ;
-    
-decl_uso: 'use' STRING ;
+decl_tipo
+    : 'tipo' ID '=' tipo                          # alias
+    | 'tipo' ID (dcl|decl_funcao)* 'fim'          # classe ;
 
-dcl: id1 ':' tipo ;
-dcls: (dcl (',' dcl)* )? ;
+decl_uso
+    : 'use' STRING ;
 
-dcl1: ID
+dcl
+    : id1 ':' tipo ;
+
+dcls
+    : (dcl (',' dcl)* )? ;
+
+dcl1
+    : ID
     | '(' expr2 ')'
-    | '(' dcls ')'
-    ;
+    | '(' dcls ')' ;
 
-tipo: ID                                  # tipo_simples
-    | 'Tupla(' tipo2 ')'                  # tipo_tupla
-    | ID '[' tipo ']'                     # tipo_generico
-    | tipo '=>' tipo                      # tipo_funcao
-    ;
+tipo
+    : ID                                          # tipo_simples
+    | 'Tupla(' tipo2 ')'                          # tipo_tupla
+    | ID '[' tipo ']'                             # tipo_generico
+    | tipo '=>' tipo                              # tipo_funcao ;
 
 // Expressao
-expr:
-	  literal                             # lit
-    | expr '.' ID ('(' expr1 ')')?        # chamada_metodo
-    | expr '(' expr1? ')'                 # chamada_funcao
-    | expr '[' expr ']'                   # get_vetor
-    | <assoc=right> expr '^' expr         # expoente
-    | <assoc=right> expr '::' expr        # cons
-    | expr 'formato' expr                 # formato
-    | ('+'|'-') expr                      # mais_menos_unario
-    | expr ('*'|'/'|'div'|'mod') expr     # mult_div
-    | expr ('+'|'-') expr                 # soma_sub
-    | expr ('>'|'>='|'<'|'<='|'=='|'<>') expr   # comparacao
-    | ('nao'|'n\u00e3o') expr             # nao_logico
-    | expr 'e' expr                       # e_logico
-    | expr 'ou' expr                      # ou_logico
-    | dcl1 '=>' inst                      # lambda
-    | decisao                             # decis
-    | repeticao                           # laco
-    | '(' expr ')'                        # paren
-    | 'Tupla(' expr2 ')'                  # tupla
-    | '[' expr1? ']'                      # lista
-    ;
-    
-literal:
-      ID                                  # id
-    | BS expr (MS expr)* ES               # texto_interpolacao
-    | STRING                              # texto
-    | INT                                 # inteiro
-    | FLOAT                               # real
-    | CHAR                                # char
-    | BOOLEANO                            # booleano
-    ;
-    
+expr
+    : literal                                     # lit
+    | expr '.' ID ('(' expr1 ')')?                # chamada_metodo
+    | expr '(' expr1? ')'                         # chamada_funcao
+    | expr '[' expr ']'                           # get_vetor
+    | <assoc=right> expr '^' expr                 # expoente
+    | <assoc=right> expr '::' expr                # cons
+    | expr 'formato' expr                         # formato
+    | ('+'|'-') expr                              # mais_menos_unario
+    | expr ('*'|'/'|'div'|'mod') expr             # mult_div
+    | expr ('+'|'-') expr                         # soma_sub
+    | expr ('>'|'>='|'<'|'<='|'=='|'<>') expr     # comparacao
+    | ('nao'|'n\u00e3o') expr                     # nao_logico
+    | expr 'e' expr                               # e_logico
+    | expr 'ou' expr                              # ou_logico
+    | dcl1 '=>' inst                              # lambda
+    | decisao                                     # decis
+    | repeticao                                   # laco
+    | '(' expr ')'                                # paren
+    | 'Tupla(' expr2 ')'                          # tupla
+    | '[' expr1? ']'                              # lista ;
+
+literal
+    : ID                                          # id
+    | BS expr (MS expr)* ES                       # texto_interpolacao
+    | STRING                                      # texto
+    | INT                                         # inteiro
+    | FLOAT                                       # real
+    | CHAR                                        # char
+    | BOOLEANO                                    # booleano ;
+
     
 // Decisao
-decisao: se | escolha ;
+decisao
+    : se
+    | escolha ;
 
-se: 'se' expr entao senaose* senao? 'fim' ;
-entao:   ('entao'  |'ent\u00e3o'  )? exprlist;
-senaose: ('senaose'|'sen\u00e3ose')  expr entao;
-senao:   ('senao'  |'sen\u00e3o'  )  exprlist;
+se
+    : 'se' expr entao senaose* senao? 'fim' ;
 
-escolha: 'escolha' expr caso+ 'fim' ;
-caso: 'caso' expr ('se' expr)? '=>' exprlist;
+entao
+    : ('entao'  |'ent\u00e3o'  )? exprlist ;
+
+senaose
+    : ('senaose'|'sen\u00e3ose')  expr entao ;
+
+senao
+    : ('senao'  |'sen\u00e3o'  )  exprlist ;
+
+escolha
+    : 'escolha' expr caso+ 'fim' ;
+
+caso
+    : 'caso' expr ('se' expr)? '=>' exprlist ;
+
+ // : 'caso' padrao ('se' expr)? '=>' exprlist ;
+
+padrao
+    : '_'                                         # padrao_default
+    | ID                                          # padrao_id
+    | literal                                     # padrao_literal
+    | ID '(' padrao ')'                           # padrao_objeto
+    | padrao ('::' padrao)+                       # padrao_cons
+    | '(' padrao+ ')'                             # padrao_tupla
+    | '[' padrao? ']'                             # padrao_lista
+    | padrao ('|' padrao)+                        # padrao_ou
+    | padrao (',' padrao)+                        # padrao_virgula ;
 
 // Repeticao    
-repeticao: para_faca | para_gere | enquanto ;
+repeticao
+    : para_faca
+    | para_gere
+    | enquanto ;
 
-para_faca: 'para' faixas ('se' expr)? bloco;
-para_gere: 'para' faixas ('se' expr)? 'gere' exprlist 'fim' ;
-enquanto: 'enquanto' expr bloco ;
+para_faca
+    : 'para' faixas ('se' expr)? bloco ;
 
-faixa: ID 'em' expr
-     | ID 'de' expr ('ate'|'at\u00e9') expr ('passo' expr)?
-     ;
+para_gere
+    : 'para' faixas ('se' expr)? 'gere' exprlist 'fim' ;
 
-faixas: faixa (',' faixa)*;
+enquanto
+    : 'enquanto' expr bloco ;
 
-bloco: ('faca' | 'fa\u00e7a') exprlist 'fim' ;
+faixa
+    : ID 'em' expr
+    | ID 'de' expr ('ate'|'at\u00e9') expr ('passo' expr)? ;
+
+faixas
+    : faixa (',' faixa)* ;
+
+bloco
+    : ('faca' | 'fa\u00e7a') exprlist 'fim' ;
 
 // Outros
-expr1: expr (',' expr)* ;
-expr2: expr (',' expr)+ ;
-id1 : ID (',' ID)* ;
-id2 : ID (',' ID)+ ;
+expr1
+    : expr (',' expr)* ;
 
-tipo2 : tipo (',' tipo)+ ;
+expr2
+    : expr (',' expr)+ ;
 
-exprlist: inst* ;
+id1
+    : ID (',' ID)* ;
 
+id2
+    : ID (',' ID)+ ;
+
+tipo2
+    : tipo (',' tipo)+ ;
+
+exprlist
+    : inst* ;
 
 // Lexer
 //channels { WSCHANNEL, MYHIDDEN };
- 
-ID: (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
+ID
+    : (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
-fragment
-ALPHA: 'a' .. 'z' | 'A' .. 'Z'| '_' ;
-fragment
-ACENTO : '\u00a1' .. '\ufffc' ;
+fragment ALPHA
+    : 'a' .. 'z'
+    | 'A' .. 'Z'
+    | '_' ;
 
-INT : DIGIT+ ;
+fragment ACENTO
+    : '\u00a1' .. '\ufffc' ;
+
+INT
+    : DIGIT+ ;
 
 FLOAT
     : DIGIT+ '.' DIGIT+
-    |        '.' DIGIT+
-    ;
-fragment
-DIGIT: '0'..'9' ;
+    | '.' DIGIT+ ;
 
-STRING : '"' (ESC | ~[{]) *? '"' ;
-BS: '"' ~["]*? '{';
-MS: '}' ~["]*? '{';
-ES: '}' ~[{]*? '"';
-CHAR : '\''.'\'';
+fragment DIGIT
+    : '0'..'9' ;
 
-BOOLEANO: 'verdadeiro' | 'falso' ;
+STRING
+    : '"' (ESC | ~[{]) *? '"' ;
 
-fragment
-ESC : '\\"' | '\\\\' ;
+BS
+    : '"' ~["]*? '{' ;
 
-WS : (' '|'\t'|'\r')+ -> skip ;
-COMMENT : '#' .*? '\r'? '\n' -> channel(1) ;
-NL: '\n' ->channel(2);
+MS
+    : '}' ~["]*? '{' ;
+
+ES
+    : '}' ~[{]*? '"' ;
+
+CHAR
+    : '\''.'\'' ;
+
+BOOLEANO
+    : 'verdadeiro'
+    | 'falso' ;
+
+fragment ESC
+    : '\\"'
+    | '\\\\' ;
+
+WS
+    : (' '|'\t'|'\r')+ -> skip ;
+
+COMMENT
+    : '#' .*? '\r'? '\n' -> channel(1) ;
+
+NL
+    : '\n' ->channel(2) ;
+
