@@ -63,8 +63,7 @@ Editores de código para Potigol:
 
  > Alterar ícone. Escolha o icone em preto e branco.
 
-  - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial"
-  - Instale as fontes da pasta "fonts". 
+  - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial".
 
 
 ##LINUX
@@ -83,6 +82,6 @@ Editores de código para Potigol:
 [Desktop Entry]
 Name=Potigol
 Type=Application
-Exec=java -jar [caminho até a pasta do potigol]/potigol.jar
+Exec=java -jar [caminho até a pasta do potigol]/epotigol.jar
 Icon=[caminho até a pasta do potigol]/potigol.png
 ````
