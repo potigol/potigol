@@ -53,6 +53,8 @@ public final class K {
 
     public static final String INDENT = "  ";
 
+    public static final String DOT = ".";
+
     private K() {
     }
 

@@ -100,9 +100,9 @@ public final class M {
     public static String chamadaMetodo(final String objeto, final String metodo,
             final String param) {
         if (param.isEmpty()) {
-            return objeto + "." + metodo;
+            return objeto + K.DOT + metodo;
         }
-        return objeto + "." + metodo + K.param(param);
+        return objeto + K.DOT + metodo + K.param(param);
     }
 
     public static String formato(final String exp1, final String fmt) {
@@ -283,8 +283,8 @@ public final class M {
 
     public static String prologo() {
         final String pacote = "import br.edu.ifrn.potigol.";
-        final String resposta = pacote + "Potigolutil._" + K.NEWLINE + pacote
-                + "Matematica._" + K.NEWLINE;
+        final String resposta = pacote + "Potigolutil._" + K.SEMI + pacote
+                + "Matematica._" + K.SEMI;
         return resposta;
     }
 
@@ -334,21 +334,21 @@ public final class M {
 
     public static String saida(final List<String> warnings,
             final List<String> items) {
-        String resposta = "";
+        StringBuilder resposta = new StringBuilder();
         if (!warnings.isEmpty()) {
-            resposta += "escreva(\"===[ATENCAO]===\")\n";
-            resposta += "escreva(\"" + warnings.get(0) + "\")";
+            resposta.append("escreva(\"===[ATENCAO]===\")\n")
+                    .append("escreva(\"" + warnings.get(0) + "\")");
         }
         for (final String item : items) {
-            resposta += item;
+            resposta.append(item);
         }
-        resposta += K.NEWLINE + "()" + K.NEWLINE;
-        return organizar(resposta);
+        resposta.append(K.NEWLINE).append("()").append(K.NEWLINE);
+        return organizar(resposta.toString());
     }
 
     public static String inst(final int codigo, final String inst) {
         final String resposta = "/*Codigo: " + codigo + " */" + K.NEWLINE + inst
-                + K.NEWLINE + K.SEMI;
+                + K.SEMI;
         return resposta;
     }
 
@@ -362,10 +362,11 @@ public final class M {
 
     public static String classe(final String id, final List<String> params) {
         final StringBuilder resposta = new StringBuilder();
-        resposta.append("case class " + M.escapeID(id) + K.OPENBRACKET);
+        resposta.append("case class ").append(M.escapeID(id))
+                .append(K.OPENBRACKET);
         for (int i = 2; i < params.size() - 1; i++) {
             final String param = params.get(i);
-            resposta.append(K.INDENT + param);
+            resposta.append(K.INDENT).append(param);
             if (i < params.size() - 2) {
                 resposta.append(K.VIRGULA);
             }
