@@ -48,6 +48,7 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
     private static final String versao = "0.9.8";
+    
     private static final int saidaMinima = 40;
 
     public static void main(final String... args) {
@@ -103,7 +104,7 @@ public class Principal {
         return conteudo.toString();
     }
 
-    public Principal() {
+    private Principal() {
     }
 
     private static boolean argument(final List<String> list,

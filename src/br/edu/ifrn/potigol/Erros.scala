@@ -61,6 +61,7 @@ object Erros {
     val matrizNaoDeclarada = "value (?:get|update) is not (\\S+) member of.*".r
     val metodoNaoExiste = "value (\\S+) is not a member of (?:\\S*\\.)?(\\S+) .*".r
     val semParametros = "(.+) does not take parameters.*".r
+    val divisaoTipoErrado = "overloaded method value.*".r
   }
 
   private[this] object Msg {
@@ -113,7 +114,7 @@ object Erros {
       case Erro.semParametros(C.String) => Msg.semParametros(C.Texto)
       case Erro.semParametros(C.Boolean) => Msg.semParametros(C.Logico)
       case Erro.semParametros(a) => Msg.semParametros(a)
-
+      case Erro.divisaoTipoErrado() => Msg.tipoErrado(C.Real)
       case _ => erro
     }
   }

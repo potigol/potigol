@@ -145,7 +145,7 @@ public class Listener extends potigolBaseListener {
     }
 
     private String getOrElse(final ParseTree node) {
-        return getOrElse(node, "");
+        return this.getOrElse(node, "");
     }
 
     @Override
@@ -377,7 +377,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDecl(final DeclContext ctx) {
         final String decl = this.getValue(ctx.getChild(0));
-        String resposta = M.declaracao(decl);
+        final String resposta = M.declaracao(decl);
         this.setValue(ctx, resposta);
     }
 
@@ -490,7 +490,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitFaixas(final FaixasContext ctx) {
-        final List<String> lista = getValues(ctx.faixa());
+        final List<String> lista = this.getValues(ctx.faixa());
         final String resposta = M.faixas(lista);
         this.setValue(ctx, resposta);
     }
@@ -604,9 +604,9 @@ public class Listener extends potigolBaseListener {
         for (final InstContext item : ctx.inst()) {
             items.add(this.getValue(item));
         }
-        saida += M.saida(this.warnings, items);
+        this.saida += M.saida(this.warnings, items);
 
-        this.setValue(ctx, saida);
+        this.setValue(ctx, this.saida);
         this.declaracoes.pop();
     }
 
@@ -726,13 +726,10 @@ public class Listener extends potigolBaseListener {
     @Override
     public void visitTerminal(final TerminalNode node) {
         final String resposta;
-        switch (node.getSymbol().getType()) {
-            case potigolLexer.ID:
-                resposta = M.escapeID(node.getText());
-                break;
-            default:
-                resposta = node.getText();
-                break;
+        if (node.getSymbol().getType() == potigolLexer.ID) {
+            resposta = M.escapeID(node.getText());
+        } else {
+            resposta = node.getText();
         }
         this.setValue(node, resposta);
     }

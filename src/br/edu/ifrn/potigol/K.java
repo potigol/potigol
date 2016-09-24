@@ -50,7 +50,7 @@ public final class K {
     public static final String CLOSEBRACKET = ")";
 
     public static final String VERDADEIRO = "verdadeiro";
-    
+
     public static final String INDENT = "  ";
 
     private K() {
@@ -125,8 +125,8 @@ public final class K {
         }
         return op;
     }
-    
-    public static String indent(final String valor){
+
+    public static String indent(final String valor) {
         return K.INDENT + valor + K.NEWLINE;
     }
 
