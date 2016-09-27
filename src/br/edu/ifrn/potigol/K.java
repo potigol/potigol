@@ -75,7 +75,7 @@ public final class K {
     }
 
     public static String formato(final String expr, final String fmt) {
-        return exp(expr) + ".format" + param(fmt);
+        return exp(fmt) + ".format" + param(expr);
     }
 
     public static String escreva(final String expr) {
