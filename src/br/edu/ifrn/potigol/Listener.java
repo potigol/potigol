@@ -392,6 +392,7 @@ public class Listener extends potigolBaseListener {
             resposta += K.VAR + ids[i] + K.IGUAL + exps[i] + K.NEWLINE;
         }
         this.setValue(ctx, resposta);
+        this.verificarDuplicados(M.string2List(id), ctx);
     }
 
     @Override
@@ -400,6 +401,7 @@ public class Listener extends potigolBaseListener {
         final String exp = this.getValue(ctx.expr());
         final String resposta = M.declVariavel(id, exp);
         this.setValue(ctx, resposta);
+        this.verificarDuplicados(M.string2List(id), ctx);
     }
 
     @Override
@@ -703,7 +705,7 @@ public class Listener extends potigolBaseListener {
         final List<String> exps = M.string2List(this.getValue(ctx.expr2()));
         final String resposta = M.valorMultiplo(ids, exps);
         this.setValue(ctx, resposta);
-        this.verificarDuplicados(ids);
+        this.verificarDuplicados(ids, ctx);
     }
 
     @Override
@@ -713,7 +715,7 @@ public class Listener extends potigolBaseListener {
         final List<String> ids = M.string2List(id);
         final String resposta = M.declValor(id, exp);
         this.setValue(ctx, resposta);
-        this.verificarDuplicados(ids);
+        this.verificarDuplicados(ids, ctx);
     }
 
     @Override
@@ -739,10 +741,13 @@ public class Listener extends potigolBaseListener {
     }
 
     // TODO: Refatorar
-    private void verificarDuplicados(final List<String> ids) {
+    private void verificarDuplicados(final List<String> ids,
+            final ParserRuleContext ctx) {
         for (final String i : ids) {
             if (this.valores().contains(i)) {
-                this.warnings.add("Valor " + i + " declarado duas vezes.");
+                final int linha = ctx.getStart().getLine();
+                this.warnings.add("Valor '" + i
+                        + "' declarado pela segunda vez na linha " + linha + ".");
             }
         }
         this.declaracoes.peek().addAll(ids);

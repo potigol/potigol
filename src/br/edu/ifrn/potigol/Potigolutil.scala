@@ -167,14 +167,20 @@ object Potigolutil {
   implicit class Textos(val lista: String) {
     private[this] val ZERO = "0"
 
-    @deprecated def para_int: Inteiro = (intRE.findPrefixOf(lista).getOrElse(ZERO)).toInt
+    @deprecated def para_int: Inteiro = {
+      if (lista == null) 0 else
+        (intRE.findPrefixOf(lista).getOrElse(ZERO)).toInt
+    }
     @deprecated def para_i: Inteiro = para_int
     @deprecated def para_inteiro: Inteiro = para_int
 
     def inteiro: Inteiro = para_int
     def get(a: Int): Caractere = if (a > 0) lista(a - 1) else lista(tamanho + a)
     def posicao(elem: Caractere): Inteiro = lista.indexOf(elem, 0) + 1
-    def para_numero: Real = (ZERO + numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
+    def para_numero: Real = {
+      if (lista == null) 0 else
+        (ZERO + numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
+    }
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)

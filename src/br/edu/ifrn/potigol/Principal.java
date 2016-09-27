@@ -55,7 +55,7 @@ public class Principal {
         if (args.length == 0) {
             System.out.println("Potigol versão " + versao
                     + " Copyright (C) 2016 Leonardo Lucena" + "\n\n"
-                    + "Uso: potigol [arquivo.poti]\n");
+                    + "Uso: potigol [-c] [-w] [arquivo.poti]\n");
         } else {
             final String arq = args[args.length - 1];
             final List<String> argList = Arrays.asList(args);

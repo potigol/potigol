@@ -113,13 +113,13 @@ expr
     | '[' expr1? ']'                              # lista ;
 
 literal
-    : ID                                          # id
+    : BOOLEANO                                    # booleano
+	| ID                                          # id
     | BS expr (MS expr)* ES                       # texto_interpolacao
     | STRING                                      # texto
     | INT                                         # inteiro
     | FLOAT                                       # real
-    | CHAR                                        # char
-    | BOOLEANO                                    # booleano ;
+    | CHAR                                        # char ;
 
     
 // Decisao

@@ -132,4 +132,7 @@ public final class K {
         return K.INDENT + valor + K.NEWLINE;
     }
 
+    public static String codigo(final int linha) {
+        return "/*Codigo: " + linha + " */";
+    }
 }

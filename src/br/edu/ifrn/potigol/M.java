@@ -269,7 +269,7 @@ public final class M {
         return K.LEFTBRACE + "!" + exp + K.RIGHTBRACE;
     }
 
-    public static String parenteses(String exp) {
+    public static String parenteses(final String exp) {
         return K.exp(exp);
     }
 
@@ -334,10 +334,10 @@ public final class M {
 
     public static String saida(final List<String> warnings,
             final List<String> items) {
-        StringBuilder resposta = new StringBuilder();
+        final StringBuilder resposta = new StringBuilder();
         if (!warnings.isEmpty()) {
-            resposta.append("escreva(\"===[ATENCAO]===\")\n")
-                    .append("escreva(\"" + warnings.get(0) + "\")");
+            resposta.append("escreva(\"===[ATENCAO]===\")\nescreva(\"")
+                    .append(warnings.get(0)).append("\")");
         }
         for (final String item : items) {
             resposta.append(item);
@@ -347,9 +347,7 @@ public final class M {
     }
 
     public static String inst(final int codigo, final String inst) {
-        final String resposta = "/*Codigo: " + codigo + " */" + K.NEWLINE + inst
-                + K.SEMI;
-        return resposta;
+        return K.codigo(codigo) + K.NEWLINE + inst + K.SEMI;
     }
 
     private M() {
