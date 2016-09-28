@@ -286,11 +286,11 @@ object Potigolutil {
 
   def escreva(texto: Any): Unit = {
     if ($cor) corNao
-    println(texto.toString)
+    Console.println(texto.toString)
   }
   def imprima(texto: Any): Unit = {
     if ($cor) corNao
-    print(texto.toString)
+    Console.print(texto.toString)
   }
 
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)

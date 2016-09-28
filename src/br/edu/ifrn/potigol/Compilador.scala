@@ -46,23 +46,27 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     print(back + space + back)
   }
 
-  def executar(code: String, codigoPotigol: String, cor: Boolean = false): Unit = {
-    val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor}") ++
-      code.split(NL).drop(2)).mkString(NL);
+  def executar(code: String, codigoPotigol: String, cor: Boolean = false,
+               antes: String = "", depois: String = ""): String = {
+    val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor};") ++
+      List(antes) ++ NL ++ code.split(NL).drop(2) ++ List(depois)).mkString(NL);
     if (debug) {
       imprimirCodigo(c)
+      ""
     }
     else {
       avaliar(c) match {
         case Success(_) =>
           if (wait) clean()
-          (new Eval(None)).apply[Unit](c)
+          (new Eval(None)).apply[String](c)
         case Failure(f) =>
           if (wait) clean()
           println(codigoErro(c, f.getMessage, codigoPotigol, cor))
+          ""
         case _ =>
           if (wait) clean()
-          println("erro")
+          Console.err.println("erro")
+          ""
       }
     }
   }

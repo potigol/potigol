@@ -48,8 +48,24 @@ import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
     private static final String versao = "0.9.8";
-    
+
     private static final int saidaMinima = 40;
+
+    public static String test(String code, String input) {
+        final Listener listener = getListnerFromString(code);
+        final String saida = listener.getSaida();
+        if (saida.trim().length() > saidaMinima) {
+            final Compilador compilador = new Compilador(false, false);
+            return compilador.executar(saida, code, false,
+                    "val $output = new java.io.ByteArrayOutputStream;\n"
+                            + "val $input = new java.io.ByteArrayInputStream(\"\"\""
+                            + input + "\"\"\".getBytes(\"UTF-8\"));\n"
+                            + "Console.setOut($output);\n"
+                            + "Console.setIn($input);\n",
+                    "$output.toString()");
+        }
+        return "";
+    }
 
     public static void main(final String... args) {
         if (args.length == 0) {
@@ -72,16 +88,20 @@ public class Principal {
                     final boolean debug = argument(argList, "-d");
                     final Compilador compilador = new Compilador(debug, wait);
                     final boolean color = argument(argList, "-c");
-                    compilador.executar(saida, lerArquivo(arq), color);
+                    compilador.executar(saida, lerArquivo(arq), color, "", "");
                 }
             } catch (IOException e) {
-                System.out.println("Erro: Arquivo " + arq + " não encontrado.");
+                System.err.println("Erro: Arquivo " + arq + " não encontrado.");
             }
         }
     }
 
     public static Listener getListner(final String arq) throws IOException {
         final String file = lerArquivo(arq);
+        return getListnerFromString(file);
+    }
+
+    private static Listener getListnerFromString(final String file) {
         final ANTLRInputStream input = new ANTLRInputStream(file);
         final potigolLexer lexer = new potigolLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);

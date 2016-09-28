@@ -342,7 +342,7 @@ public final class M {
         for (final String item : items) {
             resposta.append(item);
         }
-        resposta.append(K.NEWLINE).append("()").append(K.NEWLINE);
+        resposta.append(K.NEWLINE).append("\"\"").append(K.NEWLINE);
         return organizar(resposta.toString());
     }
 
