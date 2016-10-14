@@ -97,10 +97,10 @@ expr
     | expr '[' expr ']'                           # get_vetor
     | <assoc=right> expr '^' expr                 # expoente
     | <assoc=right> expr '::' expr                # cons
-    | expr 'formato' expr                         # formato
     | ('+'|'-') expr                              # mais_menos_unario
     | expr ('*'|'/'|'div'|'mod') expr             # mult_div
     | expr ('+'|'-') expr                         # soma_sub
+    | expr 'formato' expr                         # formato
     | expr ('>'|'>='|'<'|'<='|'=='|'<>') expr     # comparacao
     | ('nao'|'n\u00e3o') expr                     # nao_logico
     | expr 'e' expr                               # e_logico

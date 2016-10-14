@@ -179,7 +179,7 @@ object Potigolutil {
     def posicao(elem: Caractere): Inteiro = lista.indexOf(elem, 0) + 1
     def para_numero: Real = {
       if (lista == null) 0 else
-        (ZERO + numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
+        (numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
     }
     def maiusculo: Texto = lista.toUpperCase()
     def minusculo: Texto = lista.toLowerCase()
@@ -224,21 +224,27 @@ object Potigolutil {
       val precisao = Math.pow(10, n)
       (x * precisao).round / precisao
     }
+    def inteiro: Inteiro = x.toInt
+    def real: Real = x
+    def piso: Real = x.floor
+    def teto: Real = x.ceil
   }
 
   implicit class Inteiros(x: Int) {
     def caractere: Caractere = x.toChar
+    def inteiro: Inteiro = x
+    def real: Real = x.toDouble
   }
 
   implicit class Todos[T <: Any](x: T) {
-    def formato(formato: Texto): Texto = Try {
-      x.formatted(formato)
+    def formato(fmt: Texto): Texto = Try {
+      fmt.formatLocal(java.util.Locale.US, x)
     } match {
       case Success(s) => s
       case Failure(_) => "Erro de formato"
     }
 
-    def %(formato_ : Texto): Texto = formato(formato_)
+    def %(fmt: Texto): Texto = formato(fmt)
     @deprecated def para_texto: Texto = x.toString
     def texto: Texto = para_texto
   }
@@ -286,11 +292,19 @@ object Potigolutil {
 
   def escreva(texto: Any): Unit = {
     if ($cor) corNao
-    Console.println(texto.toString)
+    texto match {
+      case true  => Console.println("verdadeiro")
+      case false => Console.println("falso")
+      case _     => Console.println(texto.toString)
+    }
   }
   def imprima(texto: Any): Unit = {
     if ($cor) corNao
-    Console.print(texto.toString)
+    texto match {
+      case true  => Console.print("verdadeiro")
+      case false => Console.print("falso")
+      case _     => Console.print(texto.toString)
+    }
   }
 
   case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
