@@ -271,7 +271,14 @@ object Potigolutil {
   def leia_textos(separador: Texto): Lista[Texto] = leia(separador)
 
   def leia_int: Inteiro = leia.para_int
-  def leia_ints(n: Inteiro): Lista[Inteiro] = Lista(((1 to n) map { _ => leia_int }).toList)
+  def leia_ints(n: Inteiro): Lista[Inteiro] = {
+    var l = Lista.vazia(0)
+    while (l.tamanho < n) {
+      l = l + leia_ints(" ")
+    }
+    l.pegue(n)
+    //    Lista(((1 to n) map { _ => leia_int }).toList)
+  }
   def leia_ints(separador: Texto): Lista[Int] = {
     val l = leia(separador).lista
     Lista(l.map(_.para_int))
@@ -282,7 +289,14 @@ object Potigolutil {
 
   def leia_num: Real = leia.para_num
   def leia_numero: Real = leia_num
-  def leia_nums(n: Inteiro): Lista[Real] = Lista(((1 to n) map { _ => leia_num }).toList)
+  def leia_nums(n: Inteiro): Lista[Real] = {
+    var l = Lista.vazia(0.0)
+    while (l.tamanho < n) {
+      l = l + leia_nums(" ")
+    }
+    l.pegue(n)
+    //    Lista(((1 to n) map { _ => leia_num }).toList)
+  }
   def leia_nums(separador: Texto): Lista[Real] = Lista(leia(separador).lista.map { _.para_num })
   def leia_numeros(n: Inteiro): Lista[Real] = leia_nums(n)
   def leia_numeros(separador: Texto): Lista[Real] = leia_nums(separador)
