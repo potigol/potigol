@@ -124,6 +124,7 @@ public final class K {
                 break;
             default:
                 op = valor;
+                break;
         }
         return op;
     }

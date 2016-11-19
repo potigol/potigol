@@ -47,11 +47,11 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    private static final String versao = "0.9.8";
+    private static final String versao = "0.9.9";
 
-    private static final int saidaMinima = 40;
+    private static final int saidaMinima = -1;
 
-    public static String test(String code, String input) {
+    public static String test(final String code, final String input) {
         final Listener listener = getListnerFromString(code);
         final String saida = listener.getSaida();
         if (saida.trim().length() > saidaMinima) {

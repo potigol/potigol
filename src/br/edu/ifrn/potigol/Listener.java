@@ -553,8 +553,8 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitMult_div(final Mult_divContext ctx) {
-        String exp1 = this.getValue(ctx.expr(0));
-        String op = ctx.getChild(1).getText();
+        final String exp1 = this.getValue(ctx.expr(0));
+        final String op = ctx.getChild(1).getText();
         final String exp2 = this.getValue(ctx.expr(1));
         final String resposta = M.operacaoBin(exp1, op, exp2);
         this.setValue(ctx, resposta);
