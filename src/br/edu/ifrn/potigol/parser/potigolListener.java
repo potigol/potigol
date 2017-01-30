@@ -214,6 +214,16 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitDcl(potigolParser.DclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link potigolParser#dcl_var}.
+	 * @param ctx the parse tree
+	 */
+	void enterDcl_var(potigolParser.Dcl_varContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link potigolParser#dcl_var}.
+	 * @param ctx the parse tree
+	 */
+	void exitDcl_var(potigolParser.Dcl_varContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link potigolParser#dcls}.
 	 * @param ctx the parse tree
 	 */
@@ -474,6 +484,18 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitChamada_funcao(potigolParser.Chamada_funcaoContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code curinga}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCuringa(potigolParser.CuringaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code curinga}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCuringa(potigolParser.CuringaContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code mais_menos_unario}
 	 * labeled alternative in {@link potigolParser#expr}.
 	 * @param ctx the parse tree
@@ -521,6 +543,18 @@ public interface potigolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCons(potigolParser.ConsContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code booleano}
+	 * labeled alternative in {@link potigolParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleano(potigolParser.BooleanoContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code booleano}
+	 * labeled alternative in {@link potigolParser#literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleano(potigolParser.BooleanoContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code id}
 	 * labeled alternative in {@link potigolParser#literal}.
@@ -594,18 +628,6 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitChar(potigolParser.CharContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code booleano}
-	 * labeled alternative in {@link potigolParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterBooleano(potigolParser.BooleanoContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code booleano}
-	 * labeled alternative in {@link potigolParser#literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitBooleano(potigolParser.BooleanoContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link potigolParser#decisao}.
 	 * @param ctx the parse tree
 	 */
@@ -616,22 +638,22 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitDecisao(potigolParser.DecisaoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#SE}.
+	 * Enter a parse tree produced by {@link potigolParser#se}.
 	 * @param ctx the parse tree
 	 */
 	void enterSe(potigolParser.SeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#SE}.
+	 * Exit a parse tree produced by {@link potigolParser#se}.
 	 * @param ctx the parse tree
 	 */
 	void exitSe(potigolParser.SeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#ENTAO}.
+	 * Enter a parse tree produced by {@link potigolParser#entao}.
 	 * @param ctx the parse tree
 	 */
 	void enterEntao(potigolParser.EntaoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#ENTAO}.
+	 * Exit a parse tree produced by {@link potigolParser#entao}.
 	 * @param ctx the parse tree
 	 */
 	void exitEntao(potigolParser.EntaoContext ctx);
@@ -646,12 +668,12 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitSenaose(potigolParser.SenaoseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#SENAO}.
+	 * Enter a parse tree produced by {@link potigolParser#senao}.
 	 * @param ctx the parse tree
 	 */
 	void enterSenao(potigolParser.SenaoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#SENAO}.
+	 * Exit a parse tree produced by {@link potigolParser#senao}.
 	 * @param ctx the parse tree
 	 */
 	void exitSenao(potigolParser.SenaoContext ctx);
@@ -675,6 +697,114 @@ public interface potigolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCaso(potigolParser.CasoContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_cons}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_cons(potigolParser.Padrao_consContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_cons}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_cons(potigolParser.Padrao_consContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_default}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_default(potigolParser.Padrao_defaultContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_default}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_default(potigolParser.Padrao_defaultContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_literal}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_literal(potigolParser.Padrao_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_literal}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_literal(potigolParser.Padrao_literalContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_objeto}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_objeto(potigolParser.Padrao_objetoContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_objeto}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_objeto(potigolParser.Padrao_objetoContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_tupla}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_tupla(potigolParser.Padrao_tuplaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_tupla}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_tupla(potigolParser.Padrao_tuplaContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_id}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_id(potigolParser.Padrao_idContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_id}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_id(potigolParser.Padrao_idContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_ou}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_ou(potigolParser.Padrao_ouContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_ou}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_ou(potigolParser.Padrao_ouContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_virgula}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_virgula(potigolParser.Padrao_virgulaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_virgula}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_virgula(potigolParser.Padrao_virgulaContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code padrao_lista}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void enterPadrao_lista(potigolParser.Padrao_listaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code padrao_lista}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 */
+	void exitPadrao_lista(potigolParser.Padrao_listaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link potigolParser#repeticao}.
 	 * @param ctx the parse tree
@@ -706,12 +836,12 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitPara_gere(potigolParser.Para_gereContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link potigolParser#ENQUANTO}.
+	 * Enter a parse tree produced by {@link potigolParser#enquanto}.
 	 * @param ctx the parse tree
 	 */
 	void enterEnquanto(potigolParser.EnquantoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link potigolParser#ENQUANTO}.
+	 * Exit a parse tree produced by {@link potigolParser#enquanto}.
 	 * @param ctx the parse tree
 	 */
 	void exitEnquanto(potigolParser.EnquantoContext ctx);

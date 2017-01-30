@@ -19,26 +19,26 @@ public final class M {
         return "$a" + num;
     }
 
-    public static String escapeID(final String id) {
+    public static String escapeID(final String ident) {
         final String resposta;
-        if (scalawords.contains(id)) {
-            resposta = K.GRAVE + id + K.GRAVE;
+        if (scalawords.contains(ident)) {
+            resposta = K.GRAVE + ident + K.GRAVE;
         } else {
-            resposta = id;
+            resposta = ident;
         }
         return resposta;
     }
 
-    public static String getVetor(final String id, final String indice) {
-        return id + ".get" + K.param(indice);
+    public static String getVetor(final String ident, final String indice) {
+        return ident + ".get" + K.param(indice);
     }
 
     public static String lambda(final String param, final String corpo) {
-        return " " + K.param(param) + K.ARROW + K.bloco(corpo);
+        return K.ESPACO + K.param(param) + K.ARROW + K.bloco(corpo);
     }
 
-    public static String tipoGenerico(final String id, final String tipo) {
-        return id + K.generico(tipo);
+    public static String tipoGenerico(final String ident, final String tipo) {
+        return ident + K.generico(tipo);
     }
 
     public static String tipoFuncao(final String esq, final String dir) {
@@ -53,15 +53,15 @@ public final class M {
         return nome + K.param(param);
     }
 
-    public static String operacaoBin(final String exp1, final String op,
+    public static String operacaoBin(final String exp1, final String operador,
             final String exp2) {
         final String exp;
-        if ("/".equals(op)) {
-            exp = "(" + K.exp(exp1) + " * 1.0)";
+        if ("/".equals(operador)) {
+            exp = K.OPENBRACKET + K.exp(exp1) + " * 1.0" + K.CLOSEBRACKET;
         } else {
             exp = exp1;
         }
-        return K.LEFTBRACE + exp + K.operador(op) + exp2 + K.RIGHTBRACE;
+        return K.LEFTBRACE + exp + K.operador(operador) + exp2 + K.RIGHTBRACE;
     }
 
     public static String operacaoBinE(final String exp1, final String exp2) {
@@ -72,8 +72,9 @@ public final class M {
         return K.LEFTBRACE + exp1 + K.OR + exp2 + K.RIGHTBRACE;
     }
 
-    public static String operacaoUnaria(final String op, final String exp) {
-        return op + exp;
+    public static String operacaoUnaria(final String operador,
+            final String exp) {
+        return operador + exp;
     }
 
     public static String paraFaca(final String faixas, final String guarda,
@@ -86,11 +87,11 @@ public final class M {
     }
 
     public static String escolha(final String exp, final List<String> casos) {
-        String corpo = "";
+        final StringBuilder corpo = new StringBuilder();
         for (final String caso : casos) {
-            corpo += K.indent(caso);
+            corpo.append(K.indent(caso));
         }
-        return K.exp(exp) + " match " + K.bloco(corpo);
+        return K.exp(exp) + " match " + K.bloco(corpo.toString());
     }
 
     public static String enquanto(final String exp, final String bloco) {
@@ -184,6 +185,10 @@ public final class M {
         return Arrays.asList(texto.split(K.VIRGULA));
     }
 
+    public static String[] split(String id) {
+        return id.split(K.VIRGULA);
+    }
+
     public static String defFuncao(final String id, final String param,
             final String tipo, final String corpo) {
         return K.DEF + id + K.param(param) + K.tipo(tipo) + K.IGUAL
@@ -191,7 +196,16 @@ public final class M {
     }
 
     public static String declVariavel(final String id, final String exp) {
-        return K.VAR + id + K.IGUAL + exp;
+        return K.VAR + id + K.IGUAL + exp+ K.NEWLINE;
+    }
+
+    public static String declVariavelMult(final String[] ids,
+            final String[] exps) {
+        final StringBuilder resposta = new StringBuilder();
+        for (int i = 0; i < ids.length; i++) {
+            resposta.append(M.declVariavel(ids[i], exps[i]) + K.NEWLINE);
+        }
+        return resposta.toString();
     }
 
     public static String tupla(final int tamanho, final String exp) {
@@ -212,8 +226,8 @@ public final class M {
         return valor;
     }
 
-    public static String declValor(final String id, final String exp) {
-        return K.VAL + id + K.IGUAL + exp + K.SEMI;
+    public static String declValor(final String ident, final String exp) {
+        return K.VAL + ident + K.IGUAL + exp + K.SEMI;
     }
 
     public static String atribMultipla(final List<String> ids,
@@ -233,7 +247,7 @@ public final class M {
         return resposta.toString();
     }
 
-    public static String faixa(final String id, final List<String> exps) {
+    public static String faixa(final String ident, final List<String> exps) {
         final int tamanho = exps.size();
         final String inicio = exps.get(0);
         final String resposta;
@@ -247,7 +261,7 @@ public final class M {
             final String passo = exps.get(2);
             resposta = inicio + K.ATE + fim + K.PASSO + passo;
         }
-        return id + " <- " + resposta;
+        return ident + K.LEFTARROW + resposta;
     }
 
     public static String texto(final String texto) {
@@ -266,7 +280,7 @@ public final class M {
     }
 
     public static String operacaoUnariaNao(final String exp) {
-        return K.LEFTBRACE + "!" + exp + K.RIGHTBRACE;
+        return K.LEFTBRACE + K.NOT + exp + K.RIGHTBRACE;
     }
 
     public static String parenteses(final String exp) {
@@ -318,13 +332,13 @@ public final class M {
     public static String interpolacao(final List<String> string,
             final List<String> interp) {
         final StringBuilder resposta = new StringBuilder();
-        int i = 0;
+        int pos = 0;
         for (final String exp : interp) {
-            resposta.append(string.get(i).replace(K.LEFTBRACE, "${"))
+            resposta.append(string.get(pos).replace(K.LEFTBRACE, "${"))
                     .append(exp);
-            i = i + 1;
+            pos++;
         }
-        resposta.append(string.get(i));
+        resposta.append(string.get(pos));
         if (resposta.toString().contains("\n")) {
             resposta.insert(0, "\"\"").append("\"\".stripMargin('|')");
         }
@@ -358,11 +372,11 @@ public final class M {
         return resposta;
     }
 
-    public static String classe(final String id, final List<String> params) {
+    public static String classe(final String ident, final List<String> params, final List<String> elems) {
         final StringBuilder resposta = new StringBuilder();
-        resposta.append("case class ").append(M.escapeID(id))
+        resposta.append("case class ").append(M.escapeID(ident))
                 .append(K.OPENBRACKET);
-        for (int i = 2; i < params.size() - 1; i++) {
+        for (int i = 0; i < params.size(); i++) {
             final String param = params.get(i);
             resposta.append(K.INDENT).append(param);
             if (i < params.size() - 2) {
@@ -370,12 +384,17 @@ public final class M {
             }
         }
         resposta.append(K.CLOSEBRACKET);
+        resposta.append(K.LEFTBRACE+K.NEWLINE);
+        for (String i: elems){
+            resposta.append(i);
+        }
+        resposta.append(K.RIGHTBRACE);
         return resposta.toString();
     }
 
-    public static String setVetor(final String id, final List<String> idx,
+    public static String setVetor(final String ident, final List<String> idx,
             final String exp) {
-        final StringBuilder resposta = new StringBuilder(id);
+        final StringBuilder resposta = new StringBuilder(ident);
         for (final String ind : idx) {
             resposta.append(K.param(ind + " -1"));
         }

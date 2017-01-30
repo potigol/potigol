@@ -67,13 +67,16 @@ decl_funcao
 
 decl_tipo
     : 'tipo' ID '=' tipo                          # alias
-    | 'tipo' ID (dcl|decl_funcao)* 'fim'          # classe ;
+    | 'tipo' ID (dcl|dcl_var|decl_funcao|decl_valor)* 'fim' # classe ;
 
 decl_uso
     : 'use' STRING ;
 
 dcl
     : id1 ':' tipo ;
+    
+dcl_var
+    : 'var' id1 ':' tipo ;
 
 dcls
     : (dcl (',' dcl)* )? ;
@@ -110,7 +113,8 @@ expr
     | repeticao                                   # laco
     | '(' expr ')'                                # paren
     | 'Tupla(' expr2 ')'                          # tupla
-    | '[' expr1? ']'                              # lista ;
+    | '[' expr1? ']'                              # lista 
+    | '_'                                         # curinga ;
 
 literal
     : BOOLEANO                                    # booleano

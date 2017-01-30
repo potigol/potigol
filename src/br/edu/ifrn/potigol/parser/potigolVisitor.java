@@ -132,6 +132,12 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDcl(potigolParser.DclContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link potigolParser#dcl_var}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDcl_var(potigolParser.Dcl_varContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link potigolParser#dcls}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -284,6 +290,13 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitChamada_funcao(potigolParser.Chamada_funcaoContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code curinga}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCuringa(potigolParser.CuringaContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code mais_menos_unario}
 	 * labeled alternative in {@link potigolParser#expr}.
 	 * @param ctx the parse tree
@@ -311,6 +324,13 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCons(potigolParser.ConsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code booleano}
+	 * labeled alternative in {@link potigolParser#literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleano(potigolParser.BooleanoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code id}
 	 * labeled alternative in {@link potigolParser#literal}.
@@ -354,26 +374,19 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitChar(potigolParser.CharContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code booleano}
-	 * labeled alternative in {@link potigolParser#literal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBooleano(potigolParser.BooleanoContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link potigolParser#decisao}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDecisao(potigolParser.DecisaoContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#SE}.
+	 * Visit a parse tree produced by {@link potigolParser#se}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSe(potigolParser.SeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#ENTAO}.
+	 * Visit a parse tree produced by {@link potigolParser#entao}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -385,7 +398,7 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSenaose(potigolParser.SenaoseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#SENAO}.
+	 * Visit a parse tree produced by {@link potigolParser#senao}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -402,6 +415,69 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCaso(potigolParser.CasoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_cons}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_cons(potigolParser.Padrao_consContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_default}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_default(potigolParser.Padrao_defaultContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_literal}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_literal(potigolParser.Padrao_literalContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_objeto}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_objeto(potigolParser.Padrao_objetoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_tupla}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_tupla(potigolParser.Padrao_tuplaContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_id}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_id(potigolParser.Padrao_idContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_ou}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_ou(potigolParser.Padrao_ouContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_virgula}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_virgula(potigolParser.Padrao_virgulaContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code padrao_lista}
+	 * labeled alternative in {@link potigolParser#padrao}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPadrao_lista(potigolParser.Padrao_listaContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link potigolParser#repeticao}.
 	 * @param ctx the parse tree
@@ -421,7 +497,7 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPara_gere(potigolParser.Para_gereContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link potigolParser#ENQUANTO}.
+	 * Visit a parse tree produced by {@link potigolParser#enquanto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

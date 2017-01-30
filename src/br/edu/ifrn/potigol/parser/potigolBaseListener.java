@@ -232,6 +232,18 @@ public class potigolBaseListener implements potigolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDcl_var(potigolParser.Dcl_varContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDcl_var(potigolParser.Dcl_varContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDcls(potigolParser.DclsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -496,6 +508,18 @@ public class potigolBaseListener implements potigolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCuringa(potigolParser.CuringaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCuringa(potigolParser.CuringaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMais_menos_unario(potigolParser.Mais_menos_unarioContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -539,6 +563,18 @@ public class potigolBaseListener implements potigolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCons(potigolParser.ConsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBooleano(potigolParser.BooleanoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBooleano(potigolParser.BooleanoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -611,18 +647,6 @@ public class potigolBaseListener implements potigolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitChar(potigolParser.CharContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBooleano(potigolParser.BooleanoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBooleano(potigolParser.BooleanoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -707,6 +731,114 @@ public class potigolBaseListener implements potigolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCaso(potigolParser.CasoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_cons(potigolParser.Padrao_consContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_cons(potigolParser.Padrao_consContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_default(potigolParser.Padrao_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_default(potigolParser.Padrao_defaultContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_literal(potigolParser.Padrao_literalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_literal(potigolParser.Padrao_literalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_objeto(potigolParser.Padrao_objetoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_objeto(potigolParser.Padrao_objetoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_tupla(potigolParser.Padrao_tuplaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_tupla(potigolParser.Padrao_tuplaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_id(potigolParser.Padrao_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_id(potigolParser.Padrao_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_ou(potigolParser.Padrao_ouContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_ou(potigolParser.Padrao_ouContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_virgula(potigolParser.Padrao_virgulaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_virgula(potigolParser.Padrao_virgulaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPadrao_lista(potigolParser.Padrao_listaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPadrao_lista(potigolParser.Padrao_listaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

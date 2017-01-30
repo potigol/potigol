@@ -28,7 +28,9 @@ public final class K {
     public static final String TUPLA = "Tupla";
 
     public static final String ARROW = " => ";
-
+    
+    public static final String LEFTARROW = " <- ";
+    
     public static final String SE = "case _ if (";
 
     public static final String SENAO = "case _ => ";
@@ -55,6 +57,12 @@ public final class K {
 
     public static final String DOT = ".";
 
+    public static final String DOISPONTOS = ": ";
+
+    public static final String ESPACO = " ";
+
+    public static final String NOT = "!";
+
     private K() {
     }
 
@@ -75,15 +83,16 @@ public final class K {
     }
 
     public static String formato(final String expr, final String fmt) {
-        return exp(fmt) + ".formatLocal(java.util.Locale.US, "+ expr+")";
+        return exp(fmt) + ".formatLocal(java.util.Locale.US, " + expr
+                + CLOSEBRACKET;
     }
 
     public static String escreva(final String expr) {
-        return "escreva" + OPENBRACKET + expr + CLOSEBRACKET;
+        return "escreva" + param(expr);
     }
 
     public static String imprima(final String expr) {
-        return "imprima" + OPENBRACKET + expr + CLOSEBRACKET;
+        return "imprima" + param(expr);
     }
 
     public static String lista(final String exp) {
@@ -105,7 +114,7 @@ public final class K {
         if (valor.isEmpty()) {
             resp = "";
         } else {
-            resp = ": " + valor;
+            resp = DOISPONTOS + valor;
         }
         return resp;
     }
