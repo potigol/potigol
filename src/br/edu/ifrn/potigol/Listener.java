@@ -212,8 +212,7 @@ public class Listener extends potigolBaseListener {
                     || child.getClass().equals(Def_funcao_corpoContext.class)
                     || child.getClass().equals(Def_funcaoContext.class)
                     || child.getClass().equals(Decl_var_simplesContext.class)
-                    || child.getClass().equals(Valor_simplesContext.class)
-                    ) {
+                    || child.getClass().equals(Valor_simplesContext.class)) {
                 elem.add(child);
             }
         }

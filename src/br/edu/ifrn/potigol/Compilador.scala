@@ -51,7 +51,8 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor};") ++
       List(antes) ++ NL ++ code.split(NL).drop(2) ++ List(depois)).mkString(NL);
     if (debug) {
-      imprimirCodigo(c)
+//      imprimirCodigo(c)
+      println(c)
       ""
     }
     else {

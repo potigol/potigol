@@ -65,21 +65,21 @@ object Potigolutil {
   def cubo[A](i: Inteiro, j: Inteiro, k: Inteiro)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
 
   trait Colecao[T] {
-    val lista: Seq[T]
-    def apply(a: Int): T = lista(a)
-    def length: Int = lista.length
-    override def toString: String = lista.mkString("[", ", ", "]")
-    def junte(separador: Texto = ""): Texto = lista.mkString(separador)
-    def junte(inicio: Texto, separador: Texto, fim: Texto): Texto = lista.mkString(inicio, separador, fim)
-    def tamanho: Inteiro = lista.length
+    val _lista: Seq[T]
+    def apply(a: Int): T = _lista(a)
+    def length: Int = _lista.length
+    override def toString: String = _lista.mkString("[", ", ", "]")
+    def junte(separador: Texto = ""): Texto = _lista.mkString(separador)
+    def junte(inicio: Texto, separador: Texto, fim: Texto): Texto = _lista.mkString(inicio, separador, fim)
+    def tamanho: Inteiro = _lista.length
     def get(a: Int): T = if (a > 0) apply(a - 1) else apply(tamanho + a)
-    def posicao(elem: T): Inteiro = lista.indexOf(elem, 0) + 1
-    def cabeca: T = lista.head
-    def contem(a: T): Lógico = lista.contains(a)
-    def ultimo: T = lista.last
-    def injete[A >: T](f: (A, T) => A): A = lista.reduceLeft(f)
-    def injete[A](neutro: A)(f: (A, T) => A): A = lista.foldLeft(neutro)(f)
-    def ache(p: T => Lógico): Option[T] = lista.find(p)
+    def posicao(elem: T): Inteiro = _lista.indexOf(elem, 0) + 1
+    def cabeca: T = _lista.head
+    def contem(a: T): Lógico = _lista.contains(a)
+    def ultimo: T = _lista.last
+    def injete[A >: T](f: (A, T) => A): A = _lista.reduceLeft(f)
+    def injete[A](neutro: A)(f: (A, T) => A): A = _lista.foldLeft(neutro)(f)
+    def ache(p: T => Lógico): Option[T] = _lista.find(p)
     def contém: T => Lógico = contem
     def cabeça: T = cabeca
     def primeiro: T = cabeca
@@ -87,29 +87,32 @@ object Potigolutil {
     def posição: T => Inteiro = posicao
     def posiçao: T => Inteiro = posicao
     def posicão: T => Inteiro = posicao
-    def para_lista: Lista[T] = Lista(lista.toList)
-    def mutavel: Vetor[T] = Vetor(lista.to)
+    def para_lista: Lista[T] = Lista(_lista.toList)
+    def lista: Lista[T] = para_lista
+    def mutavel: Vetor[T] = Vetor(_lista.to)
     def mutável: Vetor[T] = mutavel
+    def imutável = lista
+    def imutavel = lista
   }
 
-  case class Lista[T](val lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
-    def cauda: Lista[T] = Lista(lista.tail)
-    def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(lista.sorted)
-    def inverta: Lista[T] = Lista(lista.reverse)
-    @deprecated("Use 'selecione'", since094) def filtre(p: T => Lógico): Lista[T] = Lista(lista.filter(p))
+  case class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
+    def cauda: Lista[T] = Lista(_lista.tail)
+    def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted)
+    def inverta: Lista[T] = Lista(_lista.reverse)
+    @deprecated("Use 'selecione'", since094) def filtre(p: T => Lógico): Lista[T] = Lista(_lista.filter(p))
     def selecione: (T => Lógico) => Lista[T] = filtre
-    def mapeie[B](f: T => B): Lista[B] = Lista(lista.map(f))
-    def pegue_enquanto(p: T => Lógico): Lista[T] = Lista(lista.takeWhile(p))
-    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto(p: T => Lógico): Lista[T] = Lista(lista.dropWhile(p))
+    def mapeie[B](f: T => B): Lista[B] = Lista(_lista.map(f))
+    def pegue_enquanto(p: T => Lógico): Lista[T] = Lista(_lista.takeWhile(p))
+    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto(p: T => Lógico): Lista[T] = Lista(_lista.dropWhile(p))
     def descarte_enquanto: (T => Lógico) => Lista[T] = passe_enquanto
-    @deprecated("Use 'descarte'", since094) def passe(a: Inteiro): Lista[T] = Lista(lista.drop(a))
+    @deprecated("Use 'descarte'", since094) def passe(a: Inteiro): Lista[T] = Lista(_lista.drop(a))
     def descarte: Inteiro => Lista[T] = passe _
-    def pegue(a: Inteiro): Lista[T] = Lista(lista.take(a))
-    def +(outra: Lista[T]): Lista[T] = Lista(lista ::: outra.lista)
-    def ::[A >: T](a: A): Lista[A] = Lista(a :: lista)
-    def remova(i: Inteiro): Lista[T] = Lista(lista.take(i - 1) ::: lista.drop(i))
-    def insira(i: Inteiro, valor: T): Lista[T] = Lista(lista.take(i - 1) ::: valor :: lista.drop(i - 1))
-    def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
+    def pegue(a: Inteiro): Lista[T] = Lista(_lista.take(a))
+    def +(outra: Lista[T]): Lista[T] = Lista(_lista ::: outra._lista)
+    def ::[A >: T](a: A): Lista[A] = Lista(a :: _lista)
+    def remova(i: Inteiro): Lista[T] = Lista(_lista.take(i - 1) ::: _lista.drop(i))
+    def insira(i: Inteiro, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
+    def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(_lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     })
   }
@@ -147,21 +150,21 @@ object Potigolutil {
     def mutável[A]: (Inteiro, Inteiro, Inteiro, => A) => Vetor[Vetor[Vetor[A]]] = mutavel
   }
 
-  case class Vetor[T](lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {
-    override def update(ind: Int, elem: T): Unit = { lista.update(ind, elem) }
-    def cauda: Vetor[T] = Vetor(lista.tail)
-    def inverta: Vetor[T] = Vetor(lista.reverse)
-    def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(lista.sorted)
-    @deprecated def filtre(p: T => Lógico): Vetor[T] = Vetor(lista.filter(p))
+  case class Vetor[T](_lista: MSeq[T]) extends collection.mutable.IndexedSeq[T] with Colecao[T] {
+    override def update(ind: Int, elem: T): Unit = { _lista.update(ind, elem) }
+    def cauda: Vetor[T] = Vetor(_lista.tail)
+    def inverta: Vetor[T] = Vetor(_lista.reverse)
+    def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(_lista.sorted)
+    @deprecated def filtre(p: T => Lógico): Vetor[T] = Vetor(_lista.filter(p))
     def selecione: (T => Lógico) => Vetor[T] = filtre
-    def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(lista.map(f))
-    def pegue(a: Inteiro): Vetor[T] = Vetor(lista.take(a))
-    def descarte(a: Inteiro): Vetor[T] = Vetor(lista.drop(a))
-    def pegue_enquanto(p: T => Lógico): Vetor[T] = Vetor(lista.takeWhile(p))
-    @deprecated def passe_enquanto(p: T => Lógico): Vetor[T] = Vetor(lista.dropWhile(p))
+    def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(_lista.map(f))
+    def pegue(a: Inteiro): Vetor[T] = Vetor(_lista.take(a))
+    def descarte(a: Inteiro): Vetor[T] = Vetor(_lista.drop(a))
+    def pegue_enquanto(p: T => Lógico): Vetor[T] = Vetor(_lista.takeWhile(p))
+    @deprecated def passe_enquanto(p: T => Lógico): Vetor[T] = Vetor(_lista.dropWhile(p))
     def descarte_enquanto: (T => Lógico) => Vetor[T] = passe_enquanto
-    def remova(i: Inteiro): Vetor[T] = Vetor(lista.take(i - 1) ++ lista.drop(i))
-    def insira(i: Inteiro, valor: T): Vetor[T] = Vetor(lista.take(i - 1) ++ List(valor) ++ lista.drop(i - 1))
+    def remova(i: Inteiro): Vetor[T] = Vetor(_lista.take(i - 1) ++ _lista.drop(i))
+    def insira(i: Inteiro, valor: T): Vetor[T] = Vetor(_lista.take(i - 1) ++ List(valor) ++ _lista.drop(i - 1))
   }
 
   implicit class Textos(val lista: String) {
@@ -280,7 +283,7 @@ object Potigolutil {
     //    Lista(((1 to n) map { _ => leia_int }).toList)
   }
   def leia_ints(separador: Texto): Lista[Int] = {
-    val l = leia(separador).lista
+    val l = leia(separador)._lista
     Lista(l.map(_.para_int))
   }
   def leia_inteiro: Inteiro = leia_int
@@ -297,7 +300,7 @@ object Potigolutil {
     l.pegue(n)
     //    Lista(((1 to n) map { _ => leia_num }).toList)
   }
-  def leia_nums(separador: Texto): Lista[Real] = Lista(leia(separador).lista.map { _.para_num })
+  def leia_nums(separador: Texto): Lista[Real] = Lista(leia(separador)._lista.map { _.para_num })
   def leia_numeros(n: Inteiro): Lista[Real] = leia_nums(n)
   def leia_numeros(separador: Texto): Lista[Real] = leia_nums(separador)
   def leia_real: Real = leia_num

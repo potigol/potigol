@@ -50,7 +50,13 @@ public final class M {
     }
 
     public static String chamadaFuncao(final String nome, final String param) {
-        return nome + K.param(param);
+        final String p;
+        if (param != null) {
+            p = param;
+        } else {
+            p = "";
+        }
+        return nome + K.param(p);
     }
 
     public static String operacaoBin(final String exp1, final String operador,
@@ -196,7 +202,7 @@ public final class M {
     }
 
     public static String declVariavel(final String id, final String exp) {
-        return K.VAR + id + K.IGUAL + exp+ K.NEWLINE;
+        return K.VAR + id + K.IGUAL + exp + K.NEWLINE;
     }
 
     public static String declVariavelMult(final String[] ids,
@@ -372,7 +378,8 @@ public final class M {
         return resposta;
     }
 
-    public static String classe(final String ident, final List<String> params, final List<String> elems) {
+    public static String classe(final String ident, final List<String> params,
+            final List<String> elems) {
         final StringBuilder resposta = new StringBuilder();
         resposta.append("case class ").append(M.escapeID(ident))
                 .append(K.OPENBRACKET);
@@ -384,8 +391,8 @@ public final class M {
             }
         }
         resposta.append(K.CLOSEBRACKET);
-        resposta.append(K.LEFTBRACE+K.NEWLINE);
-        for (String i: elems){
+        resposta.append(K.LEFTBRACE + K.NEWLINE);
+        for (String i : elems) {
             resposta.append(i);
         }
         resposta.append(K.RIGHTBRACE);
@@ -401,5 +408,4 @@ public final class M {
         resposta.append(K.IGUAL).append(exp);
         return resposta.toString();
     }
-
 }
