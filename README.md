@@ -10,7 +10,7 @@ Linguagem de Programação moderna para iniciantes
 
 
 
-##Características
+## Características
   - Sintaxe simples
   - Palavras Chave em Português
   - Tipagem Estática e forte
@@ -21,7 +21,7 @@ Linguagem de Programação moderna para iniciantes
 ![Editor](https://cloud.githubusercontent.com/assets/303460/8604675/7180d638-2656-11e5-9239-90d29628d9d0.png)
 
 
-##Como usar:
+## Como usar:
   - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo
   - Para executar o Editor de Código digite no prompt do terminal
@@ -49,7 +49,7 @@ Editores de código para Potigol:
 
 # Instalação
 
-##Windows 8 e 10
+## Windows 8 e 10
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
@@ -68,7 +68,7 @@ Editores de código para Potigol:
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial".
 
 
-##LINUX
+## LINUX
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Copie a pasta Potigol para o local adequado
