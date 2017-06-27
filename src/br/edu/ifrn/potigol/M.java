@@ -191,6 +191,17 @@ public final class M {
         return Arrays.asList(texto.split(K.VIRGULA));
     }
 
+    public static String list2Qualid(final List<String> lista) {
+        final StringBuilder resposta = new StringBuilder();
+        if (!lista.isEmpty()) {
+            resposta.append(lista.get(0));
+        }
+        for (int i = 1; i < lista.size(); i++) {
+            resposta.append(".").append(lista.get(i));
+        }
+        return resposta.toString();
+    }
+    
     public static String[] split(String id) {
         return id.split(K.VIRGULA);
     }
@@ -386,7 +397,7 @@ public final class M {
         for (int i = 0; i < params.size(); i++) {
             final String param = params.get(i);
             resposta.append(K.INDENT).append(param);
-            if (i < params.size() - 2) {
+            if (i < params.size() - 1) {
                 resposta.append(K.VIRGULA);
             }
         }

@@ -139,7 +139,8 @@ object TesteErros extends App {
 
     Erro("Método inexistente",
       """ 'a'.get(0)
-        """))
+        """),
+    Erro("Tipo", """Lista(1,"q").dssds var a = [1] a := Lista.mutavel(1,"ok")"""))
 
   def imprimir_erro(erro: Erro): Unit = {
     val code = erro.codigo
@@ -161,5 +162,5 @@ object TesteErros extends App {
     println(texto(c.avaliar(listener.getSaida).toString()))
   }
 
-  erros.drop(24).foreach { imprimir_erro }
+  erros.drop(30).foreach { imprimir_erro }
 }

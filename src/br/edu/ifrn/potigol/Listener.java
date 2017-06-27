@@ -81,7 +81,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitSet_vetor(final Set_vetorContext ctx) {
         final int last = ctx.expr().size() - 1;
-        final String id = ctx.ID().getText();
+        final String id = data.getValue(ctx.qualid());
         final List<String> idx = data.getValues(ctx.expr());
         final String exp = idx.get(last);
         idx.remove(last);
@@ -235,7 +235,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitAtrib_multipla(final Atrib_multiplaContext ctx) {
-        final List<String> ids = M.string2List(data.getValue(ctx.id2()));
+        final List<String> ids = M.string2List(data.getValue(ctx.qualid2()));
         final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
         final String resposta = M.atribMultipla(ids, exps);
         data.setValue(ctx, resposta);
@@ -243,7 +243,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitAtrib_simples(final Atrib_simplesContext ctx) {
-        final List<String> ids = M.string2List(data.getValue(ctx.id1()));
+        final List<String> ids = M.string2List(data.getValue(ctx.qualid1()));
         final String exp = data.getValue(ctx.expr());
         final String resposta = M.atribSimples(ids, exp);
         data.setValue(ctx, resposta);
@@ -445,6 +445,27 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
+    public void exitQualid(final QualidContext ctx) {
+        final List<String> lista = data.getValues(ctx.ID());
+        final String resposta = M.list2Qualid(lista);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitQualid1(final Qualid1Context ctx) {
+        final List<String> lista = data.getValues(ctx.qualid());
+        final String resposta = M.list2String(lista);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitQualid2(final Qualid2Context ctx) {
+        final List<String> lista = data.getValues(ctx.qualid());
+        final String resposta = M.list2String(lista);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
     public void exitImprima(final ImprimaContext ctx) {
         final String exp = data.getValue(ctx.expr());
         final String resposta = M.escreva(exp, false);
@@ -543,6 +564,12 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitReal(final RealContext ctx) {
         data.setValue(ctx, ctx.getText());
+    }
+
+    @Override
+    public void exitRetorne(final RetorneContext ctx) {
+        String resp = data.getValue(ctx.expr());
+        data.setValue(ctx, resp);
     }
 
     @Override

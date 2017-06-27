@@ -44,9 +44,10 @@ inst
 cmd
     : 'escreva' expr                              # escreva
     | 'imprima' expr                              # imprima
-    | id1 ':=' expr                               # atrib_simples
-    | id2 ':=' expr2                              # atrib_multipla
-    | ID('['expr']')+ ':=' expr                   # set_vetor ;
+    | qualid1 ':=' expr                           # atrib_simples
+    | qualid2 ':=' expr2                          # atrib_multipla
+    | qualid ('['expr']')+ ':=' expr              # set_vetor 
+    | 'retorne' expr                              # retorne ;
 
 // Declaracao
 decl
@@ -92,7 +93,7 @@ tipo
     | ID '[' tipo ']'                             # tipo_generico
     | tipo '=>' tipo                              # tipo_funcao ;
 
-// Expressao
+// Expressao 
 expr
     : literal                                     # lit
     | expr '.' ID ('(' expr1 ')')?                # chamada_metodo
@@ -200,6 +201,16 @@ id1
 id2
     : ID (',' ID)+ ;
 
+qualid 
+	: (ID '.')* ID;
+
+qualid1
+	: qualid (',' qualid)* ;
+
+qualid2
+	: qualid (',' qualid)+ ;
+
+
 tipo2
     : tipo (',' tipo)+ ;
 
@@ -208,6 +219,7 @@ exprlist
 
 // Lexer
 //channels { WSCHANNEL, MYHIDDEN };
+	
 ID
     : (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 

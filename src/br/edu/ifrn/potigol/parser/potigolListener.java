@@ -88,6 +88,18 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitSet_vetor(potigolParser.Set_vetorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code retorne}
+	 * labeled alternative in {@link potigolParser#cmd}.
+	 * @param ctx the parse tree
+	 */
+	void enterRetorne(potigolParser.RetorneContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code retorne}
+	 * labeled alternative in {@link potigolParser#cmd}.
+	 * @param ctx the parse tree
+	 */
+	void exitRetorne(potigolParser.RetorneContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link potigolParser#decl}.
 	 * @param ctx the parse tree
 	 */
@@ -915,6 +927,36 @@ public interface potigolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitId2(potigolParser.Id2Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link potigolParser#qualid}.
+	 * @param ctx the parse tree
+	 */
+	void enterQualid(potigolParser.QualidContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link potigolParser#qualid}.
+	 * @param ctx the parse tree
+	 */
+	void exitQualid(potigolParser.QualidContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link potigolParser#qualid1}.
+	 * @param ctx the parse tree
+	 */
+	void enterQualid1(potigolParser.Qualid1Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link potigolParser#qualid1}.
+	 * @param ctx the parse tree
+	 */
+	void exitQualid1(potigolParser.Qualid1Context ctx);
+	/**
+	 * Enter a parse tree produced by {@link potigolParser#qualid2}.
+	 * @param ctx the parse tree
+	 */
+	void enterQualid2(potigolParser.Qualid2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link potigolParser#qualid2}.
+	 * @param ctx the parse tree
+	 */
+	void exitQualid2(potigolParser.Qualid2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link potigolParser#tipo2}.
 	 * @param ctx the parse tree

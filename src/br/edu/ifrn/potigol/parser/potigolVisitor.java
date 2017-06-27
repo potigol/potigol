@@ -58,6 +58,13 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSet_vetor(potigolParser.Set_vetorContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code retorne}
+	 * labeled alternative in {@link potigolParser#cmd}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRetorne(potigolParser.RetorneContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link potigolParser#decl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -544,6 +551,24 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId2(potigolParser.Id2Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link potigolParser#qualid}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQualid(potigolParser.QualidContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link potigolParser#qualid1}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQualid1(potigolParser.Qualid1Context ctx);
+	/**
+	 * Visit a parse tree produced by {@link potigolParser#qualid2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQualid2(potigolParser.Qualid2Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link potigolParser#tipo2}.
 	 * @param ctx the parse tree

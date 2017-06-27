@@ -347,4 +347,10 @@ object Potigolutil {
     def setimo: T7 = sétimo; def decimo: T10 = décimo
   }
 
+  case class URL(caminho: Texto) {
+    lazy val erro = conteudo == ""
+    lazy val conteudo = Try {
+      io.Source.fromURL(caminho).mkString("")
+    } getOrElse ("")
+  }
 }

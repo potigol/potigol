@@ -100,6 +100,18 @@ public class potigolBaseListener implements potigolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRetorne(potigolParser.RetorneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRetorne(potigolParser.RetorneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDecl(potigolParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -971,6 +983,42 @@ public class potigolBaseListener implements potigolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitId2(potigolParser.Id2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQualid(potigolParser.QualidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQualid(potigolParser.QualidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQualid1(potigolParser.Qualid1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQualid1(potigolParser.Qualid1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQualid2(potigolParser.Qualid2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQualid2(potigolParser.Qualid2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
