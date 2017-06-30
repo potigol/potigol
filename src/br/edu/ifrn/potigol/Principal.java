@@ -30,6 +30,7 @@
 
 package br.edu.ifrn.potigol;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -119,7 +120,17 @@ public class Principal {
                 StandardCharsets.UTF_8);
         final StringBuffer conteudo = new StringBuffer();
         for (final String linha : linhas) {
-            conteudo.append(linha).append('\n');
+            if (linha.trim().startsWith("use")) {
+                String s = linha.substring(3).replaceAll("\"", "").trim();
+                File uso = new File(s);
+                if (uso.exists() && uso.isFile()) {
+                    conteudo.append(lerArquivo(s)).append('\n');
+                } else {
+                    conteudo.append(linha).append('\n');
+                }
+            } else {
+                conteudo.append(linha).append('\n');
+            }
         }
         return conteudo.toString();
     }
