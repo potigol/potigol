@@ -36,7 +36,7 @@ Linguagem de Programação moderna para iniciantes
   
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
-##Editores de Código
+## Editores de Código
 
 Editores de código para Potigol:
 
