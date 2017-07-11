@@ -695,4 +695,10 @@ public class Listener extends potigolBaseListener {
     public void enterCuringa(potigolParser.CuringaContext ctx) {
         data.setValue(ctx, "_");
     }
+    
+    @Override
+    public void enterIsto(potigolParser.IstoContext ctx) {
+        data.setValue(ctx, " this ");
+    }
+    
 }

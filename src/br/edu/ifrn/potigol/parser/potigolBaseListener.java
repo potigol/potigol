@@ -448,6 +448,18 @@ public class potigolBaseListener implements potigolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIsto(potigolParser.IstoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIsto(potigolParser.IstoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterE_logico(potigolParser.E_logicoContext ctx) { }
 	/**
 	 * {@inheritDoc}

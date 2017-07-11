@@ -51,7 +51,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor};") ++
       List(antes) ++ NL ++ code.split(NL).drop(2) ++ List(depois)).mkString(NL);
     if (debug) {
-//      imprimirCodigo(c)
+      //      imprimirCodigo(c)
       println(c)
       ""
     }
@@ -59,7 +59,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       avaliar(c) match {
         case Success(_) =>
           if (wait) clean()
-          (new Eval(None)).apply[String](c)
+          Try { (new Eval(None)).apply[String](c) } match {
+            case Success(a) => a
+            case Failure(f) => println("*** Erro de execução ***"); f.getLocalizedMessage
+          }
         case Failure(f) =>
           if (wait) clean()
           println(codigoErro(c, f.getMessage, codigoPotigol, cor))
@@ -94,7 +97,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     if (partes.size > 2) {
       val err = partes(2)
       val linha = partes(1).split(SPACE)(1).toInt
-      val linhaPotigol = code.split(NL).take(linha - 1).reverse.head.dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
+      val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
       val msg = Erros.traduzir(erro)
       imprimirCodigo((codigoPotigol.split(NL).toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })

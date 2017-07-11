@@ -49,6 +49,7 @@ object Potigolutil {
   type Caractere = Char
   type Matriz[T] = Lista[Lista[T]]
   type Cubo[T] = Lista[Lista[Lista[T]]]
+  type Nada = Unit
 
   var $cor = false
 

@@ -424,6 +424,18 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitLaco(potigolParser.LacoContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code isto}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsto(potigolParser.IstoContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code isto}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsto(potigolParser.IstoContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code e_logico}
 	 * labeled alternative in {@link potigolParser#expr}.
 	 * @param ctx the parse tree

@@ -114,7 +114,8 @@ expr
     | repeticao                                   # laco
     | '(' expr ')'                                # paren
     | 'Tupla(' expr2 ')'                          # tupla
-    | '[' expr1? ']'                              # lista 
+    | '[' expr1? ']'                              # lista
+    | 'isto'                                      # isto
     | '_'                                         # curinga ;
 
 literal

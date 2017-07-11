@@ -255,6 +255,13 @@ public interface potigolVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLaco(potigolParser.LacoContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code isto}
+	 * labeled alternative in {@link potigolParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIsto(potigolParser.IstoContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code e_logico}
 	 * labeled alternative in {@link potigolParser#expr}.
 	 * @param ctx the parse tree
