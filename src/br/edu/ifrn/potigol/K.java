@@ -28,9 +28,9 @@ public final class K {
     public static final String TUPLA = "Tupla";
 
     public static final String ARROW = " => ";
-    
+
     public static final String LEFTARROW = " <- ";
-    
+
     public static final String SE = "case _ if (";
 
     public static final String SENAO = "case _ => ";
@@ -135,7 +135,7 @@ public final class K {
                 op = valor;
                 break;
         }
-        return op;
+        return " " + op + " ";
     }
 
     public static String indent(final String valor) {

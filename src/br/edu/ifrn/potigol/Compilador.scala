@@ -97,7 +97,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     if (partes.size > 2) {
       val err = partes(2)
       val linha = partes(1).split(SPACE)(1).toInt
-      val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
+      val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.trim.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit } toInt
       val msg = Erros.traduzir(erro)
       imprimirCodigo((codigoPotigol.split(NL).toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\033[31m" + linha + "\033[37m" else linha })
