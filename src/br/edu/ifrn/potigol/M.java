@@ -46,7 +46,7 @@ public final class M {
     }
 
     public static String tipoTupla(final int tamanho, final String tipo) {
-        return K.TUPLA + tamanho + K.generico(tipo);
+        return K.OPENBRACKET + tipo + K.CLOSEBRACKET;
     }
 
     public static String chamadaFuncao(final String nome, final String param) {
@@ -201,7 +201,7 @@ public final class M {
         }
         return resposta.toString();
     }
-    
+
     public static String[] split(String id) {
         return id.split(K.VIRGULA);
     }
@@ -226,7 +226,7 @@ public final class M {
     }
 
     public static String tupla(final int tamanho, final String exp) {
-        return K.TUPLA + tamanho + K.param(exp);
+        return K.param(exp);
     }
 
     public static String lista(final String exp) {

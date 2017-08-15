@@ -325,27 +325,94 @@ object Potigolutil {
     }
   }
 
-  case class Tupla2[T1, T2](primeiro: T1, segundo: T2)
-  case class Tupla3[T1, T2, T3](primeiro: T1, segundo: T2, terceiro: T3)
-  case class Tupla4[T1, T2, T3, T4](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4)
-  case class Tupla5[T1, T2, T3, T4, T5](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5)
-  case class Tupla6[T1, T2, T3, T4, T5, T6](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6)
-  case class Tupla7[T1, T2, T3, T4, T5, T6, T7](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
-    sétimo: T7) { def setimo: T7 = sétimo }
-  case class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
-    sétimo: T7, oitavo: T8) { def setimo: T7 = sétimo }
-  case class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
-    primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
-    sétimo: T7, oitavo: T8, nono: T9) { def setimo: T7 = sétimo }
-  case class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
-      primeiro: T1, segundo: T2, terceiro: T3, quarto: T4, quinto: T5, sexto: T6,
-      sétimo: T7, oitavo: T8, nono: T9, décimo: T10) {
-    def setimo: T7 = sétimo; def decimo: T10 = décimo
+  implicit class Tupla2[T1, T2](t: (T1, T2)) {
+    def primeiro = t._1
+    def segundo = t._2
+  }
+
+  implicit class Tupla3[T1, T2, T3](t: (T1, T2, T3)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+  }
+
+  implicit class Tupla4[T1, T2, T3, T4](t: (T1, T2, T3, T4)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+  }
+
+  implicit class Tupla5[T1, T2, T3, T4, T5](t: (T1, T2, T3, T4, T5)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+  }
+
+  implicit class Tupla6[T1, T2, T3, T4, T5, T6](t: (T1, T2, T3, T4, T5, T6)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+    def sexto = t._6
+  }
+
+  implicit class Tupla7[T1, T2, T3, T4, T5, T6, T7](
+      t: (T1, T2, T3, T4, T5, T6, T7)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+    def sexto = t._6
+    def setimo = t._7
+    def sétimo = t._7
+  }
+
+  implicit class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
+      t: (T1, T2, T3, T4, T5, T6, T7, T8)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+    def sexto = t._6
+    def setimo = t._7
+    def sétimo = t._7
+    def oitavo = t._8
+  }
+
+  implicit class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
+      t: (T1, T2, T3, T4, T5, T6, T7, T8, T9)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+    def sexto = t._6
+    def setimo = t._7
+    def sétimo = t._7
+    def oitavo = t._8
+    def nono = t._9
+  }
+
+  implicit class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
+      t: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
+    def primeiro = t._1
+    def segundo = t._2
+    def terceiro = t._3
+    def quarto = t._4
+    def quinto = t._5
+    def sexto = t._6
+    def setimo = t._7
+    def sétimo = t._7
+    def oitavo = t._8
+    def nono = t._9
+    def decimo = t._10
+    def décimo = t._10
   }
 
   case class URL(caminho: Texto) {
