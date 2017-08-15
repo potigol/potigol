@@ -347,8 +347,9 @@ public class Listener extends potigolBaseListener {
         final String id = data.getValue(ctx.ID());
         final String param = data.getValue(ctx.dcls());
         final String tipo = data.getOrElse(ctx.tipo());
+        final String retorno = data.getOrElse(ctx.retorne());
         final String corpo = data.getValue(ctx.exprlist());
-        final String resposta = M.defFuncao(id, param, tipo, corpo);
+        final String resposta = M.defFuncao(id, param, tipo, corpo + retorno);
         data.setValue(ctx, resposta);
     }
 
@@ -695,10 +696,10 @@ public class Listener extends potigolBaseListener {
     public void enterCuringa(potigolParser.CuringaContext ctx) {
         data.setValue(ctx, "_");
     }
-    
+
     @Override
     public void enterIsto(potigolParser.IstoContext ctx) {
         data.setValue(ctx, " this ");
     }
-    
+
 }

@@ -61,7 +61,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
           if (wait) clean()
           Try { (new Eval(None)).apply[String](c) } match {
             case Success(a) => a
-            case Failure(f) => println("*** Erro de execução ***"); f.getLocalizedMessage
+            case Failure(f) =>
+              println("*** Erro de execução ***\n" +
+                f.getStackTrace.apply(0).getClassName + ": " + f.getLocalizedMessage);
+              f.getLocalizedMessage
           }
         case Failure(f) =>
           if (wait) clean()

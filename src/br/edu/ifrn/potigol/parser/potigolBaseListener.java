@@ -100,18 +100,6 @@ public class potigolBaseListener implements potigolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRetorne(potigolParser.RetorneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRetorne(potigolParser.RetorneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDecl(potigolParser.DeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -227,6 +215,18 @@ public class potigolBaseListener implements potigolListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDecl_uso(potigolParser.Decl_usoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRetorne(potigolParser.RetorneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRetorne(potigolParser.RetorneContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

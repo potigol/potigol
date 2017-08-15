@@ -46,8 +46,7 @@ cmd
     | 'imprima' expr                              # imprima
     | qualid1 ':=' expr                           # atrib_simples
     | qualid2 ':=' expr2                          # atrib_multipla
-    | qualid ('['expr']')+ ':=' expr              # set_vetor 
-    | 'retorne' expr                              # retorne ;
+    | qualid ('['expr']')+ ':=' expr              # set_vetor ;
 
 // Declaracao
 decl
@@ -64,7 +63,7 @@ decl_valor
 
 decl_funcao
     : ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
-    | ID '(' dcls ')' (':' tipo)? exprlist 'fim'  # def_funcao_corpo ;
+    | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'fim'  # def_funcao_corpo ;
 
 decl_tipo
     : 'tipo' ID '=' tipo                          # alias
@@ -72,6 +71,9 @@ decl_tipo
 
 decl_uso
     : 'use' STRING ;
+
+retorne
+    : 'retorne' expr ;
 
 dcl
     : id1 ':' tipo ;
@@ -89,9 +91,9 @@ dcl1
 
 tipo
     : ID                                          # tipo_simples
-    | 'Tupla(' tipo2 ')'                          # tipo_tupla
+    | '(' tipo2 ')'                               # tipo_tupla
     | ID '[' tipo ']'                             # tipo_generico
-    | tipo '=>' tipo                              # tipo_funcao ;
+    | <assoc=right> tipo '=>' tipo                # tipo_funcao ;
 
 // Expressao 
 expr
@@ -112,15 +114,15 @@ expr
     | dcl1 '=>' inst                              # lambda
     | decisao                                     # decis
     | repeticao                                   # laco
+    | '(' expr2 ')'                               # tupla
     | '(' expr ')'                                # paren
-    | 'Tupla(' expr2 ')'                          # tupla
     | '[' expr1? ']'                              # lista
     | 'isto'                                      # isto
     | '_'                                         # curinga ;
 
 literal
     : BOOLEANO                                    # booleano
-	| ID                                          # id
+    | ID                                          # id
     | BS expr (MS expr)* ES                       # texto_interpolacao
     | STRING                                      # texto
     | INT                                         # inteiro

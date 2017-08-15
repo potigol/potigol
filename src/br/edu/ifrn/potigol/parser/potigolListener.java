@@ -88,18 +88,6 @@ public interface potigolListener extends ParseTreeListener {
 	 */
 	void exitSet_vetor(potigolParser.Set_vetorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code retorne}
-	 * labeled alternative in {@link potigolParser#cmd}.
-	 * @param ctx the parse tree
-	 */
-	void enterRetorne(potigolParser.RetorneContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code retorne}
-	 * labeled alternative in {@link potigolParser#cmd}.
-	 * @param ctx the parse tree
-	 */
-	void exitRetorne(potigolParser.RetorneContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link potigolParser#decl}.
 	 * @param ctx the parse tree
 	 */
@@ -215,6 +203,16 @@ public interface potigolListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDecl_uso(potigolParser.Decl_usoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link potigolParser#retorne}.
+	 * @param ctx the parse tree
+	 */
+	void enterRetorne(potigolParser.RetorneContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link potigolParser#retorne}.
+	 * @param ctx the parse tree
+	 */
+	void exitRetorne(potigolParser.RetorneContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link potigolParser#dcl}.
 	 * @param ctx the parse tree
