@@ -94,6 +94,9 @@ object Potigolutil {
     def mutável: Vetor[T] = mutavel
     def imutável = lista
     def imutavel = lista
+    def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(_lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
+      if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
+    })
   }
 
   case class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
@@ -113,9 +116,8 @@ object Potigolutil {
     def ::[A >: T](a: A): Lista[A] = Lista(a :: _lista)
     def remova(i: Inteiro): Lista[T] = Lista(_lista.take(i - 1) ::: _lista.drop(i))
     def insira(i: Inteiro, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
-    def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(_lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
-      if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
-    })
+    def zip[A](outra: Colecao[A]): Lista[(T, A)] = Lista(this._lista.zip(outra._lista))
+    def zip(outra: Texto): Lista[(T, Caractere)] = Lista(this._lista.zip(outra))
   }
 
   object Lista {
@@ -166,49 +168,60 @@ object Potigolutil {
     def descarte_enquanto: (T => Lógico) => Vetor[T] = passe_enquanto
     def remova(i: Inteiro): Vetor[T] = Vetor(_lista.take(i - 1) ++ _lista.drop(i))
     def insira(i: Inteiro, valor: T): Vetor[T] = Vetor(_lista.take(i - 1) ++ List(valor) ++ _lista.drop(i - 1))
+    def +(outra: Colecao[T]): Vetor[T] = Vetor(_lista ++ outra._lista)
+    def zip[A](outra: Colecao[A]): Vetor[(T, A)] = Vetor(this._lista.zip(outra._lista))
+    def zip(outra: Texto): Vetor[(T, Caractere)] = Vetor(this._lista.zip(outra))
   }
 
-  implicit class Textos(val lista: String) {
+  implicit class Textos(val _lista: String) {
     private[this] val ZERO = "0"
 
     @deprecated def para_int: Inteiro = {
-      if (lista == null) 0 else
-        (intRE.findPrefixOf(lista).getOrElse(ZERO)).toInt
+      if (_lista == null) 0 else
+        (intRE.findPrefixOf(_lista).getOrElse(ZERO)).toInt
     }
     @deprecated def para_i: Inteiro = para_int
     @deprecated def para_inteiro: Inteiro = para_int
 
     def inteiro: Inteiro = para_int
-    def get(a: Int): Caractere = if (a > 0) lista(a - 1) else lista(tamanho + a)
-    def posicao(elem: Caractere): Inteiro = lista.indexOf(elem, 0) + 1
+    def get(a: Int): Caractere = if (a > 0) _lista(a - 1) else _lista(tamanho + a)
+    def posicao(elem: Caractere): Inteiro = _lista.indexOf(elem, 0) + 1
     def para_numero: Real = {
-      if (lista == null) 0 else
-        (numRE.findPrefixOf(lista).getOrElse(ZERO)).toDouble
+      if (_lista == null) 0 else
+        (numRE.findPrefixOf(_lista).getOrElse(ZERO)).toDouble
     }
-    def maiusculo: Texto = lista.toUpperCase()
-    def minusculo: Texto = lista.toLowerCase()
-    def divida(s: Texto = " "): Lista[Texto] = Lista(lista.replaceAll("( |\\n)+", " ").split(s).toList)
-    def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista((lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
+    def maiusculo: Texto = _lista.toUpperCase()
+    def minusculo: Texto = _lista.toLowerCase()
+    def divida(s: Texto = " "): Lista[Texto] = Lista(_lista.replaceAll("( |\\n)+", " ").split(s).toList)
+    def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista((_lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     }).map(_.junte("")))
-    def contem(a: Caractere): Lógico = lista.contains(a)
-    def cabeca: Caractere = lista.head
-    def ultimo: Caractere = lista.last
-    def cauda: Texto = lista.tail
-    def tamanho: Inteiro = lista.length
-    def inverta: Texto = lista.reverse
-    def filtre(a: Caractere => Lógico): Texto = lista.filter(a)
+    def contem(a: Caractere): Lógico = _lista.contains(a)
+    def cabeca: Caractere = _lista.head
+    def ultimo: Caractere = _lista.last
+    def cauda: Texto = _lista.tail
+    def tamanho: Inteiro = _lista.length
+    def inverta: Texto = _lista.reverse
+    def filtre(a: Caractere => Lógico): Texto = _lista.filter(a)
     def selecione: (Caractere => Lógico) => Texto = filtre
     def maiúsculo: Texto = maiusculo
     def minúsculo: Texto = minusculo
-    def injete[A >: Caractere](f: (A, Caractere) => A): A = lista.reduceLeft(f)
-    def injete[A](neutro: A)(f: (A, Caractere) => A): A = lista.foldLeft(neutro)(f)
-    def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = lista.map(f)
-    def ache(p: Caractere => Lógico): Option[Caractere] = lista.find(p)
-    def pegue_enquanto(p: Caractere => Lógico): Texto = lista.takeWhile(p)
-    @deprecated def passe_enquanto(p: Caractere => Lógico): Texto = lista.dropWhile(p)
+    def injete[A >: Caractere](f: (A, Caractere) => A): A = _lista.reduceLeft(f)
+    def injete[A](neutro: A)(f: (A, Caractere) => A): A = _lista.foldLeft(neutro)(f)
+    def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = _lista.map(f)
+    def ache(p: Caractere => Lógico): Option[Caractere] = _lista.find(p)
+    def pegue_enquanto(p: Caractere => Lógico): Texto = _lista.takeWhile(p)
+    @deprecated def passe_enquanto(p: Caractere => Lógico): Texto = _lista.dropWhile(p)
     def descarte_enquanto: (Caractere => Lógico) => Texto = passe_enquanto
-    def para_lista: Lista[Caractere] = Lista(lista.toList)
+    def lista: Lista[Caractere] = Lista(_lista.toList)
+    def junte(separador: Texto = ""): Texto = _lista.mkString(separador)
+    def junte(inicio: Texto, separador: Texto, fim: Texto): Texto = _lista.mkString(inicio, separador, fim)
+    def ordene: Texto = _lista.sorted
+    def descarte(n: Inteiro): Texto = _lista.drop(n)
+    def pegue(n: Inteiro): Texto = _lista.take(n)
+    def remova(i: Inteiro): Texto = _lista.take(i - 1) + _lista.drop(i)
+    def insira(i: Inteiro, valor: Caractere): Texto = _lista.take(i - 1) + valor + _lista.drop(i - 1)
+    def insira(i: Inteiro, valor: Texto): Texto = _lista.take(i - 1) + valor + _lista.drop(i - 1)
     def contém: Caractere => Lógico = contem
     def cabeça: Caractere = cabeca
     def primeiro: Caractere = cabeca
@@ -274,7 +287,7 @@ object Potigolutil {
   def leia_textos(n: Inteiro): Lista[Texto] = leia(n)
   def leia_textos(separador: Texto): Lista[Texto] = leia(separador)
 
-  def leia_int: Inteiro = leia.para_int
+  def leia_int: Inteiro = leia.inteiro
   def leia_ints(n: Inteiro): Lista[Inteiro] = {
     var l = Lista.vazia(0)
     while (l.tamanho < n) {
@@ -285,7 +298,7 @@ object Potigolutil {
   }
   def leia_ints(separador: Texto): Lista[Int] = {
     val l = leia(separador)._lista
-    Lista(l.map(_.para_int))
+    Lista(l.map(_.inteiro))
   }
   def leia_inteiro: Inteiro = leia_int
   def leia_inteiros(n: Inteiro): Lista[Inteiro] = leia_ints(n)

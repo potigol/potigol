@@ -83,8 +83,7 @@ public final class K {
     }
 
     public static String formato(final String expr, final String fmt) {
-        return exp(fmt) + ".formatLocal(java.util.Locale.US, " + expr
-                + CLOSEBRACKET;
+        return exp(fmt) + ".formato" + OPENBRACKET + expr + CLOSEBRACKET;
     }
 
     public static String escreva(final String expr) {
