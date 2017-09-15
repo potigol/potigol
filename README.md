@@ -87,3 +87,7 @@ Type=Application
 Exec=java -jar [caminho até a pasta do potigol]/epotigol.jar
 Icon=[caminho até a pasta do potigol]/potigol.png
 ````
+
+## Compilação
+
+Para compilar siga as instruções em [compilação.md](https://github.com/potigol/potigol/compilacao.md)
