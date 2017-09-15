@@ -90,4 +90,4 @@ Icon=[caminho até a pasta do potigol]/potigol.png
 
 ## Compilação
 
-Para compilar siga as instruções em [compilação.md](https://github.com/potigol/potigol/compilacao.md)
+Para compilar siga as instruções em [compilação.md](https://github.com/potigol/Potigol/blob/master/compilacao.md)
