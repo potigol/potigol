@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_run_jar" name="Create Runnable Jar for Project PotigolANTLR with libraries in sub-folder">
-	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
-	<!--ANT 1.7 is required                                        -->
 	<target name="create_run_jar">
-		<jar destfile="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol.jar" encoding="UTF-8">
+		<jar destfile="jar/potigol.jar" encoding="UTF-8">
 			<manifest>
 				<attribute name="Main-Class" value="br.edu.ifrn.potigol.Principal" />
 				<attribute name="Class-Path" value=". potigol_lib/antlr-runtime-4.5.jar potigol_lib/scala-compiler.jar potigol_lib/scala-library.jar potigol_lib/scala-reflect.jar" />
 			</manifest>
-			<fileset dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/bin" />
+			<fileset dir="bin" />
 		</jar>
-		<!--    <delete dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/> -->
-		<mkdir dir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib" />
-		<!--        <copy file="C:/Users/Lucena/workspace/luna/PotigolANTLR/antlr-runtime-4.5.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib"/> -->
-		<copy file="C:/Program Files (x86)/scala/lib/scala-compiler.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib" />
-		<copy file="C:/Program Files (x86)/scala/lib/scala-library.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib" />
-		<copy file="C:/Program Files (x86)/scala/lib/scala-reflect.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib" />
-		<copy file="C:/Program Files (x86)/scala/lib/scala-reflect.jar" todir="C:/Users/Lucena/workspace/luna/PotigolANTLR/jar/potigol_lib" />
+		<delete dir="jar/potigol_lib" />
+		<mkdir dir="jar/potigol_lib" />
+		<copy file="lib/antlr-runtime-4.5.jar" todir="jar/potigol_lib" />
+		<copy file="lib/scala-compiler.jar" todir="jar/potigol_lib" />
+		<copy file="lib/scala-library.jar" todir="jar/potigol_lib" />
+		<copy file="lib/scala-reflect.jar" todir="jar/potigol_lib" />
 	</target>
 </project>
