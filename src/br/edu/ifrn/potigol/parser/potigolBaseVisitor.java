@@ -1,5 +1,6 @@
-// Generated from potigol.g4 by ANTLR 4.5.2
+// Generated from potigol.g4 by ANTLR 4.5
 package br.edu.ifrn.potigol.parser;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
