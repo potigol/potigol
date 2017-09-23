@@ -45,6 +45,7 @@ Editores de código para Potigol:
   - [x] [Plugin](https://github.com/potigol/language-potigol) para o [Atom](https://atom.io)
   - [x] [Plugin](https://github.com/nfischer/vim-potigol) para o [Vim](http://www.vim.org/)
   - [x] [Plugin](https://github.com/potigol/PotigolAce) para o Ace Editor
+  - [x] [Plugin](https://github.com/nelson-ion/potigol_codemirror) para o CodeMirror
 
 
 # Instalação
