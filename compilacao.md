@@ -9,3 +9,12 @@
  - Se quiser alterar a gramática instale o ANTLR (https://github.com/jknack/antlr4ide)
  - Executar o arquivo 'potigol.xml' para gerar uma nova versão
  - Os arquivos gerados estarão na pasta '/jar'.
+
+## Via sbt (no linux)
+
+- Fazer download do projeto no Github https://github.com/potigol/potigol
+- Executar o comando abaixo na raiz do projeto:
+  ```sh
+  ./sbt clean assembly
+  ```
+ - Os arquivos gerados estarão na pasta '/jar'.
