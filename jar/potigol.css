@@ -10,7 +10,7 @@ pre {
 }
 
 .numero {
-  color:blue;
+  color:darkblue;
 }
 
 .comentario {
@@ -26,17 +26,18 @@ pre {
   color:red;
 }
 
-.operador {
-  color:black;
-}
-
-.chave, .fim{
+.chave, .fim, .operador {
   color: purple;
   font-weight: bolder;
 }
 
+.ponto {
+  color: darkblue;
+  font-style: italic;
+}
+
 .texto{
-  color:orange;
+  color:darkgoldenrod;
 }
 
 .parametro{
