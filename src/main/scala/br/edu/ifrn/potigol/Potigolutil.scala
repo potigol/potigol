@@ -53,6 +53,15 @@ object Potigolutil {
 
   var $cor = false
 
+  implicit class PotigolStr(ctx: StringContext) {
+    def bool(a: Any) = a match {
+      case false => "falso"
+      case true  => "verdadeiro"
+      case _     => a
+    }
+    def p(args: Any*): String = ctx.standardInterpolator(a => a, args.map(bool))
+  }
+
   // valores
   val verdadeiro = true
   val falso = false
@@ -233,6 +242,7 @@ object Potigolutil {
     def posição: Caractere => Inteiro = posicao
     def posiçao: Caractere => Inteiro = posicao
     def posicão: Caractere => Inteiro = posicao
+    val tipo = "Texto"
   }
 
   implicit class Reais(x: Double) {
@@ -245,12 +255,17 @@ object Potigolutil {
     def real: Real = x
     def piso: Real = x.floor
     def teto: Real = x.ceil
+    val tipo = "Real"
   }
 
   implicit class Inteiros(x: Int) {
     def caractere: Caractere = x.toChar
     def inteiro: Inteiro = x
     def real: Real = x.toDouble
+    val tipo = "Inteiro"
+  }
+  implicit object Inteiro {
+    val tipo = "Inteiro"
   }
 
   implicit class Todos[T <: Any](x: T) {
@@ -264,6 +279,16 @@ object Potigolutil {
     def %(fmt: Texto): Texto = formato(fmt)
     @deprecated def para_texto: Texto = x.toString
     def texto: Texto = para_texto
+    def tipo: Texto = x match {
+      case a: Inteiro  => "Inteiro"
+      case a: Real     => "Real"
+      case a: Lógico   => "Logico"
+      case a: Texto    => "Texto"
+      case a: Lista[T] => "Lista"
+      case a: Vetor[T] => "Vetor"
+      case a: Product  => "Tupla"
+      case a           => a.getClass.getSimpleName.takeWhile(_ != '$')
+    }
   }
 
   private[this] def corSim = print("\033[32m")
@@ -341,12 +366,14 @@ object Potigolutil {
   implicit class Tupla2[T1, T2](t: (T1, T2)) {
     def primeiro = t._1
     def segundo = t._2
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo})"
   }
 
   implicit class Tupla3[T1, T2, T3](t: (T1, T2, T3)) {
     def primeiro = t._1
     def segundo = t._2
     def terceiro = t._3
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo})"
   }
 
   implicit class Tupla4[T1, T2, T3, T4](t: (T1, T2, T3, T4)) {
@@ -354,6 +381,8 @@ object Potigolutil {
     def segundo = t._2
     def terceiro = t._3
     def quarto = t._4
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo})"
+
   }
 
   implicit class Tupla5[T1, T2, T3, T4, T5](t: (T1, T2, T3, T4, T5)) {
@@ -362,6 +391,8 @@ object Potigolutil {
     def terceiro = t._3
     def quarto = t._4
     def quinto = t._5
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo})"
+
   }
 
   implicit class Tupla6[T1, T2, T3, T4, T5, T6](t: (T1, T2, T3, T4, T5, T6)) {
@@ -371,6 +402,8 @@ object Potigolutil {
     def quarto = t._4
     def quinto = t._5
     def sexto = t._6
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo})"
+
   }
 
   implicit class Tupla7[T1, T2, T3, T4, T5, T6, T7](
@@ -383,6 +416,7 @@ object Potigolutil {
     def sexto = t._6
     def setimo = t._7
     def sétimo = t._7
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo})"
   }
 
   implicit class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
@@ -396,6 +430,7 @@ object Potigolutil {
     def setimo = t._7
     def sétimo = t._7
     def oitavo = t._8
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo})"
   }
 
   implicit class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
@@ -410,6 +445,7 @@ object Potigolutil {
     def sétimo = t._7
     def oitavo = t._8
     def nono = t._9
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo}, ${t._9.tipo})"
   }
 
   implicit class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
@@ -426,6 +462,7 @@ object Potigolutil {
     def nono = t._9
     def decimo = t._10
     def décimo = t._10
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo}, ${t._9.tipo}, ${t._10.tipo})"
   }
 
   case class URL(caminho: Texto) {

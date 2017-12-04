@@ -291,7 +291,7 @@ public final class M {
             resposta = "\"\"" + resposta + "\"\".stripMargin('|')";
         }
         if (resposta.contains(K.LEFTBRACE)) {
-            resposta = "s" + resposta;
+            resposta = "p" + resposta;
         }
         return resposta;
     }
@@ -359,7 +359,7 @@ public final class M {
         if (resposta.toString().contains("\n")) {
             resposta.insert(0, "\"\"").append("\"\".stripMargin('|')");
         }
-        resposta.insert(0, "s");
+        resposta.insert(0, "p");
         return resposta.toString();
     }
 
