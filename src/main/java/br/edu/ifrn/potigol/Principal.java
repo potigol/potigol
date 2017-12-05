@@ -48,7 +48,7 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    private static final String versao = "0.9.13";
+    private static final String versao = "0.9.14";
 
     private static final int saidaMinima = -1;
 
