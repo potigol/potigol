@@ -15,3 +15,10 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-compiler" % "2.11.11",
   "org.scala-lang" % "scala-reflect" % "2.11.11"
 )
+
+enablePlugins(Antlr4Plugin)
+
+antlr4Version in Antlr4 := "4.5.3"
+antlr4PackageName in Antlr4 := Some("br.edu.ifrn.potigol.parser")
+antlr4GenListener in Antlr4 := true
+antlr4GenVisitor in Antlr4 := true
