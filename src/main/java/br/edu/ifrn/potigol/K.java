@@ -120,19 +120,14 @@ public final class K {
 
     public static String operador(final String valor) {
         final String op;
-        switch (valor) {
-            case "mod":
-                op = "%";
-                break;
-            case "div":
-                op = "/";
-                break;
-            case "<>":
-                op = "!=";
-                break;
-            default:
-                op = valor;
-                break;
+        if ("mod".equals(valor)) {
+            op = "%";
+        } else if ("div".equals(valor)) {
+            op = "/";
+        } else if ("<>".equals(valor)) {
+            op = "!=";
+        } else {
+            op = valor;
         }
         return " " + op + " ";
     }

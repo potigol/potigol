@@ -4,6 +4,9 @@ version := "0.9.14"
 
 scalaVersion := "2.11.11"
 
+javacOptions in Compile ++= Seq("-source", "1.6", "-target", "1.6", "-Xlint")
+scalacOptions in Compile += "-target:jvm-1.6"
+
 mainClass in (Compile, packageBin) := Some("br.edu.ifrn.potigol.Principal")
 
 assemblyOutputPath in assembly := file("jar/potigol.jar")
