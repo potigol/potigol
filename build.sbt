@@ -12,10 +12,15 @@ mainClass in (Compile, packageBin) := Some("br.edu.ifrn.potigol.Principal")
 assemblyOutputPath in assembly := file("jar/potigol.jar")
 
 libraryDependencies ++= Seq(
-  "org.antlr" % "antlr4" % "4.7.1",
+  ("org.antlr" % "antlr4" % "4.7.1").
+    exclude("com.ibm.icu", "icu4j").
+    exclude("org.abego.treelayout", "org.abego.treelayout.core").
+    exclude("org.antlr", "ST4").
+    exclude("org.glassfish", "javax.json"),
   "org.antlr" % "antlr4-runtime" % "4.7.1",
   "org.scala-lang" % "scala-library" % "2.11.12",
-  "org.scala-lang" % "scala-compiler" % "2.11.12",
+  ("org.scala-lang" % "scala-compiler" % "2.11.12").
+    exclude("org.scala-lang.modules", "scala-xml_2.11"),
   "org.scala-lang" % "scala-reflect" % "2.11.12"
 )
 
