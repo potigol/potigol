@@ -18,3 +18,11 @@
   ./sbt clean assembly
   ```
  - Os arquivos gerados estarão na pasta '/jar'.
+
+### Gerando projeto para o Eclipse
+
+- Executar o comando abaixo na raiz do projeto:
+  ```sh
+  ./sbt clean assembly eclipse
+  ```
+- O projeto estará pronto para ser importado no eclipse.
