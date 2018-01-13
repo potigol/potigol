@@ -83,7 +83,7 @@ public final class K {
     }
 
     public static String formato(final String expr, final String fmt) {
-        return exp(fmt) + ".formato" + OPENBRACKET + expr + CLOSEBRACKET;
+        return exp(expr) + ".formato" + OPENBRACKET + fmt + CLOSEBRACKET;
     }
 
     public static String escreva(final String expr) {
