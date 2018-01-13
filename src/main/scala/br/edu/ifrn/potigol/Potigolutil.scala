@@ -242,8 +242,7 @@ object Potigolutil {
     def posição: Caractere => Inteiro = posicao
     def posiçao: Caractere => Inteiro = posicao
     def posicão: Caractere => Inteiro = posicao
-    val qual_tipo = "Texto"
-    def -(s: Texto): Texto = _lista.diff(s)
+    val tipo = "Texto"
   }
 
   implicit class Reais(x: Double) {
@@ -256,14 +255,17 @@ object Potigolutil {
     def real: Real = x
     def piso: Real = x.floor
     def teto: Real = x.ceil
-    val qual_tipo = "Real"
+    val tipo = "Real"
   }
 
   implicit class Inteiros(x: Int) {
     def caractere: Caractere = x.toChar
     def inteiro: Inteiro = x
     def real: Real = x.toDouble
-    val qual_tipo = "Inteiro"
+    val tipo = "Inteiro"
+  }
+  implicit object Inteiro {
+    val tipo = "Inteiro"
   }
 
   implicit class Todos[T <: Any](x: T) {
@@ -277,7 +279,7 @@ object Potigolutil {
     def %(fmt: Texto): Texto = formato(fmt)
     @deprecated def para_texto: Texto = x.toString
     def texto: Texto = para_texto
-    def qual_tipo: Texto = x match {
+    def tipo: Texto = x match {
       case a: Inteiro  => "Inteiro"
       case a: Real     => "Real"
       case a: Lógico   => "Logico"
@@ -364,14 +366,14 @@ object Potigolutil {
   implicit class Tupla2[T1, T2](t: (T1, T2)) {
     def primeiro = t._1
     def segundo = t._2
-    def qual_tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo})"
   }
 
   implicit class Tupla3[T1, T2, T3](t: (T1, T2, T3)) {
     def primeiro = t._1
     def segundo = t._2
     def terceiro = t._3
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo})"
   }
 
   implicit class Tupla4[T1, T2, T3, T4](t: (T1, T2, T3, T4)) {
@@ -379,7 +381,7 @@ object Potigolutil {
     def segundo = t._2
     def terceiro = t._3
     def quarto = t._4
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo})"
 
   }
 
@@ -389,7 +391,7 @@ object Potigolutil {
     def terceiro = t._3
     def quarto = t._4
     def quinto = t._5
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo})"
 
   }
 
@@ -400,7 +402,7 @@ object Potigolutil {
     def quarto = t._4
     def quinto = t._5
     def sexto = t._6
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo})"
 
   }
 
@@ -414,7 +416,7 @@ object Potigolutil {
     def sexto = t._6
     def setimo = t._7
     def sétimo = t._7
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo})"
   }
 
   implicit class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
@@ -428,7 +430,7 @@ object Potigolutil {
     def setimo = t._7
     def sétimo = t._7
     def oitavo = t._8
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo})"
   }
 
   implicit class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
@@ -443,7 +445,7 @@ object Potigolutil {
     def sétimo = t._7
     def oitavo = t._8
     def nono = t._9
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo}, ${t._9.tipo})"
   }
 
   implicit class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
@@ -460,7 +462,7 @@ object Potigolutil {
     def nono = t._9
     def decimo = t._10
     def décimo = t._10
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo}, ${t._10.qual_tipo})"
+    def tipo = s"(${t._1.tipo}, ${t._2.tipo}, ${t._3.tipo}, ${t._4.tipo}, ${t._5.tipo}, ${t._6.tipo}, ${t._7.tipo}, ${t._8.tipo}, ${t._9.tipo}, ${t._10.tipo})"
   }
 
   case class URL(caminho: Texto) {
@@ -468,13 +470,5 @@ object Potigolutil {
     lazy val conteudo = Try {
       io.Source.fromURL(caminho).mkString("")
     } getOrElse ("")
-  }
-
-  import scala.io.Source
-
-  object Arquivo {
-    def leia(caminho: Texto): Lista[Texto] = {
-      Lista(Source.fromFile(caminho).getLines().toList)
-    }
   }
 }
