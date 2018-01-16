@@ -200,8 +200,8 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
-        List<ParseTree> cstr = new ArrayList<>();
-        List<ParseTree> elem = new ArrayList<>();
+        final List<ParseTree> cstr = new ArrayList<ParseTree>();
+        final List<ParseTree> elem = new ArrayList<ParseTree>();
         for (ParseTree child : ctx.children) {
             if (child.getClass().equals(DclContext.class)
                     || child.getClass().equals(Dcl_varContext.class)) {

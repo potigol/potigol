@@ -24,7 +24,7 @@ public class ListenerData {
     }
 
     public ListenerData() {
-        this.values = new ParseTreeProperty<>();
+        this.values = new ParseTreeProperty<String>();
         this.declaracoes = new Stack<List<String>>();
         this.warnings = new ArrayList<String>();
         this.saida = new StringBuilder();

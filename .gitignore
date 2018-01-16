@@ -19,7 +19,8 @@ src_managed/
 project/boot/
 project/plugins/project/
 
-# Scala-IDE specific
+# Scala IDE specific (Scala & Java development for Eclipse)
+.cache-main
 .scala_dependencies
 .worksheet
 /bin/
