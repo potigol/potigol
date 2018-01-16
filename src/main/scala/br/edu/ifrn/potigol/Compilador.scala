@@ -88,8 +88,8 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       case Success(_) => 0
       case Failure(f) =>
         val linhaScala = f.getMessage.split(COLON)(1).split(SPACE)(1).toInt
-        val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile(
-          !_.contains("/*Codigo"))
+        val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile{
+          !_.contains("/*Codigo")}
         linhaPotigol.headOption.map { l => l.split(SPACE)(1).toInt }.getOrElse(1)
     }
   }
