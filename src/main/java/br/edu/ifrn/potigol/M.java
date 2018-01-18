@@ -10,7 +10,7 @@ public final class M {
             "for", "while", "throw", "finally", "protected", "extends",
             "import", "final", "return", "else", "break", "new", "catch",
             "super", "class", "case", "package", "default", "try", "this",
-            "match", "continue", "throws");
+            "match", "continue", "throws", "do", "while");
 
     private static int num;
 

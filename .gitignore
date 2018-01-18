@@ -38,3 +38,7 @@ teste1.potigol
 exemplos/lista3/prog5.poti
 src/br/edu/ifrn/potigol/Tela.scala
 src/jerimum/
+/lib/
+/.classpath
+/.project
+/antlr-4.5-complete.jar

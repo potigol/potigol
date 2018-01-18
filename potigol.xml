@@ -7,12 +7,12 @@
 				<attribute name="Class-Path" value=". potigol_lib/antlr-runtime-4.5.jar potigol_lib/scala-compiler.jar potigol_lib/scala-library.jar potigol_lib/scala-reflect.jar" />
 			</manifest>
 			<fileset dir="bin" />
-		</jar>
+		</jar><!--
 		<delete dir="jar/potigol_lib" />
 		<mkdir dir="jar/potigol_lib" />
 		<copy file="lib/antlr-runtime-4.5.jar" todir="jar/potigol_lib" />
 		<copy file="lib/scala-compiler.jar" todir="jar/potigol_lib" />
 		<copy file="lib/scala-library.jar" todir="jar/potigol_lib" />
-		<copy file="lib/scala-reflect.jar" todir="jar/potigol_lib" />
+		<copy file="lib/scala-reflect.jar" todir="jar/potigol_lib" />  -->
 	</target>
 </project>
