@@ -547,6 +547,7 @@ class Eval(target: Option[File]) {
      * Compile scala code. It can be found using the above class loader.
      */
     def apply(code: String) {
+      import scala.language.reflectiveCalls
       if (Debug.enabled)
         Debug.printWithLineNumbers(code)
 

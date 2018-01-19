@@ -95,6 +95,8 @@ public final class K {
     }
 
     public static String lista(final String exp) {
+        if (exp == null)
+            return "Lista(List())";
         return "Lista(List(" + exp + "))";
     }
 

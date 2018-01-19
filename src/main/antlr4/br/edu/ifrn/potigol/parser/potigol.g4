@@ -90,9 +90,9 @@ dcl1
     | '(' dcls ')' ;
 
 tipo
-    : ID                                          # tipo_simples
+    : ID '[' tipo ']'                             # tipo_generico
+    | ID                                          # tipo_simples
     | '(' tipo2 ')'                               # tipo_tupla
-    | ID '[' tipo ']'                             # tipo_generico
     | <assoc=right> tipo '=>' tipo                # tipo_funcao ;
 
 // Expressao 

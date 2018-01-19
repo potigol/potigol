@@ -2,6 +2,7 @@ package br.edu.ifrn.potigol
 
 import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import org.antlr.v4.runtime.CharStreams
 
 import br.edu.ifrn.potigol.Erros.texto
 import br.edu.ifrn.potigol.parser.{ potigolLexer, potigolParser }
@@ -145,7 +146,7 @@ object TesteErros extends App {
   def imprimir_erro(erro: Erro): Unit = {
     val code = erro.codigo
 
-    val input = new ANTLRInputStream(code)
+    val input = CharStreams.fromString(code)
     val lexer = new potigolLexer(input)
     val tokens = new CommonTokenStream(lexer)
     val parser = new potigolParser(tokens)
