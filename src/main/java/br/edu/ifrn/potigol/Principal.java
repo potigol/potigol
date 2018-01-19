@@ -39,7 +39,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -70,7 +71,7 @@ public class Principal {
 
     public static void main(final String... args) {
         if (args.length == 0) {
-            System.out.println("Potigol versão " + versao
+            System.out.println("Potigol versao " + versao
                     + " Copyright (C) 2015-2018 Leonardo Lucena" + "\n\n"
                     + "Uso: potigol [-c] [-w] [arquivo.poti]\n");
         } else {
@@ -103,7 +104,7 @@ public class Principal {
     }
 
     private static Listener getListnerFromString(final String file) {
-        final ANTLRInputStream input = new ANTLRInputStream(file);
+        final CharStream input = CharStreams.fromString(file);
         final potigolLexer lexer = new potigolLexer(input);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final potigolParser parser = new potigolParser(tokens);

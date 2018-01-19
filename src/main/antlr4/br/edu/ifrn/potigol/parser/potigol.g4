@@ -233,7 +233,7 @@ fragment ALPHA
 
 fragment ACENTO
     : '\u00a1' .. '\ufffc' ;
-
+    
 INT
     : DIGIT+ ;
 
