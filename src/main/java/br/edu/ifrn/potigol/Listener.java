@@ -17,14 +17,14 @@
  */
 
 /**
- *   _____      _   _             _ 
+ *   _____      _   _             _
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |        
- *                    |___/         
+ *                     __/ |
+ *                    |___/
  *
  * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
@@ -316,20 +316,22 @@ public class Listener extends potigolBaseListener {
     public void exitDecl_var_multipla(final Decl_var_multiplaContext ctx) {
         final String id = data.getValue(ctx.id2());
         final String[] ids = M.split(id);
+        final String tipo = data.getOrElse(ctx.tipo());
         final String exp = data.getValue(ctx.expr2());
         final String[] exps = M.split(exp);
-        final String resposta = M.declVariavelMult(ids, exps);
+        final String resposta = M.declVariavelMult(ids, exps, tipo);
         data.setValue(ctx, resposta.toString());
-        data.verificarDuplicados(M.string2List(id), ctx);
+        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
     }
 
     @Override
     public void exitDecl_var_simples(final Decl_var_simplesContext ctx) {
         final String id = data.getValue(ctx.id1());
+        final String tipo = data.getOrElse(ctx.tipo());
         final String exp = data.getValue(ctx.expr());
-        final String resposta = M.declVariavel(id, exp);
+        final String resposta = M.declVariavel(id, exp, tipo);
         data.setValue(ctx, resposta);
-        data.verificarDuplicados(M.string2List(id), ctx);
+        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
     }
 
     @Override
@@ -658,20 +660,22 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitValor_multiplo(final Valor_multiploContext ctx) {
         final List<String> ids = M.string2List(data.getValue(ctx.id2()));
+        final String tipo = data.getOrElse(ctx.tipo());
         final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
-        final String resposta = M.valorMultiplo(ids, exps);
+        final String resposta = M.valorMultiplo(ids, exps, tipo);
         data.setValue(ctx, resposta);
-        data.verificarDuplicados(ids, ctx);
+        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
     }
 
     @Override
     public void exitValor_simples(final Valor_simplesContext ctx) {
         final String id = data.getValue(ctx.id1());
+        final String tipo = data.getOrElse(ctx.tipo());
         final String exp = data.getValue(ctx.expr());
         final List<String> ids = M.string2List(id);
-        final String resposta = M.declValor(id, exp);
+        final String resposta = M.declValor(id, exp, tipo);
         data.setValue(ctx, resposta);
-        data.verificarDuplicados(ids, ctx);
+        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
     }
 
     @Override

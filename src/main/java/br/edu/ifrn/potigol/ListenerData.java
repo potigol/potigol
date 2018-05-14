@@ -60,7 +60,8 @@ public class ListenerData {
 
     // TODO: Refatorar
     public void verificarDuplicados(final List<String> ids,
-            final ParserRuleContext ctx) {
+            final ParserRuleContext ctx, final boolean show) {
+        if (show){
         for (final String i : ids) {
             if (this.valores().contains(i)) {
                 final int linha = ctx.getStart().getLine();
@@ -68,6 +69,7 @@ public class ListenerData {
                         "Valor '" + i + "' declarado pela segunda vez na linha "
                                 + linha + ".");
             }
+        }
         }
         this.declaracoes.peek().addAll(ids);
     }

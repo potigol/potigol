@@ -17,14 +17,14 @@
  */
 
 /**
- *   _____      _   _             _ 
+ *   _____      _   _             _
  *  |  __ \    | | (_)           | |
  *  | |__) |__ | |_ _  __ _  ___ | |
  *  |  ___/ _ \| __| |/ _` |/ _ \| |
  *  | |  | (_) | |_| | (_| | (_) | |
  *  |_|   \___/ \__|_|\__, |\___/|_|
- *                     __/ |        
- *                    |___/         
+ *                     __/ |
+ *                    |___/
  *
  * @author Leonardo Lucena (leonardo.lucena@ifrn.edu.br)
  */
@@ -56,10 +56,10 @@ decl
     | decl_uso ;
 
 decl_valor
-    : id1 '=' expr                                # valor_simples
-    | id2 '=' expr2                               # valor_multiplo
-    | 'var' id1 (':='| '=') expr                  # decl_var_simples
-    | 'var' id2 (':='| '=') expr2                 # decl_var_multipla ;
+    : id1 (':' tipo)? '=' expr                    # valor_simples
+    | id2 (':' tipo)? '=' expr2                   # valor_multiplo
+    | 'var' id1 (':' tipo)? (':='| '=') expr      # decl_var_simples
+    | 'var' id2 (':' tipo)? (':='| '=') expr2     # decl_var_multipla ;
 
 decl_funcao
     : ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
@@ -77,7 +77,7 @@ retorne
 
 dcl
     : id1 ':' tipo ;
-    
+
 dcl_var
     : 'var' id1 ':' tipo ;
 
@@ -95,7 +95,7 @@ tipo
     | '(' tipo2 ')'                               # tipo_tupla
     | <assoc=right> tipo '=>' tipo                # tipo_funcao ;
 
-// Expressao 
+// Expressao
 expr
     : literal                                     # lit
     | expr '.' ID ('(' expr1 ')')?                # chamada_metodo
@@ -129,7 +129,7 @@ literal
     | FLOAT                                       # real
     | CHAR                                        # char ;
 
-    
+
 // Decisao
 decisao
     : se
@@ -166,7 +166,7 @@ padrao
     | padrao ('|' padrao)+                        # padrao_ou
     | padrao (',' padrao)+                        # padrao_virgula ;
 
-// Repeticao    
+// Repeticao
 repeticao
     : para_faca
     | para_gere
@@ -204,7 +204,7 @@ id1
 id2
     : ID (',' ID)+ ;
 
-qualid 
+qualid
 	: (ID '.')* ID;
 
 qualid1
@@ -222,7 +222,7 @@ exprlist
 
 // Lexer
 //channels { WSCHANNEL, MYHIDDEN };
-	
+
 ID
     : (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
@@ -233,7 +233,7 @@ fragment ALPHA
 
 fragment ACENTO
     : '\u00a1' .. '\ufffc' ;
-    
+
 INT
     : DIGIT+ ;
 
@@ -275,4 +275,3 @@ COMMENT
 
 NL
     : '\n' ->channel(2) ;
-

@@ -112,7 +112,7 @@ public final class K {
 
     public static String tipo(final String valor) {
         final String resp;
-        if (valor.isEmpty()) {
+        if (valor == null || valor.isEmpty()) {
             resp = "";
         } else {
             resp = DOISPONTOS + valor;

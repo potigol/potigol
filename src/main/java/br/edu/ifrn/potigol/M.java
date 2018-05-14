@@ -212,18 +212,28 @@ public final class M {
                 + K.bloco(corpo) + K.NEWLINE;
     }
 
+    public static String declVariavel(final String id, final String exp, final String tipo) {
+        return K.VAR + id + K.tipo(tipo) + K.IGUAL + exp + K.NEWLINE;
+    }
+
     public static String declVariavel(final String id, final String exp) {
-        return K.VAR + id + K.IGUAL + exp + K.NEWLINE;
+        return declVariavel(id, exp, "");
+    }
+
+    public static String declVariavelMult(final String[] ids,
+            final String[] exps, final String tipo) {
+        final StringBuilder resposta = new StringBuilder();
+        for (int i = 0; i < ids.length; i++) {
+            resposta.append(M.declVariavel(ids[i], exps[i], tipo) + K.NEWLINE);
+        }
+        return resposta.toString();
     }
 
     public static String declVariavelMult(final String[] ids,
             final String[] exps) {
-        final StringBuilder resposta = new StringBuilder();
-        for (int i = 0; i < ids.length; i++) {
-            resposta.append(M.declVariavel(ids[i], exps[i]) + K.NEWLINE);
-        }
-        return resposta.toString();
+        return declVariavelMult(ids, exps, "");
     }
+
 
     public static String tupla(final int tamanho, final String exp) {
         return K.param(exp);
@@ -245,6 +255,10 @@ public final class M {
 
     public static String declValor(final String ident, final String exp) {
         return K.VAL + ident + K.IGUAL + exp + K.SEMI;
+    }
+
+    public static String declValor(final String ident, final String exp, final String tipo) {
+        return K.VAL + ident + K.tipo(tipo) + K.IGUAL + exp + K.SEMI;
     }
 
     public static String atribMultipla(final List<String> ids,
@@ -337,11 +351,16 @@ public final class M {
 
     public static String valorMultiplo(final List<String> ids,
             final List<String> exps) {
+        return valorMultiplo(ids, exps, "");
+    }
+
+    public static String valorMultiplo(final List<String> ids,
+            final List<String> exps, final String tipo) {
         final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             final String id = ids.get(i);
             final String exp = exps.get(i);
-            resposta.append(M.declValor(id, exp));
+            resposta.append(M.declValor(id, exp, tipo));
         }
         return resposta.toString();
     }
