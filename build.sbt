@@ -2,10 +2,10 @@ name := "potigol"
 
 version := "0.9.15"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.6"
 
 javacOptions in Compile ++= Seq("-source", "1.6", "-target", "1.6", "-Xlint")
-scalacOptions in Compile += "-target:jvm-1.6"
+scalacOptions in Compile ++= Seq("-deprecation")
 
 mainClass in (Compile, packageBin) := Some("br.edu.ifrn.potigol.Principal")
 
@@ -18,10 +18,10 @@ libraryDependencies ++= Seq(
     exclude("org.antlr", "ST4").
     exclude("org.glassfish", "javax.json"),
   "org.antlr" % "antlr4-runtime" % "4.7.1",
-  "org.scala-lang" % "scala-library" % "2.11.12",
-  ("org.scala-lang" % "scala-compiler" % "2.11.12").
-    exclude("org.scala-lang.modules", "scala-xml_2.11"),
-  "org.scala-lang" % "scala-reflect" % "2.11.12"
+  "org.scala-lang" % "scala-library" % "2.12.6",
+  ("org.scala-lang" % "scala-compiler" % "2.12.6").
+    exclude("org.scala-lang.modules", "scala-xml_2.12"),
+  "org.scala-lang" % "scala-reflect" % "2.12.6"
 )
 
 enablePlugins(Antlr4Plugin)
