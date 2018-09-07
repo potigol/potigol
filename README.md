@@ -50,7 +50,7 @@ Editores de código para Potigol:
 
 # Instalação
 
-## Windows 8 e 10
+## Windows 7, 8 e 10
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
