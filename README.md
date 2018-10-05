@@ -8,18 +8,15 @@
 
 Linguagem de Programação moderna para iniciantes
 
-
-
 ## Características
   - Sintaxe simples
-  - Palavras Chave em Português
-  - Tipagem Estática e forte
-  - Inferencia de tipos
+  - Palavras-chave em português
+  - Tipagem estática e forte
+  - Inferência de tipos
   - Multiparadigma
   - Encoraja a programação funcional
 
 ![Editor](https://cloud.githubusercontent.com/assets/303460/8604675/7180d638-2656-11e5-9239-90d29628d9d0.png)
-
 
 ## Como usar:
   - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
@@ -40,26 +37,28 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
 Editores de código para Potigol:
 
-  - [x] [Editor Potigol](https://github.com/potigol/EditorPotigol) (já incluido na versão executável de Potigol)
+  - [x] [Editor Potigol](https://github.com/potigol/EditorPotigol) (já incluso na versão executável de Potigol)
   - [x] [JCEditor](https://github.com/cristian-henrique/JCEditor)
   - [x] [Plugin](https://github.com/potigol/language-potigol) para o [Atom](https://atom.io)
   - [x] [Plugin](https://github.com/nfischer/vim-potigol) para o [Vim](http://www.vim.org/)
   - [x] [Plugin (potigol/PotigolAce)](https://github.com/potigol/PotigolAce) para o Ace Editor
   - [x] [Plugin (nelson-ion/potigol_codemirror)](https://github.com/nelson-ion/potigol_codemirror) para o CodeMirror
 
+<br/>
 
 # Instalação
+Veja passo a passo como instalar o Potigol em sistemas Windowns e Linux
 
 ## Windows 8 e 10
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
-  - Envie um atalho de "epotigol.jar" para a área de trabalho.
+  - Envie um atalho de "epotigol.jar" para a área de trabalho
   - Altere o nome do atalho para "Editor Potigol"
-  - Em propriedades altere o ícone. Escolha o icone em cores que está na pasta do potigol.
+  - Em propriedades, altere o ícone. Escolha o ícone em cores que está na pasta do Potigol.
   - Envie um atalho de C:\Windows\System32\cmd.exe para a área de trabalho.
   - Em propriedade altere:
-  - 
+  
  >   Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
 
  > Iniciar em: [Vazio]
@@ -67,7 +66,6 @@ Editores de código para Potigol:
  > Alterar ícone. Escolha o icone em preto e branco.
 
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial".
-
 
 ## LINUX
 
