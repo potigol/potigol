@@ -47,7 +47,8 @@ Editores de código para Potigol:
 <br/>
 
 # Instalação
-Veja passo a passo como instalar o Potigol em sistemas Windowns e Linux
+
+Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
 
 ## Windows 7, 8 e 10
 
