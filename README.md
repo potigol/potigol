@@ -8,8 +8,6 @@
 
 Linguagem de Programação moderna para iniciantes
 
-
-
 ## Características
   - Sintaxe simples
   - Palavras-chave em português
@@ -19,7 +17,6 @@ Linguagem de Programação moderna para iniciantes
   - Encoraja a programação funcional
 
 ![Editor](https://cloud.githubusercontent.com/assets/303460/8604675/7180d638-2656-11e5-9239-90d29628d9d0.png)
-
 
 ## Como usar:
   - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
@@ -50,6 +47,7 @@ Editores de código para Potigol:
 <br/>
 
 # Instalação
+
 Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
 
 ## Windows 7, 8 e 10
@@ -58,7 +56,7 @@ Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
   - Envie um atalho de "epotigol.jar" para a área de trabalho
   - Altere o nome do atalho para "Editor Potigol"
-  - Em propriedades altere o ícone. Escolha o ícone em cores que está na pasta do Potigol.
+  - Em propriedades, altere o ícone. Escolha o ícone em cores que está na pasta do Potigol.
   - Envie um atalho de C:\Windows\System32\cmd.exe para a área de trabalho.
   - Em propriedade altere:
   
@@ -69,7 +67,6 @@ Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
  > Alterar ícone. Escolha o icone em preto e branco.
 
   - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial".
-
 
 ## LINUX
 
