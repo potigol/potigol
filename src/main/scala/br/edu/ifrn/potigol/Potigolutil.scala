@@ -471,8 +471,19 @@ object Potigolutil {
   import scala.io.Source
 
   object Arquivo {
+    import java.io.{ PrintWriter, File }
     def leia(caminho: Texto): Lista[Texto] = {
       Lista(Source.fromFile(caminho).getLines().toList)
+    }
+    def salve(caminho: Texto, conteúdo: Texto, anexar: Lógico = falso) = {
+      val pw = new PrintWriter(new File(caminho))
+      if (anexar) {
+        pw.append(conteúdo)
+      }
+      else {
+        pw.write(conteúdo)
+      }
+      pw.close
     }
   }
 }

@@ -88,8 +88,10 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       case Success(_) => 0
       case Failure(f) =>
         val linhaScala = f.getMessage.split(COLON)(1).split(SPACE)(1).toInt
-        val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile(i =>
-          !(i.contains("/*Codigo")))
+        val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile {
+          case i =>
+            !(i.contains("/*Codigo"))
+        }
         linhaPotigol.headOption.map { l => l.split(SPACE)(1).toInt }.getOrElse(1)
     }
   }
@@ -99,7 +101,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     if (partes.size > 2) {
       val err = partes(2)
       val linha = partes(1).split(SPACE)(1).toInt
-      val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.trim.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile{ x => x.isDigit }.toInt
+      val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.trim.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit }.toInt
       val msg = Erros.traduzir(erro)
       imprimirCodigo((codigoPotigol.split(NL).toList
         .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\u001b[31m" + linha + "\u001b[37m" else linha })

@@ -1,6 +1,6 @@
 package br.edu.ifrn.potigol
 
-import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
+import org.antlr.v4.runtime.{ CommonTokenStream }
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.CharStreams
 

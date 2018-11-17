@@ -16,6 +16,8 @@
 
 package com.twitter.util
 
+import com.twitter.conversions.string._
+import com.twitter.io.StreamIO
 import java.io._
 import java.math.BigInteger
 import java.net.URLClassLoader
@@ -24,15 +26,13 @@ import java.util.Random
 import java.util.jar.JarFile
 import scala.collection.mutable
 import scala.io.Source
-import scala.tools.nsc.interpreter.AbstractFileClassLoader
+//import scala.reflect.api.Position
+import scala.reflect.internal.util.{BatchSourceFile, Position}
+import scala.reflect.internal.util.AbstractFileClassLoader
 import scala.tools.nsc.io.{AbstractFile, VirtualDirectory}
-import scala.tools.nsc.reporters.AbstractReporter
-import scala.tools.nsc.util.{BatchSourceFile, Position}
+import scala.tools.nsc.reporters.{Reporter, AbstractReporter}
 import scala.tools.nsc.{Global, Settings}
 import scala.util.matching.Regex
-
-import com.twitter.conversions.string._
-import com.twitter.io.StreamIO
 
 /**
  * Evaluate a file or string and return the result.
@@ -79,11 +79,9 @@ class Eval(target: Option[File]) {
   }
 
   private lazy val libPath = try {
-//    classPathOfClass("scala.ScalaObject")
-    List[String]()
+    classPathOfClass("scala.AnyVal")
   } catch {
     case e: Throwable =>
-      println(e.getCause)
       throw new RuntimeException("Unable to load scala base object from classpath (scala-library jar is missing?)", e)
   }
 
@@ -100,14 +98,10 @@ class Eval(target: Option[File]) {
         Seq(
           new ClassScopedResolver(getClass),
           new FilesystemResolver(new File(".")),
-          new FilesystemResolver(new File("." + File.separator + "config"))
-        ) ++ (
-          Option(System.getProperty("com.twitter.util.Eval.includePath")) map { path =>
-            new FilesystemResolver(new File(path))
-          }
-        )
-      )
-    )
+          new FilesystemResolver(new File("." + File.separator + "config"))) ++ (
+            Option(System.getProperty("com.twitter.util.Eval.includePath")) map { path =>
+              new FilesystemResolver(new File(path))
+            })))
 
   private[this] val STYLE_INDENT = 2
   private[this] lazy val compiler = new StringCompiler(STYLE_INDENT, target)
@@ -127,7 +121,7 @@ class Eval(target: Option[File]) {
   def writeChecksum(checksum: String, file: File) {
     val writer = new FileWriter(file)
     writer.write("%s".format(checksum))
-    writer.close
+    writer.close()
   }
 
   /**
@@ -149,7 +143,7 @@ class Eval(target: Option[File]) {
       val sourceChecksum = uniqueId(processed, None)
       val checksumFile = new File(targetDir, "checksum")
       val lastChecksum = if (checksumFile.exists) {
-        Source.fromFile(checksumFile).getLines.take(1).toList.head
+        Source.fromFile(checksumFile).getLines().take(1).toList.head
       } else {
         -1
       }
@@ -267,7 +261,7 @@ class Eval(target: Option[File]) {
     val sha = new BigInteger(1, digest).toString(16)
     idOpt match {
       case Some(id) => sha + "_" + jvmId
-      case _ => sha
+      case _        => sha
     }
   }
 
@@ -282,7 +276,7 @@ class Eval(target: Option[File]) {
      */
     val fileName = f.getName
     val baseName = fileName.lastIndexOf('.') match {
-      case -1 => fileName
+      case -1  => fileName
       case dot => fileName.substring(0, dot)
     }
     baseName.regexSub(Eval.classCleaner) { m =>
@@ -291,14 +285,14 @@ class Eval(target: Option[File]) {
   }
 
   /*
-   * Wrap source code in a new class with an apply method.
+   * Wraps source code in a new class with an apply methods.
    */
-  private def wrapCodeInClass(className: String, code: String) = {
+  private[this] def wrapCodeInClass(className: String, code: String) = {
     "class " + className + " extends (() => Any) {\n" +
-    "  def apply() = {\n" +
-    code + "\n" +
-    "  }\n" +
-    "}\n"
+      "  def apply() = {\n" +
+      code + "\n" +
+      "  }\n" +
+      "}\n"
   }
 
   /*
@@ -329,7 +323,7 @@ class Eval(target: Option[File]) {
         case _ => Nil
       }
       cl.getParent match {
-        case null => (cp :: acc).reverse
+        case null   => (cp :: acc).reverse
         case parent => getClassPath(parent, cp :: acc)
       }
     }
@@ -437,7 +431,7 @@ class Eval(target: Option[File]) {
   private class StringCompiler(lineOffset: Int, targetDir: Option[File]) {
     val target = targetDir match {
       case Some(dir) => AbstractFile.getDirectory(dir)
-      case None => new VirtualDirectory("(memory)", None)
+      case None      => new VirtualDirectory("(memory)", None)
     }
 
     val cache = new mutable.HashMap[String, Class[_]]()
@@ -459,7 +453,7 @@ class Eval(target: Option[File]) {
         val severityName = severity match {
           case ERROR   => "error: "
           case WARNING => "warning: "
-          case _ => ""
+          case _       => ""
         }
         // the line number is not always available
         val lineMessage =
@@ -470,7 +464,7 @@ class Eval(target: Option[File]) {
           }
         messages += (severityName + lineMessage + ": " + message) ::
           (if (pos.isDefined) {
-            pos.inUltimateSource(pos.source).lineContent.stripLineEnd ::
+            pos.finalPosition.lineContent.stripLineEnd ::
               (" " * (pos.column - 1) + "^") ::
               Nil
           } else {
@@ -499,18 +493,18 @@ class Eval(target: Option[File]) {
     def reset() {
       targetDir match {
         case None => {
-          target.asInstanceOf[VirtualDirectory].clear
+          target.asInstanceOf[VirtualDirectory].clear()
         }
         case Some(t) => {
           target.foreach { abstractFile =>
             if (abstractFile.file == null || abstractFile.file.getName.endsWith(".class")) {
-              abstractFile.delete
+              abstractFile.delete()
             }
           }
         }
       }
       cache.clear()
-      reporter.reset
+      reporter.reset()
       classLoader = new AbstractFileClassLoader(target, this.getClass.getClassLoader)
     }
 
