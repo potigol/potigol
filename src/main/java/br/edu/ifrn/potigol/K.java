@@ -22,7 +22,11 @@ public final class K {
     public static final String OR = " || ";
 
     public static final String ENQUANTO = "while ";
-
+    
+    public static final String EXTENDS = " extends ";
+    
+    public static final String WITH = " with ";
+    
     public static final String TYPE = "type ";
 
     public static final String TUPLA = "Tupla";
@@ -103,7 +107,7 @@ public final class K {
     public static String guarda(final String cond) {
         final String resp;
         if (cond.isEmpty()) {
-            resp = " ";
+            resp = ESPACO;
         } else {
             resp = " if " + cond;
         }
@@ -131,7 +135,7 @@ public final class K {
         } else {
             op = valor;
         }
-        return " " + op + " ";
+        return ESPACO + op + ESPACO;
     }
 
     public static String indent(final String valor) {

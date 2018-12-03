@@ -462,8 +462,8 @@ object Potigolutil {
   }
 
   case class URL(caminho: Texto) {
-    lazy val erro = conteudo == ""
-    lazy val conteudo = Try {
+    lazy val erro: Boolean = conteudo == ""
+    lazy val conteudo: String = Try {
       io.Source.fromURL(caminho).mkString("")
     } getOrElse ("")
   }

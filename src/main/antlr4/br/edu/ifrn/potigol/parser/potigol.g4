@@ -70,7 +70,7 @@ decl_tipo
     | 'tipo' ID (':' id1)? membros 'fim'            # classe
     | 'tipo' 'abstrato' ID (':' id1)? membros 'fim' # interface ;
 
-membros : (dcl|dcl_var|decl_funcao|decl_valor)* ;
+membros : (dcl | dcl_var | dcl_fun | decl_funcao | decl_valor)* ;
 
 decl_uso
     : 'use' STRING ;
@@ -83,6 +83,9 @@ dcl
 
 dcl_var
     : 'var' id1 ':' tipo ;
+
+dcl_fun
+    : ID '(' dcls ')' ':' tipo;
 
 dcls
     : (dcl (',' dcl)* )? ;

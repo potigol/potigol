@@ -212,6 +212,10 @@ public final class M {
                 + K.bloco(corpo) + K.NEWLINE;
     }
 
+    public static String dclFun(String id, String param, String tipo) {
+        return K.DEF + id + K.param(param) + K.tipo(tipo) + K.NEWLINE;
+    }
+    
     public static String declVariavel(final String id, final String exp,
             final String tipo) {
         return K.VAR + id + K.tipo(tipo) + K.IGUAL + exp + K.NEWLINE;
@@ -409,10 +413,31 @@ public final class M {
         return resposta;
     }
 
-    public static String classe(final String ident, final String membros) {
+    public static String classe(final String ident, final List<String> sup,
+            final String membros) {
+        if (!sup.isEmpty()) {
+            sup.set(0, K.EXTENDS + sup.get(0));
+        }
+        for (int i = 1; i < sup.size(); i++) {
+            sup.set(i, K.WITH + sup.get(i));
+        }
         final StringBuilder resposta = new StringBuilder("case class ")
                 .append(M.escapeID(ident)).append(membros);
-        return resposta.toString();
+        return resposta.toString().replace("){",
+                ") " + String.join(" ", sup) + "{");
+    }
+
+    public static String abstrato(String ident, List<String> sup,
+            String membros) {
+        if (!sup.isEmpty()) {
+            sup.set(0, K.EXTENDS + sup.get(0));
+        }
+        for (int i = 1; i < sup.size(); i++) {
+            sup.set(i, K.WITH + sup.get(i));
+        }
+        final StringBuilder resposta = new StringBuilder("trait ")
+                .append(M.escapeID(ident)).append(String.join(" ", sup)).append(membros);
+        return resposta.toString().replaceFirst("\\(", "{").replaceFirst("\\)\\{", "\n");
     }
 
     public static String membros(final List<String> params,

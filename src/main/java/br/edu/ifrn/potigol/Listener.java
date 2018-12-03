@@ -200,12 +200,28 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
+        final List<String> sup = M.string2List(data.getOrElse(ctx.id1()));
         final String membros = data.getValue(ctx.membros());
-        final String resposta = M.classe(id, membros);
+        final String resposta = M.classe(id, sup, membros);
         data.setValue(ctx, resposta);
     }
+
+    @Override
+    public void exitInterface(final InterfaceContext ctx) {
+        final String id = ctx.ID().getText();
+        final List<String> sup = M.string2List(data.getOrElse(ctx.id1()));
+        final String membros = data.getValue(ctx.membros());
+        final String resposta = M.abstrato(id, sup, membros);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void enterMembros(final MembrosContext ctx) {
+        data.getDeclaracoes().push(new ArrayList<String>());
+    }
     
-    @Override public void enterMembros(potigolParser.MembrosContext ctx) {
+    @Override
+    public void exitMembros(final MembrosContext ctx) {
         final List<ParseTree> cstr = new ArrayList<ParseTree>();
         final List<ParseTree> elem = new ArrayList<ParseTree>();
         for (ParseTree child : ctx.children) {
@@ -214,6 +230,7 @@ public class Listener extends potigolBaseListener {
                 cstr.add(child);
             }
             if (child.getClass().equals(Decl_funcaoContext.class)
+                    || child.getClass().equals(Dcl_funContext.class)
                     || child.getClass().equals(Decl_valorContext.class)
                     || child.getClass().equals(Def_funcao_corpoContext.class)
                     || child.getClass().equals(Def_funcaoContext.class)
@@ -226,6 +243,7 @@ public class Listener extends potigolBaseListener {
         final List<String> constr = data.getValues(cstr);
         final String resposta = M.membros(constr, elemen);
         data.setValue(ctx, resposta);
+        data.getDeclaracoes().pop();
     }
 
     @Override
@@ -285,8 +303,16 @@ public class Listener extends potigolBaseListener {
     public void exitDcl(final DclContext ctx) {
         final String id = data.getValue(ctx.id1());
         final String tipo = data.getValue(ctx.tipo());
-        final String resposta = id.replaceAll(K.VIRGULA,
-                K.DOISPONTOS + tipo + K.VIRGULA) + K.DOISPONTOS + tipo;
+        final String pre;
+        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_membros) {
+            pre = "val ";
+        } else {
+            pre = "";
+        }
+        final String resposta = pre
+                + id.replaceAll(K.VIRGULA,
+                        K.DOISPONTOS + tipo + K.VIRGULA + pre)
+                + K.DOISPONTOS + tipo;
         // if (ctx.parent.getRuleIndex() == potigolParser.RULE_decl_tipo) {
         // resposta = "" + resposta;
         // }
@@ -338,6 +364,15 @@ public class Listener extends potigolBaseListener {
         final String resposta = M.declVariavel(id, exp, tipo);
         data.setValue(ctx, resposta);
         data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
+    }
+    
+    @Override
+    public void exitDcl_fun(final Dcl_funContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final String param = data.getValue(ctx.dcls());
+        final String tipo = data.getValue(ctx.tipo());
+        final String resposta = M.dclFun(id, param, tipo);
+        data.setValue(ctx, resposta);
     }
 
     @Override
@@ -567,7 +602,6 @@ public class Listener extends potigolBaseListener {
         data.getSaida().append(M.saida(data.getWarnings(), items));
 
         data.setValue(ctx, data.getSaida().toString());
-        data.getDeclaracoes().pop();
     }
 
     @Override
