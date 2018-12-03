@@ -54,7 +54,7 @@ object Potigolutil {
   var $cor = false
 
   implicit class PotigolStr(ctx: StringContext) {
-    def bool(a: Any) = a match {
+    def bool(a: Any): Any = a match {
       case false => "falso"
       case true  => "verdadeiro"
       case _     => a
@@ -101,8 +101,8 @@ object Potigolutil {
     def lista: Lista[T] = para_lista
     def mutavel: Vetor[T] = Vetor(_lista.to)
     def mutável: Vetor[T] = mutavel
-    def imutável = lista
-    def imutavel = lista
+    def imutável: Lista[T] = lista
+    def imutavel: Lista[T] = lista
     def divida_quando(f: (T, T) => Lógico): Matriz[T] = Lista(_lista.foldRight(List.empty[Lista[T]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     })
@@ -283,7 +283,7 @@ object Potigolutil {
       case a: Lista[T] => "Lista"
       case a: Vetor[T] => "Vetor"
       case a: Product  => "Tupla"
-      case a           => a.getClass.getSimpleName.takeWhile(_ != '$')
+      case _           => x.getClass.getSimpleName.takeWhile(_ != '$')
     }
   }
 
@@ -360,105 +360,105 @@ object Potigolutil {
   }
 
   implicit class Tupla2[T1, T2](t: (T1, T2)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def qual_tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo})"
   }
 
   implicit class Tupla3[T1, T2, T3](t: (T1, T2, T3)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo})"
   }
 
   implicit class Tupla4[T1, T2, T3, T4](t: (T1, T2, T3, T4)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo})"
 
   }
 
   implicit class Tupla5[T1, T2, T3, T4, T5](t: (T1, T2, T3, T4, T5)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo})"
 
   }
 
   implicit class Tupla6[T1, T2, T3, T4, T5, T6](t: (T1, T2, T3, T4, T5, T6)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def sexto = t._6
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def sexto: T6 = t._6
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo})"
 
   }
 
   implicit class Tupla7[T1, T2, T3, T4, T5, T6, T7](
       t: (T1, T2, T3, T4, T5, T6, T7)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def sexto = t._6
-    def setimo = t._7
-    def sétimo = t._7
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def sexto: T6 = t._6
+    def setimo: T7 = t._7
+    def sétimo: T7 = t._7
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo})"
   }
 
   implicit class Tupla8[T1, T2, T3, T4, T5, T6, T7, T8](
       t: (T1, T2, T3, T4, T5, T6, T7, T8)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def sexto = t._6
-    def setimo = t._7
-    def sétimo = t._7
-    def oitavo = t._8
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def sexto: T6 = t._6
+    def setimo: T7 = t._7
+    def sétimo: T7 = t._7
+    def oitavo: T8 = t._8
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo})"
   }
 
   implicit class Tupla9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
       t: (T1, T2, T3, T4, T5, T6, T7, T8, T9)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def sexto = t._6
-    def setimo = t._7
-    def sétimo = t._7
-    def oitavo = t._8
-    def nono = t._9
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def sexto: T6 = t._6
+    def setimo: T7 = t._7
+    def sétimo: T7 = t._7
+    def oitavo: T8 = t._8
+    def nono: T9 = t._9
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo})"
   }
 
   implicit class Tupla10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
       t: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
-    def primeiro = t._1
-    def segundo = t._2
-    def terceiro = t._3
-    def quarto = t._4
-    def quinto = t._5
-    def sexto = t._6
-    def setimo = t._7
-    def sétimo = t._7
-    def oitavo = t._8
-    def nono = t._9
-    def decimo = t._10
-    def décimo = t._10
-    def tipo = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo}, ${t._10.qual_tipo})"
+    def primeiro: T1 = t._1
+    def segundo: T2 = t._2
+    def terceiro: T3 = t._3
+    def quarto: T4 = t._4
+    def quinto: T5 = t._5
+    def sexto: T6 = t._6
+    def setimo: T7 = t._7
+    def sétimo: T7 = t._7
+    def oitavo: T8 = t._8
+    def nono: T9 = t._9
+    def decimo: T10 = t._10
+    def décimo: T10 = t._10
+    def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo}, ${t._7.qual_tipo}, ${t._8.qual_tipo}, ${t._9.qual_tipo}, ${t._10.qual_tipo})"
   }
 
   case class URL(caminho: Texto) {

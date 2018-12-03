@@ -9,15 +9,15 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 public class ListenerData {
-    private ParseTreeProperty<String> values;
+    private final ParseTreeProperty<String> values;
 
     public List<String> getWarnings() {
         return warnings;
     }
 
-    private Stack<List<String>> declaracoes;
-    private List<String> warnings;
-    private StringBuilder saida;
+    private final Stack<List<String>> declaracoes;
+    private final List<String> warnings;
+    private final StringBuilder saida;
 
     public Stack<List<String>> getDeclaracoes() {
         return declaracoes;
@@ -61,15 +61,15 @@ public class ListenerData {
     // TODO: Refatorar
     public void verificarDuplicados(final List<String> ids,
             final ParserRuleContext ctx, final boolean show) {
-        if (show){
-        for (final String i : ids) {
-            if (this.valores().contains(i)) {
-                final int linha = ctx.getStart().getLine();
-                this.warnings.add(
-                        "Valor '" + i + "' declarado pela segunda vez na linha "
-                                + linha + ".");
+        if (show) {
+            for (final String i : ids) {
+                if (this.valores().contains(i)) {
+                    final int linha = ctx.getStart().getLine();
+                    this.warnings.add("Valor '" + i
+                            + "' declarado pela segunda vez na linha " + linha
+                            + ".");
+                }
             }
-        }
         }
         this.declaracoes.peek().addAll(ids);
     }

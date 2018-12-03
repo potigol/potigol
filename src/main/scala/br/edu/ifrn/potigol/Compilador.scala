@@ -63,7 +63,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
             case Success(a) => a
             case Failure(f) =>
               println("*** Erro de execução ***\n" +
-                f.getStackTrace.apply(0).getClassName + ": " + f.getLocalizedMessage);
+                f.getStackTrace.apply(0).getClassName + COLON + f.getLocalizedMessage);
               f.getLocalizedMessage
           }
         case Failure(f) =>
@@ -89,7 +89,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       case Failure(f) =>
         val linhaScala = f.getMessage.split(COLON)(1).split(SPACE)(1).toInt
         val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile {
-          case i =>
+          case i: String =>
             !(i.contains("/*Codigo"))
         }
         linhaPotigol.headOption.map { l => l.split(SPACE)(1).toInt }.getOrElse(1)

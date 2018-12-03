@@ -66,8 +66,11 @@ decl_funcao
     | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'fim'  # def_funcao_corpo ;
 
 decl_tipo
-    : 'tipo' ID '=' tipo                          # alias
-    | 'tipo' ID (dcl|dcl_var|decl_funcao|decl_valor)* 'fim' # classe ;
+    : 'tipo' ID '=' tipo                            # alias
+    | 'tipo' ID (':' id1)? membros 'fim'            # classe
+    | 'tipo' 'abstrato' ID (':' id1)? membros 'fim' # interface ;
+
+membros : (dcl|dcl_var|decl_funcao|decl_valor)* ;
 
 decl_uso
     : 'use' STRING ;

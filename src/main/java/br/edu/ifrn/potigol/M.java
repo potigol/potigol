@@ -51,10 +51,10 @@ public final class M {
 
     public static String chamadaFuncao(final String nome, final String param) {
         final String p;
-        if (param != null) {
-            p = param;
-        } else {
+        if (param == null) {
             p = "";
+        } else {
+            p = param;
         }
         return nome + K.param(p);
     }
@@ -202,7 +202,7 @@ public final class M {
         return resposta.toString();
     }
 
-    public static String[] split(String id) {
+    public static String[] split(final String id) {
         return id.split(K.VIRGULA);
     }
 
@@ -212,7 +212,8 @@ public final class M {
                 + K.bloco(corpo) + K.NEWLINE;
     }
 
-    public static String declVariavel(final String id, final String exp, final String tipo) {
+    public static String declVariavel(final String id, final String exp,
+            final String tipo) {
         return K.VAR + id + K.tipo(tipo) + K.IGUAL + exp + K.NEWLINE;
     }
 
@@ -233,7 +234,6 @@ public final class M {
             final String[] exps) {
         return declVariavelMult(ids, exps, "");
     }
-
 
     public static String tupla(final int tamanho, final String exp) {
         return K.param(exp);
@@ -257,7 +257,8 @@ public final class M {
         return K.VAL + ident + K.IGUAL + exp + K.SEMI;
     }
 
-    public static String declValor(final String ident, final String exp, final String tipo) {
+    public static String declValor(final String ident, final String exp,
+            final String tipo) {
         return K.VAL + ident + K.tipo(tipo) + K.IGUAL + exp + K.SEMI;
     }
 
@@ -408,11 +409,15 @@ public final class M {
         return resposta;
     }
 
-    public static String classe(final String ident, final List<String> params,
+    public static String classe(final String ident, final String membros) {
+        final StringBuilder resposta = new StringBuilder("case class ")
+                .append(M.escapeID(ident)).append(membros);
+        return resposta.toString();
+    }
+
+    public static String membros(final List<String> params,
             final List<String> elems) {
-        final StringBuilder resposta = new StringBuilder();
-        resposta.append("case class ").append(M.escapeID(ident))
-                .append(K.OPENBRACKET);
+        final StringBuilder resposta = new StringBuilder(K.OPENBRACKET);
         for (int i = 0; i < params.size(); i++) {
             final String param = params.get(i);
             resposta.append(K.INDENT).append(param);
@@ -438,4 +443,5 @@ public final class M {
         resposta.append(K.IGUAL).append(exp);
         return resposta.toString();
     }
+
 }

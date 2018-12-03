@@ -200,6 +200,12 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
+        final String membros = data.getValue(ctx.membros());
+        final String resposta = M.classe(id, membros);
+        data.setValue(ctx, resposta);
+    }
+    
+    @Override public void enterMembros(potigolParser.MembrosContext ctx) {
         final List<ParseTree> cstr = new ArrayList<ParseTree>();
         final List<ParseTree> elem = new ArrayList<ParseTree>();
         for (ParseTree child : ctx.children) {
@@ -218,7 +224,7 @@ public class Listener extends potigolBaseListener {
         }
         final List<String> elemen = data.getValues(elem);
         final List<String> constr = data.getValues(cstr);
-        final String resposta = M.classe(id, constr, elemen);
+        final String resposta = M.membros(constr, elemen);
         data.setValue(ctx, resposta);
     }
 
