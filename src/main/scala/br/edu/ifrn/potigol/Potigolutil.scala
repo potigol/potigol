@@ -127,6 +127,9 @@ object Potigolutil {
     def insira(i: Inteiro, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
     def zip[A](outra: Colecao[A]): Lista[(T, A)] = Lista(this._lista.zip(outra._lista))
     def zip(outra: Texto): Lista[(T, Caractere)] = Lista(this._lista.zip(outra))
+    def atualize(indice: Int, valor: T): Lista[T] = {
+      Lista(_lista.updated(indice, valor))
+    }
   }
 
   object Lista {
@@ -180,6 +183,10 @@ object Potigolutil {
     def +(outra: Colecao[T]): Vetor[T] = Vetor(_lista ++ outra._lista)
     def zip[A](outra: Colecao[A]): Vetor[(T, A)] = Vetor(this._lista.zip(outra._lista))
     def zip(outra: Texto): Vetor[(T, Caractere)] = Vetor(this._lista.zip(outra))
+    def atualize(indice: Int, valor: T): Vetor[T] = {
+      _lista.update(indice, valor)
+      this
+    }
   }
 
   implicit class Textos(val _lista: String) {

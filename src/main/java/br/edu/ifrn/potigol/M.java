@@ -1,5 +1,6 @@
 package br.edu.ifrn.potigol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -215,7 +216,7 @@ public final class M {
     public static String dclFun(String id, String param, String tipo) {
         return K.DEF + id + K.param(param) + K.tipo(tipo) + K.NEWLINE;
     }
-    
+
     public static String declVariavel(final String id, final String exp,
             final String tipo) {
         return K.VAR + id + K.tipo(tipo) + K.IGUAL + exp + K.NEWLINE;
@@ -436,8 +437,10 @@ public final class M {
             sup.set(i, K.WITH + sup.get(i));
         }
         final StringBuilder resposta = new StringBuilder("trait ")
-                .append(M.escapeID(ident)).append(String.join(" ", sup)).append(membros);
-        return resposta.toString().replaceFirst("\\(", "{").replaceFirst("\\)\\{", "\n");
+                .append(M.escapeID(ident)).append(String.join(" ", sup))
+                .append(membros);
+        return resposta.toString().replaceFirst("\\(", "{")
+                .replaceFirst("\\)\\{", "\n");
     }
 
     public static String membros(final List<String> params,
@@ -461,11 +464,27 @@ public final class M {
 
     public static String setVetor(final String ident, final List<String> idx,
             final String exp) {
-        final StringBuilder resposta = new StringBuilder(ident);
-        for (final String ind : idx) {
-            resposta.append(K.param(ind + " -1"));
+        final StringBuilder resposta = new StringBuilder();
+        String var = nextVar();
+        String val = exp;
+        List<String> idx1 = new ArrayList<String>(idx);
+        for (int i = 0; i < idx1.size(); i++) {
+            idx1.set(i, idx1.get(i) + " -1");
         }
-        resposta.append(K.IGUAL).append(exp);
+        for (int i = 0; i < idx1.size(); i++) {
+            String s = "("
+                    + String.join(")(", idx1.subList(0, idx1.size() - i - 1))
+                    + ")";
+            if (s.equals("()")) {
+                s = "";
+            }
+            s = "val " + var + " = " + ident + s + ".atualize("
+                    + idx1.get(idx1.size() - i - 1) + ", " + val + ")\n";
+            val = var;
+            var = nextVar();
+            resposta.append(s);
+        }
+        resposta.append(ident).append(" = ").append(val);
         return resposta.toString();
     }
 
