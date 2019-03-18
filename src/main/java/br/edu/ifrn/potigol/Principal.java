@@ -72,7 +72,7 @@ public class Principal {
     public static void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versao " + versao
-                    + " Copyright (C) 2015-2018 Leonardo Lucena" + "\n\n"
+                    + " Copyright (C) 2015-2019 Leonardo Lucena" + "\n\n"
                     + "Uso: potigol [-c] [-w] [-d] [arquivo.poti]\n");
         } else {
             final String arq = args[args.length - 1];
