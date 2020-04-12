@@ -3,9 +3,10 @@ package br.edu.ifrn.potigol;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public final class M {
-    private static List<String> scalawords = Arrays.asList("type", "yield",
+    private static final List<String> scalawords = Arrays.asList("type", "yield",
             "lazy", "override", "def", "with", "val", "var", "false", "true",
             "sealed", "abstract", "private", "trait", "object", "null", "if",
             "for", "while", "throw", "finally", "protected", "extends",
@@ -151,9 +152,9 @@ public final class M {
         resposta.append("1 match {").append(K.NEWLINE).append(K.SE).append(cond)
                 .append(K.ENTAO).append(entao).append(K.NEWLINE);
         for (final String item : senaose) {
-            resposta.append(item + K.NEWLINE);
+            resposta.append(item).append(K.NEWLINE);
         }
-        resposta.append(K.SENAO + senao + K.NEWLINE + K.RIGHTBRACE);
+        resposta.append(K.SENAO).append(senao).append(K.NEWLINE).append(K.RIGHTBRACE);
         return resposta.toString();
     }
 
@@ -230,7 +231,7 @@ public final class M {
             final String[] exps, final String tipo) {
         final StringBuilder resposta = new StringBuilder();
         for (int i = 0; i < ids.length; i++) {
-            resposta.append(M.declVariavel(ids[i], exps[i], tipo) + K.NEWLINE);
+            resposta.append(M.declVariavel(ids[i], exps[i], tipo)).append(K.NEWLINE);
         }
         return resposta.toString();
     }
@@ -325,18 +326,17 @@ public final class M {
     }
 
     public static String exprList(final List<String> lista) {
-        String resposta = K.NEWLINE;
+        StringBuilder resposta = new StringBuilder(K.NEWLINE);
         for (final String s : lista) {
-            resposta += K.indent(s);
+            resposta.append(K.indent(s));
         }
-        return resposta;
+        return resposta.toString();
     }
 
     public static String prologo() {
         final String pacote = "import br.edu.ifrn.potigol.";
-        final String resposta = pacote + "Potigolutil._" + K.SEMI + pacote
+        return pacote + "Potigolutil._" + K.SEMI + pacote
                 + "Matematica._" + K.SEMI;
-        return resposta;
     }
 
     public static String organizar(final String programa) {
@@ -347,7 +347,7 @@ public final class M {
     public static String faixas(final List<String> lista) {
         final StringBuilder resposta = new StringBuilder();
         for (final String s : lista) {
-            if (s != lista.get(0)) {
+            if (!Objects.equals(s, lista.get(0))) {
                 resposta.append(K.SEMI);
             }
             resposta.append(s);
@@ -376,13 +376,13 @@ public final class M {
         final StringBuilder resposta = new StringBuilder();
         int pos = 0;
         for (final String exp : interp) {
-            resposta.append(string.get(pos).replace(K.LEFTBRACE, "${"))
-                    .append(exp);
+            final String s = string.get(pos).replace("$", "$$").replace(K.LEFTBRACE, "${");
+            resposta.append(s).append(exp);
             pos++;
         }
         resposta.append(string.get(pos));
-        if (resposta.toString().contains("\n")) {
-            resposta.insert(0, "\"\"").append("\"\".stripMargin('|')");
+        if (resposta.toString().contains(K.NEWLINE)) {
+            resposta.insert(0, K.DOUBLEDOUBLE).append(K.DOUBLEDOUBLE).append(".stripMargin('|')");
         }
         resposta.insert(0, "p");
         return resposta.toString();
@@ -410,8 +410,7 @@ public final class M {
     }
 
     public static String declaracao(final String decl) {
-        final String resposta = K.NEWLINE + decl;
-        return resposta;
+        return K.NEWLINE + decl;
     }
 
     public static String classe(final String ident, final List<String> sup,
@@ -422,9 +421,9 @@ public final class M {
         for (int i = 1; i < sup.size(); i++) {
             sup.set(i, K.WITH + sup.get(i));
         }
-        final StringBuilder resposta = new StringBuilder("case class ")
-                .append(M.escapeID(ident)).append(membros);
-        return resposta.toString().replace("){",
+        String resposta = "case class " +
+                M.escapeID(ident) + membros;
+        return resposta.replace("){",
                 ") " + String.join(" ", sup) + "{");
     }
 
@@ -436,10 +435,10 @@ public final class M {
         for (int i = 1; i < sup.size(); i++) {
             sup.set(i, K.WITH + sup.get(i));
         }
-        final StringBuilder resposta = new StringBuilder("trait ")
-                .append(M.escapeID(ident)).append(String.join(" ", sup))
-                .append(membros);
-        return resposta.toString().replaceFirst("\\(", "{")
+        String resposta = "trait " +
+                M.escapeID(ident) + String.join(" ", sup) +
+                membros;
+        return resposta.replaceFirst("\\(", "{")
                 .replaceFirst("\\)\\{", "\n");
     }
 
@@ -467,7 +466,7 @@ public final class M {
         final StringBuilder resposta = new StringBuilder();
         String var = nextVar();
         String val = exp;
-        List<String> idx1 = new ArrayList<String>(idx);
+        List<String> idx1 = new ArrayList<>(idx);
         for (int i = 0; i < idx1.size(); i++) {
             idx1.set(i, idx1.get(i) + " -1");
         }

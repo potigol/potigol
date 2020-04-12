@@ -67,6 +67,8 @@ public final class K {
 
     public static final String NOT = "!";
 
+    public static final String DOUBLEDOUBLE = "\"\"";
+
     private K() {
     }
 

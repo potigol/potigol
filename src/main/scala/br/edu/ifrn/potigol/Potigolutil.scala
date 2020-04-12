@@ -70,7 +70,7 @@ object Potigolutil {
   private[this] val intRE = """-?\d+""".r
   private[this] val numRE = """-?(\d*)(\.\d*)?""".r
 
-  def lista[A](n: Inteiro)(valor: => A) = Lista.apply(n, valor)
+  def lista[A](n: Inteiro)(valor: => A): Lista[A] = Lista.imutavel(n, valor)
   def matriz[A](i: Inteiro, j: Inteiro)(valor: => A): Matriz[A] = Matriz.apply(i, j, valor)
   def cubo[A](i: Inteiro, j: Inteiro, k: Inteiro)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
 
@@ -87,7 +87,7 @@ object Potigolutil {
     def cabeca: T = _lista.head
     def contem(a: T): Lógico = _lista.contains(a)
     def ultimo: T = _lista.last
-    def injete[A >: T](f: (A, T) => A): A = _lista.reduceLeft(f)
+    def injete(f: (T, T) => T): T = _lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, T) => A): A = _lista.foldLeft(neutro)(f)
     def ache(p: T => Lógico): Option[T] = _lista.find(p)
     def contém: T => Lógico = contem
@@ -108,17 +108,17 @@ object Potigolutil {
     })
   }
 
-  case class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
+  case class Lista[T](_lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
     def cauda: Lista[T] = Lista(_lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted)
     def inverta: Lista[T] = Lista(_lista.reverse)
-    @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Lista[T] = selecione _
+    @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Lista[T] = selecione
     def selecione(p: T => Lógico): Lista[T] = Lista(_lista.filter(p))
     def mapeie[B](f: T => B): Lista[B] = Lista(_lista.map(f))
     def pegue_enquanto(p: T => Lógico): Lista[T] = Lista(_lista.takeWhile(p))
-    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (T => Lógico) => Lista[T] = descarte_enquanto _
+    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (T => Lógico) => Lista[T] = descarte_enquanto
     def descarte_enquanto(p: T => Lógico): Lista[T] = Lista(_lista.dropWhile(p))
-    @deprecated("Use 'descarte'", since094) def passe: Inteiro => Lista[T] = descarte _
+    @deprecated("Use 'descarte'", since094) def passe: Inteiro => Lista[T] = descarte
     def descarte(a: Inteiro): Lista[T] = Lista(_lista.drop(a))
     def pegue(a: Inteiro): Lista[T] = Lista(_lista.take(a))
     def +(outra: Lista[T]): Lista[T] = Lista(_lista ::: outra._lista)
@@ -154,7 +154,7 @@ object Potigolutil {
   }
 
   object Cubo {
-    def apply[A]: (Inteiro, Inteiro, Inteiro, => A) => Cubo[A] = imutavel[A] _
+    def apply[A]: (Inteiro, Inteiro, Inteiro, => A) => Cubo[A] = imutavel[A]
     def mutavel[A](x: Inteiro, y: Inteiro, z: Inteiro, valor: => A): Vetor[Vetor[Vetor[A]]] = {
       Lista.mutavel(x, Lista.mutavel(y, Lista.mutavel(z, valor)))
     }
@@ -170,13 +170,13 @@ object Potigolutil {
     def cauda: Vetor[T] = Vetor(_lista.tail)
     def inverta: Vetor[T] = Vetor(_lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(_lista.sorted)
-    @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Vetor[T] = selecione _
+    @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Vetor[T] = selecione
     def selecione(p: T => Lógico): Vetor[T] = Vetor(_lista.filter(p))
     def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(_lista.map(f))
     def pegue(a: Inteiro): Vetor[T] = Vetor(_lista.take(a))
     def descarte(a: Inteiro): Vetor[T] = Vetor(_lista.drop(a))
     def pegue_enquanto(p: T => Lógico): Vetor[T] = Vetor(_lista.takeWhile(p))
-    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (T => Lógico) => Vetor[T] = descarte_enquanto _
+    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (T => Lógico) => Vetor[T] = descarte_enquanto
     def descarte_enquanto(p: T => Lógico): Vetor[T] = Vetor(_lista.dropWhile(p))
     def remova(i: Inteiro): Vetor[T] = Vetor(_lista.take(i - 1) ++ _lista.drop(i))
     def insira(i: Inteiro, valor: T): Vetor[T] = Vetor(_lista.take(i - 1) ++ List(valor) ++ _lista.drop(i - 1))
@@ -196,7 +196,7 @@ object Potigolutil {
     @deprecated("Use 'inteiro'", since094) def para_inteiro: Inteiro = inteiro
     def inteiro: Inteiro = {
       if (_lista == null) 0 else
-        (intRE.findPrefixOf(_lista).getOrElse(ZERO)).toInt
+        intRE.findPrefixOf(_lista).getOrElse(ZERO).toInt
     }
     def get(a: Int): Caractere = if (a > 0) _lista(a - 1) else _lista(tamanho + a)
     def posicao(elem: Caractere): Inteiro = _lista.indexOf(elem, 0) + 1
@@ -204,9 +204,9 @@ object Potigolutil {
     def maiusculo: Texto = _lista.toUpperCase()
     def minusculo: Texto = _lista.toLowerCase()
     def divida(s: Texto = " "): Lista[Texto] = Lista(_lista.replaceAll("( |\\n)+", " ").split(s).toList)
-    def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista((_lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
+    def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista(_lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
-    }).map(_.junte("")))
+    }.map(_.junte()))
     def contem(a: Caractere): Lógico = _lista.contains(a)
     def cabeca: Caractere = _lista.head
     def ultimo: Caractere = _lista.last
@@ -222,7 +222,7 @@ object Potigolutil {
     def mapeie[B, That](f: Caractere => B)(implicit bf: CanBuildFrom[String, B, That]): That = _lista.map(f)
     def ache(p: Caractere => Lógico): Option[Caractere] = _lista.find(p)
     def pegue_enquanto(p: Caractere => Lógico): Texto = _lista.takeWhile(p)
-    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (Caractere => Lógico) => Texto = descarte_enquanto _
+    @deprecated("Use 'descarte_enquanto'", since094) def passe_enquanto: (Caractere => Lógico) => Texto = descarte_enquanto
     def descarte_enquanto(p: Caractere => Lógico): Texto = _lista.dropWhile(p)
     def lista: Lista[Caractere] = Lista(_lista.toList)
     def junte(separador: Texto = ""): Texto = _lista.mkString(separador)
@@ -242,7 +242,7 @@ object Potigolutil {
     @deprecated("Use 'real'", since094) def para_real: Real = real
     def real: Real = {
       if (_lista == null) 0 else
-        (numRE.findPrefixOf(_lista).getOrElse(ZERO)).toDouble
+        numRE.findPrefixOf(_lista).getOrElse(ZERO).toDouble
     }
     def posição: Caractere => Inteiro = posicao
     def posiçao: Caractere => Inteiro = posicao
@@ -283,39 +283,39 @@ object Potigolutil {
     @deprecated("Use 'texto'", since094) def para_texto: Texto = texto
     def texto: Texto = x.toString
     def qual_tipo: Texto = x match {
-      case a: Inteiro  => "Inteiro"
-      case a: Real     => "Real"
-      case a: Lógico   => "Logico"
-      case a: Texto    => "Texto"
-      case a: Lista[T] => "Lista"
-      case a: Vetor[T] => "Vetor"
-      case a: Product  => "Tupla"
+      case _: Inteiro  => "Inteiro"
+      case _: Real     => "Real"
+      case _: Lógico   => "Logico"
+      case _: Texto    => "Texto"
+      case _: Lista[T] => "Lista"
+      case _: Vetor[T] => "Vetor"
+      case _: Product  => "Tupla"
       case _           => x.getClass.getSimpleName.takeWhile(_ != '$')
     }
   }
 
-  private[this] def corSim = print("\u001b[32m")
-  private[this] def corNao = print("\u001b[37m")
+  private[this] def corSim(): Nada = print("\u001b[32m")
+  private[this] def corNao(): Nada = print("\u001b[37m")
   def leia(): Texto = {
-    if ($cor) corSim
+    if ($cor) corSim()
     val s = StdIn.readLine()
-    if ($cor) corNao
+    if ($cor) corNao()
     s
   }
 
-  def leia(separador: Texto): Lista[Texto] = Lista(leia
-    .split(separador.toCharArray())
+  def leia(separador: Texto): Lista[Texto] = Lista(leia()
+    .split(separador.toCharArray)
     .toList) //  .filterNot(_ == "")
 
   def leia(n: Inteiro): Lista[Texto] = Lista({
-    for { i <- 1 to n } yield { leia }
+    for {_ <- 1 to n} yield { leia() }
   }.toList)
 
-  def leia_texto: Texto = leia
+  def leia_texto: Texto = leia()
   def leia_textos(n: Inteiro): Lista[Texto] = leia(n)
   def leia_textos(separador: Texto): Lista[Texto] = leia(separador)
 
-  def leia_inteiro: Inteiro = leia.inteiro
+  def leia_inteiro: Inteiro = leia().inteiro
   def leia_inteiros(n: Inteiro): Lista[Inteiro] = {
     var l = Lista.vazia(0)
     while (l.tamanho < n) {
@@ -332,7 +332,7 @@ object Potigolutil {
   @deprecated("Use 'leia_inteiros'", since094) def leia_ints(n: Inteiro): Lista[Inteiro] = leia_inteiros(n)
   @deprecated("Use 'leia_inteiros'", since094) def leia_ints(separador: Texto): Lista[Inteiro] = leia_inteiros(separador)
 
-  def leia_real: Real = leia.real
+  def leia_real: Real = leia().real
   @deprecated("Use 'leia_real'", since094) def leia_numero: Real = leia_real
   def leia_reais(n: Inteiro): Lista[Real] = {
     var l = Lista.vazia(0.0)
@@ -350,7 +350,7 @@ object Potigolutil {
   @deprecated("Use 'leia_reais'", since094) def leia_nums(separador: Texto): Lista[Real] = leia_reais(separador)
 
   def escreva(texto: Any): Unit = {
-    if ($cor) corNao
+    if ($cor) corNao()
     texto match {
       case true  => Console.println("verdadeiro")
       case false => Console.println("falso")
@@ -358,7 +358,7 @@ object Potigolutil {
     }
   }
   def imprima(texto: Any): Unit = {
-    if ($cor) corNao
+    if ($cor) corNao()
     texto match {
       case true  => Console.print("verdadeiro")
       case false => Console.print("falso")
@@ -472,7 +472,7 @@ object Potigolutil {
     lazy val erro: Boolean = conteudo == ""
     lazy val conteudo: String = Try {
       io.Source.fromURL(caminho).mkString("")
-    } getOrElse ("")
+    } getOrElse ""
   }
 
   import scala.io.Source
@@ -482,7 +482,7 @@ object Potigolutil {
     def leia(caminho: Texto): Lista[Texto] = {
       Lista(Source.fromFile(caminho).getLines().toList)
     }
-    def salve(caminho: Texto, conteúdo: Texto, anexar: Lógico = falso) = {
+    def salve(caminho: Texto, conteúdo: Texto, anexar: Lógico = falso): Nada = {
       val pw = new PrintWriter(new File(caminho))
       if (anexar) {
         pw.append(conteúdo)
@@ -490,7 +490,7 @@ object Potigolutil {
       else {
         pw.write(conteúdo)
       }
-      pw.close
+      pw.close()
     }
   }
 }

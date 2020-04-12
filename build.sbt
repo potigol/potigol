@@ -1,7 +1,7 @@
 name := "potigol"
 organization := "potigol"
 
-version := "0.9.16"
+version := "1.0"
 
 scalaVersion := "2.12.11"
 

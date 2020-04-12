@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2015-2018  Leonardo Lucena
+ *  Copyright (C) 2015-2020  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
 
   def executar(code: String, codigoPotigol: String, cor: Boolean = false,
                antes: String = "", depois: String = ""): String = {
-    val c = (code.split(NL).take(2) ++ List(s"$$cor=${cor};") ++
-      List(antes) ++ NL ++ code.split(NL).drop(2) ++ List(depois)).mkString(NL);
+    val c = (code.split(NL).take(2) ++ List(s"$$cor=$cor;") ++
+      List(antes) ++ NL ++ code.split(NL).drop(2) ++ List(depois)).mkString(NL)
     if (debug) {
       //      imprimirCodigo(c)
       println(c)
@@ -59,11 +59,11 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       avaliar(c) match {
         case Success(_) =>
           if (wait) clean()
-          Try { (new Eval(None)).apply[String](c) } match {
+          Try { new Eval(None).apply[String](c) } match {
             case Success(a) => a
             case Failure(f) =>
               println("*** Erro de execução ***\n" +
-                f.getStackTrace.apply(0).getClassName + COLON + f.getLocalizedMessage);
+                f.getStackTrace.apply(0).getClassName + COLON + f.getLocalizedMessage)
               f.getLocalizedMessage
           }
         case Failure(f) =>
@@ -79,7 +79,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   }
   def avaliar(code: String): Try[Unit] = {
     Try {
-      (new Eval(None)).check(code)
+      new Eval(None).check(code)
     }
   }
 
@@ -89,8 +89,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       case Failure(f) =>
         val linhaScala = f.getMessage.split(COLON)(1).split(SPACE)(1).toInt
         val linhaPotigol = code.split('\n').take(linhaScala).reverse.toList.dropWhile {
-          case i: String =>
-            !(i.contains("/*Codigo"))
+          i: String => !i.contains("/*Codigo")
         }
         linhaPotigol.headOption.map { l => l.split(SPACE)(1).toInt }.getOrElse(1)
     }
@@ -103,9 +102,8 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
       val linha = partes(1).split(SPACE)(1).toInt
       val linhaPotigol = code.split(NL).take(linha - 1).reverse.dropWhile(!_.trim.startsWith("/*Codigo")).headOption.getOrElse("1").dropWhile { x => !x.isDigit }.takeWhile { x => x.isDigit }.toInt
       val msg = Erros.traduzir(erro)
-      imprimirCodigo((codigoPotigol.split(NL).toList
-        .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\u001b[31m" + linha + "\u001b[37m" else linha })
-        .drop(linhaPotigol - 3).take(5).mkString(NL), Math.max(linhaPotigol - 3, 0))
+      imprimirCodigo(codigoPotigol.split(NL).toList
+        .zipWithIndex.map { case (linha, numero) => if (cor && numero == linhaPotigol - 1) "\u001b[31m" + linha + "\u001b[37m" else linha }.slice(linhaPotigol - 3, linhaPotigol - 3 + 5).mkString(NL), Math.max(linhaPotigol - 3, 0))
       NL + msg + NL + "linha: " + linhaPotigol
     }
     else {
@@ -116,12 +114,12 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     val linhas = code.split(NL)
     println()
     for { (linha, n) <- linhas.zipWithIndex } {
-      val numero = (n + 1 + inicio)
-      println(s"${numero.formatted("%4d")} | ${linha}")
+      val numero = n + 1 + inicio
+      println(s"${numero.formatted("%4d")} | $linha")
     }
   }
 }
 
 object Comp extends App {
-  (new Compilador()).executar("println(1+2)\nval a = readInt\nprintln(b)", "")
+  new Compilador().executar("println(1+2)\nval a = readInt\nprintln(b)", "")
 }

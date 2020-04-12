@@ -1,6 +1,6 @@
 package br.edu.ifrn.potigol
 
-import org.antlr.v4.runtime.{ CommonTokenStream }
+import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.CharStreams
 
@@ -160,7 +160,7 @@ object TesteErros extends App {
     println("-----------------------")
     println(erro.codigo)
     println("-----------------------")
-    println(texto(c.avaliar(listener.getSaida).toString()))
+    println(texto(c.avaliar(listener.getSaida).toString))
   }
 
   erros.drop(30).foreach { imprimir_erro }

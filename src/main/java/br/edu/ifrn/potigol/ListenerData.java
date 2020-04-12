@@ -24,9 +24,9 @@ public class ListenerData {
     }
 
     public ListenerData() {
-        this.values = new ParseTreeProperty<String>();
-        this.declaracoes = new Stack<List<String>>();
-        this.warnings = new ArrayList<String>();
+        this.values = new ParseTreeProperty<>();
+        this.declaracoes = new Stack<>();
+        this.warnings = new ArrayList<>();
         this.saida = new StringBuilder();
     }
 
@@ -39,7 +39,7 @@ public class ListenerData {
     }
 
     public List<String> getValues(final List<? extends ParseTree> list) {
-        final List<String> valores = new ArrayList<String>();
+        final List<String> valores = new ArrayList<>();
         for (final ParseTree id : list) {
             valores.add(this.getValue(id));
         }
@@ -75,7 +75,7 @@ public class ListenerData {
     }
 
     public List<String> valores() {
-        final List<String> lista = new ArrayList<String>();
+        final List<String> lista = new ArrayList<>();
         for (final List<String> declaracao : this.declaracoes) {
             lista.addAll(declaracao);
         }

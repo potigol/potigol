@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2015-2018 by Leonardo Lucena
+ *  Copyright (C) 2015-2020 by Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -45,10 +46,113 @@ import br.edu.ifrn.potigol.parser.potigolParser.*;
 
 public class Listener extends potigolBaseListener {
 
-    private ListenerData data = new ListenerData();
+    private final ListenerData data = new ListenerData();
 
     public String getSaida() {
         return data.getSaida().toString();
+    }
+
+    /*
+     * Programa
+     */
+
+    @Override
+    public void enterProg(final ProgContext ctx) {
+        data.getSaida().append(M.prologo());
+        data.getDeclaracoes().push(new ArrayList<String>());
+    }
+
+    @Override
+    public void exitProg(final ProgContext ctx) {
+        final List<String> items = new ArrayList<>();
+        for (final InstContext item : ctx.inst()) {
+            items.add(data.getValue(item));
+        }
+        data.getSaida().append(M.saida(data.getWarnings(), items));
+
+        data.setValue(ctx, data.getSaida().toString());
+    }
+
+    @Override
+    public void exitInst(final InstContext ctx) {
+        final int linha = ctx.getStart().getLine();
+        final String inst = data.getValue(ctx.getChild(0));
+        final String resposta = M.inst(linha, inst);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitEveryRule(final ParserRuleContext ctx) {
+        if (data.getValue(ctx) == null) {
+            data.setValue(ctx, data.getValue(ctx.getChild(0)));
+        }
+    }
+
+    @Override
+    public void visitTerminal(final TerminalNode node) {
+        final String resposta;
+        if (node.getSymbol().getType() == potigolLexer.ID) {
+            resposta = M.escapeID(node.getText());
+        } else {
+            resposta = node.getText();
+        }
+        data.setValue(node, resposta);
+    }
+
+    @Override
+    public void visitErrorNode(ErrorNode node) {
+        System.out.println("Erro: "+ node.toString()+", "+node.toStringTree()+","+node.getSourceInterval().a+","+node.getSourceInterval().b);
+    }
+
+    /*
+     *  Literal
+     */
+
+    @Override
+    public void exitBooleano(final BooleanoContext ctx) {
+        final String bool = ctx.BOOLEANO().getText();
+        final String resposta = M.booleano(bool);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitId(final IdContext ctx) {
+        data.setValue(ctx, M.escapeID(ctx.getText()));
+    }
+
+    @Override
+    public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
+        final List<String> string = new ArrayList<>();
+        string.add(ctx.BS().getText());
+        for (final TerminalNode node : ctx.MS()) {
+            string.add(node.getText());
+        }
+        string.add(ctx.ES().getText());
+
+        final List<String> interp = new ArrayList<>();
+        for (final ExprContext exp : ctx.expr()) {
+            interp.add(data.getValue(exp));
+        }
+
+        final String resposta = M.interpolacao(string, interp);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitTexto(final TextoContext ctx) {
+        final String texto = ctx.getText();
+        final String resposta = M.texto(texto);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitInteiro(final InteiroContext ctx) {
+        data.setValue(ctx, ctx.getText());
+    }
+
+    @Override
+    public void exitReal(final RealContext ctx) {
+        data.setValue(ctx, ctx.getText());
     }
 
     @Override
@@ -57,25 +161,157 @@ public class Listener extends potigolBaseListener {
         data.setValue(ctx, resposta);
     }
 
+    /*
+     * Decisao
+     */
+
     @Override
-    public void exitGet_vetor(final Get_vetorContext ctx) {
-        final String id = data.getValue(ctx.expr(0));
-        final String indice = data.getValue(ctx.expr(1));
-        final String resposta = M.getVetor(id, indice);
+    public void exitSe(final SeContext ctx) {
+        final List<String> senaose = new ArrayList<>();
+        for (final SenaoseContext c : ctx.senaose()) {
+            senaose.add(data.getValue(c));
+        }
+        final String cond = data.getValue(ctx.expr());
+        final String entao = data.getValue(ctx.entao());
+        final String senao = data.getOrElse(ctx.senao());
+        final String resposta = M.se(cond, entao, senaose, senao);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitDcl1(final Dcl1Context ctx) {
-        final ParseTree tree;
-        if (ctx.ID() != null) {
-            tree = ctx.ID();
-        } else if (ctx.expr2() != null) {
-            tree = ctx.expr2();
-        } else {
-            tree = ctx.dcls();
+    public void exitEntao(final EntaoContext ctx) {
+        final String resposta = data.getValue(ctx.exprlist());
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitSenao(final SenaoContext ctx) {
+        final String resposta = data.getValue(ctx.exprlist());
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitSenaose(final SenaoseContext ctx) {
+        final String cond = data.getValue(ctx.expr());
+        final String entao = data.getValue(ctx.entao());
+        final String resposta = M.senaoSe(cond, entao);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitEscolha(final EscolhaContext ctx) {
+        final List<String> casos = new ArrayList<>();
+        for (final CasoContext caso : ctx.caso()) {
+            casos.add(data.getValue(caso));
         }
-        data.setValue(ctx, data.getValue(tree));
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.escolha(exp, casos);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override // TODO: Refatorar, casamento de padroes
+    public void exitCaso(final CasoContext ctx) {
+        final String exp = data.getValue(ctx.expr(0));
+        String exps = data.getValue(ctx.exprlist());
+        int posicao = exp.indexOf("a$");
+        if (posicao >= 0) {
+            String resposta = exp.substring(posicao + 2);
+            posicao = resposta.indexOf('$');
+            resposta = resposta.substring(0, posicao);
+            // String resposta = exp.split("if")[0].split("::")[1].replaceAll("
+            // ",
+            // "").substring(2);
+            exps = K.VAL + resposta + K.IGUAL + "Lista(a$" + resposta + "$)"
+                    + K.SEMI + exps.substring(1);
+        }
+        final String cond = data.getOrElse(ctx.expr(1));
+        final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
+        data.setValue(ctx, resposta);
+    }
+
+    /*
+     * Repeticao
+     */
+    @Override
+    public void exitPara_faca(final Para_facaContext ctx) {
+        final String faixas = data.getValue(ctx.faixas());
+        final String guarda = data.getOrElse(ctx.expr());
+        final String bloco = data.getValue(ctx.bloco());
+        final String resposta = M.paraFaca(faixas, guarda, bloco);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitPara_gere(final Para_gereContext ctx) {
+        final String faixas = data.getValue(ctx.faixas());
+        final String se = data.getOrElse(ctx.expr());
+        final String gere = data.getValue(ctx.exprlist());
+        final String resposta = M.paraGere(faixas, se, gere);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitEnquanto(final EnquantoContext ctx) {
+        final String exp = data.getValue(ctx.expr());
+        final String bloco = data.getValue(ctx.bloco());
+        final String resposta = M.enquanto(exp, bloco);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitFaixa(final FaixaContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final List<String> exps = data.getValues(ctx.expr());
+        final String resposta = M.faixa(id, exps);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitFaixas(final FaixasContext ctx) {
+        final List<String> lista = data.getValues(ctx.faixa());
+        final String resposta = M.faixas(lista);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitBloco(final BlocoContext ctx) {
+        final String exp = data.getValue(ctx.exprlist());
+        final String resposta = M.bloco(exp);
+        data.setValue(ctx, resposta);
+    }
+
+    /*
+     * Comandos
+     */
+
+    @Override
+    public void exitEscreva(final EscrevaContext ctx) {
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.escreva(exp, true);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitImprima(final ImprimaContext ctx) {
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.escreva(exp, false);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitAtrib_simples(final Atrib_simplesContext ctx) {
+        final List<String> ids = M.string2List(data.getValue(ctx.qualid1()));
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.atribSimples(ids, exp);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitAtrib_multipla(final Atrib_multiplaContext ctx) {
+        final List<String> ids = M.string2List(data.getValue(ctx.qualid2()));
+        final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
+        final String resposta = M.atribMultipla(ids, exps);
+        data.setValue(ctx, resposta);
     }
 
     @Override
@@ -89,103 +325,79 @@ public class Listener extends potigolBaseListener {
         data.setValue(ctx, resposta);
     }
 
-    @Override
-    public void exitLambda(final LambdaContext ctx) {
-        final String param = data.getValue(ctx.dcl1());
-        final String corpo = data.getValue(ctx.inst());
-        final String resposta = M.lambda(param, corpo);
-        data.setValue(ctx, resposta);
-    }
+
+    /*
+     * Declaracao
+     */
 
     @Override
-    public void exitTipo_generico(final Tipo_genericoContext ctx) {
-        final String id = data.getValue(ctx.ID());
-        final String tipo = data.getValue(ctx.tipo());
-        final String resposta = M.tipoGenerico(id, tipo);
+    public void exitDecl(final DeclContext ctx) {
+        final String decl = data.getValue(ctx.getChild(0));
+        final String resposta = M.declaracao(decl);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitTipo_funcao(final Tipo_funcaoContext ctx) {
-        final String esq = data.getValue(ctx.tipo(0));
-        final String dir = data.getValue(ctx.tipo(1));
-        final String resposta = M.tipoFuncao(esq, dir);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitTipo2(final Tipo2Context ctx) {
-        final List<String> lista = data.getValues(ctx.tipo());
-        final String resposta = M.list2String(lista);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitTipo_tupla(final Tipo_tuplaContext ctx) {
-        final int tamanho = ctx.tipo2().tipo().size();
-        final String tipo = data.getValue(ctx.tipo2());
-        final String resposta = M.tipoTupla(tamanho, tipo);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override // TODO: Refatorar, casamento de padroes
-    public void exitCons(final ConsContext ctx) {
-        final String head = data.getValue(ctx.expr(0));
-        final String tail = data.getValue(ctx.expr(1));
-        final String resposta;
-        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
-            resposta = "Lista(collection.immutable.::( " + head + ", a$" + tail
-                    + "$))";
-        } else {
-            resposta = K.bloco(head + "::" + tail);
-        }
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitExpoente(final ExpoenteContext ctx) {
-        final String base = data.getValue(ctx.expr(0));
-        final String exp = data.getValue(ctx.expr(1));
-        final String resposta = M.expoente(base, exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override // TODO: Refatorar, casamento de padroes
-    public void exitCaso(final CasoContext ctx) {
-        final String exp = data.getValue(ctx.expr(0));
-        String exps = data.getValue(ctx.exprlist());
-        int posicao = exp.indexOf("a$", 0);
-        if (posicao >= 0) {
-            String resposta = exp.substring(posicao + 2);
-            posicao = resposta.indexOf('$', 0);
-            resposta = resposta.substring(0, posicao);
-            // String resposta = exp.split("if")[0].split("::")[1].replaceAll("
-            // ",
-            // "").substring(2);
-            exps = K.VAL + resposta + K.IGUAL + "Lista(a$" + resposta + "$)"
-                    + K.SEMI + exps.substring(1);
-        }
-        final String cond = data.getOrElse(ctx.expr(1));
-        final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitEscolha(final EscolhaContext ctx) {
-        final List<String> casos = new ArrayList<String>();
-        for (final CasoContext caso : ctx.caso()) {
-            casos.add(data.getValue(caso));
-        }
+    public void exitValor_simples(final Valor_simplesContext ctx) {
+        final String id = data.getValue(ctx.id1());
+        final String tipo = data.getOrElse(ctx.tipo());
         final String exp = data.getValue(ctx.expr());
-        final String resposta = M.escolha(exp, casos);
+        final List<String> ids = M.string2List(id);
+        final String resposta = M.declValor(id, exp, tipo);
+        data.setValue(ctx, resposta);
+        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
+    }
+
+    @Override
+    public void exitValor_multiplo(final Valor_multiploContext ctx) {
+        final List<String> ids = M.string2List(data.getValue(ctx.id2()));
+        final String tipo = data.getOrElse(ctx.tipo());
+        final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
+        final String resposta = M.valorMultiplo(ids, exps, tipo);
+        data.setValue(ctx, resposta);
+        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
+    }
+
+    @Override
+    public void exitDecl_var_simples(final Decl_var_simplesContext ctx) {
+        final String id = data.getValue(ctx.id1());
+        final String tipo = data.getOrElse(ctx.tipo());
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.declVariavel(id, exp, tipo);
+        data.setValue(ctx, resposta);
+        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
+    }
+
+    @Override
+    public void exitDecl_var_multipla(final Decl_var_multiplaContext ctx) {
+        final String id = data.getValue(ctx.id2());
+        final String[] ids = M.split(id);
+        final String tipo = data.getOrElse(ctx.tipo());
+        final String exp = data.getValue(ctx.expr2());
+        final String[] exps = M.split(exp);
+        final String resposta = M.declVariavelMult(ids, exps, tipo);
+        data.setValue(ctx, resposta);
+        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
+    }
+
+    @Override
+    public void exitDef_funcao(final Def_funcaoContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final String param = data.getValue(ctx.dcls());
+        final String tipo = data.getOrElse(ctx.tipo());
+        final String corpo = data.getValue(ctx.expr());
+        final String resposta = M.defFuncao(id, param, tipo, corpo);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitFormato(final FormatoContext ctx) {
-        final String exp1 = data.getValue(ctx.expr(0));
-        final String fmt = data.getValue(ctx.expr(1));
-        final String resposta = M.formato(exp1, fmt);
+    public void exitDef_funcao_corpo(final Def_funcao_corpoContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final String param = data.getValue(ctx.dcls());
+        final String tipo = data.getOrElse(ctx.tipo());
+        final String retorno = data.getOrElse(ctx.retorne());
+        final String corpo = data.getValue(ctx.exprlist());
+        final String resposta = M.defFuncao(id, param, tipo, corpo + retorno);
         data.setValue(ctx, resposta);
     }
 
@@ -219,11 +431,11 @@ public class Listener extends potigolBaseListener {
     public void enterMembros(final MembrosContext ctx) {
         data.getDeclaracoes().push(new ArrayList<String>());
     }
-    
+
     @Override
     public void exitMembros(final MembrosContext ctx) {
-        final List<ParseTree> cstr = new ArrayList<ParseTree>();
-        final List<ParseTree> elem = new ArrayList<ParseTree>();
+        final List<ParseTree> cstr = new ArrayList<>();
+        final List<ParseTree> elem = new ArrayList<>();
         for (ParseTree child : ctx.children) {
             if (child.getClass().equals(DclContext.class)
                     || child.getClass().equals(Dcl_varContext.class)) {
@@ -247,55 +459,15 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
-    public void enterProg(final ProgContext ctx) {
-        data.getSaida().append(M.prologo());
-        data.getDeclaracoes().push(new ArrayList<String>());
+    public void exitRetorne(final RetorneContext ctx) {
+        String resp = data.getValue(ctx.expr());
+        data.setValue(ctx, resp);
     }
 
     @Override
-    public void enterExprlist(final ExprlistContext ctx) {
-        data.getDeclaracoes().push(new ArrayList<String>());
-    }
-
-    @Override
-    public void exitAtrib_multipla(final Atrib_multiplaContext ctx) {
-        final List<String> ids = M.string2List(data.getValue(ctx.qualid2()));
-        final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
-        final String resposta = M.atribMultipla(ids, exps);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitAtrib_simples(final Atrib_simplesContext ctx) {
-        final List<String> ids = M.string2List(data.getValue(ctx.qualid1()));
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.atribSimples(ids, exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitChamada_funcao(final Chamada_funcaoContext ctx) {
-        final String nome = data.getValue(ctx.expr());
-        final String param = data.getValue(ctx.expr1());
-        final String resposta = M.chamadaFuncao(nome, param);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitChamada_metodo(final Chamada_metodoContext ctx) {
-        final String objeto = data.getValue(ctx.expr());
-        final String metodo = data.getValue(ctx.ID());
-        final String param = data.getOrElse(ctx.expr1());
-        final String resposta = M.chamadaMetodo(objeto, metodo, param);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitComparacao(final ComparacaoContext ctx) {
-        final String exp1 = data.getValue(ctx.expr(0));
-        final String exp2 = data.getValue(ctx.expr(1));
-        final String op = ctx.getChild(1).getText();
-        final String resposta = M.operacaoBin(exp1, op, exp2);
+    public void exitDecl_uso(final Decl_usoContext ctx) {
+        final String uso = data.getValue(ctx.STRING());
+        final String resposta = M.uso(uso);
         data.setValue(ctx, resposta);
     }
 
@@ -311,7 +483,7 @@ public class Listener extends potigolBaseListener {
         }
         final String resposta = pre
                 + id.replaceAll(K.VIRGULA,
-                        K.DOISPONTOS + tipo + K.VIRGULA + pre)
+                K.DOISPONTOS + tipo + K.VIRGULA + pre)
                 + K.DOISPONTOS + tipo;
         // if (ctx.parent.getRuleIndex() == potigolParser.RULE_decl_tipo) {
         // resposta = "" + resposta;
@@ -325,8 +497,17 @@ public class Listener extends potigolBaseListener {
         final String tipo = data.getValue(ctx.tipo());
         final String resposta = "var "
                 + id.replaceAll(K.VIRGULA,
-                        K.DOISPONTOS + tipo + K.VIRGULA + " var ")
+                K.DOISPONTOS + tipo + K.VIRGULA + " var ")
                 + K.DOISPONTOS + tipo;
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitDcl_fun(final Dcl_funContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final String param = data.getValue(ctx.dcls());
+        final String tipo = data.getValue(ctx.tipo());
+        final String resposta = M.dclFun(id, param, tipo);
         data.setValue(ctx, resposta);
     }
 
@@ -338,61 +519,127 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
-    public void exitDecl(final DeclContext ctx) {
-        final String decl = data.getValue(ctx.getChild(0));
-        final String resposta = M.declaracao(decl);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitDecl_var_multipla(final Decl_var_multiplaContext ctx) {
-        final String id = data.getValue(ctx.id2());
-        final String[] ids = M.split(id);
-        final String tipo = data.getOrElse(ctx.tipo());
-        final String exp = data.getValue(ctx.expr2());
-        final String[] exps = M.split(exp);
-        final String resposta = M.declVariavelMult(ids, exps, tipo);
-        data.setValue(ctx, resposta.toString());
-        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
-    }
-
-    @Override
-    public void exitDecl_var_simples(final Decl_var_simplesContext ctx) {
-        final String id = data.getValue(ctx.id1());
-        final String tipo = data.getOrElse(ctx.tipo());
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.declVariavel(id, exp, tipo);
-        data.setValue(ctx, resposta);
-        data.verificarDuplicados(M.string2List(id), ctx, tipo.isEmpty());
-    }
-    
-    @Override
-    public void exitDcl_fun(final Dcl_funContext ctx) {
+    public void exitTipo_generico(final Tipo_genericoContext ctx) {
         final String id = data.getValue(ctx.ID());
-        final String param = data.getValue(ctx.dcls());
         final String tipo = data.getValue(ctx.tipo());
-        final String resposta = M.dclFun(id, param, tipo);
+        final String resposta = M.tipoGenerico(id, tipo);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitDef_funcao(final Def_funcaoContext ctx) {
-        final String id = data.getValue(ctx.ID());
-        final String param = data.getValue(ctx.dcls());
-        final String tipo = data.getOrElse(ctx.tipo());
-        final String corpo = data.getValue(ctx.expr());
-        final String resposta = M.defFuncao(id, param, tipo, corpo);
+    public void exitTipo_funcao(final Tipo_funcaoContext ctx) {
+        final String esq = data.getValue(ctx.tipo(0));
+        final String dir = data.getValue(ctx.tipo(1));
+        final String resposta = M.tipoFuncao(esq, dir);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitDef_funcao_corpo(final Def_funcao_corpoContext ctx) {
-        final String id = data.getValue(ctx.ID());
-        final String param = data.getValue(ctx.dcls());
-        final String tipo = data.getOrElse(ctx.tipo());
-        final String retorno = data.getOrElse(ctx.retorne());
-        final String corpo = data.getValue(ctx.exprlist());
-        final String resposta = M.defFuncao(id, param, tipo, corpo + retorno);
+    public void exitTipo_tupla(final Tipo_tuplaContext ctx) {
+        final int tamanho = ctx.tipo2().tipo().size();
+        final String tipo = data.getValue(ctx.tipo2());
+        final String resposta = M.tipoTupla(tamanho, tipo);
+        data.setValue(ctx, resposta);
+    }
+
+    /*
+     * Expressoes
+     */
+
+    @Override
+    public void exitChamada_metodo(final Chamada_metodoContext ctx) {
+        final String objeto = data.getValue(ctx.expr());
+        final String metodo = data.getValue(ctx.ID());
+        final String param = data.getOrElse(ctx.expr1());
+        final String resposta = M.chamadaMetodo(objeto, metodo, param);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitChamada_funcao(final Chamada_funcaoContext ctx) {
+        final String nome = data.getValue(ctx.expr());
+        final String param = data.getValue(ctx.expr1());
+        final String resposta = M.chamadaFuncao(nome, param);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitGet_vetor(final Get_vetorContext ctx) {
+        final String id = data.getValue(ctx.expr(0));
+        final String indice = data.getValue(ctx.expr(1));
+        final String resposta = M.getVetor(id, indice);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitExpoente(final ExpoenteContext ctx) {
+        final String base = data.getValue(ctx.expr(0));
+        final String exp = data.getValue(ctx.expr(1));
+        final String resposta = M.expoente(base, exp);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override // TODO: Refatorar, casamento de padroes
+    public void exitCons(final ConsContext ctx) {
+        final String head = data.getValue(ctx.expr(0));
+        final String tail = data.getValue(ctx.expr(1));
+        final String resposta;
+        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
+            resposta = "Lista(collection.immutable.::( " + head + ", a$" + tail
+                    + "$))";
+        } else {
+            resposta = K.bloco(head + "::" + tail);
+        }
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitMais_menos_unario(final Mais_menos_unarioContext ctx) {
+        final String exp = data.getValue(ctx.expr());
+        final String op = ctx.getChild(0).getText();
+        final String resposta = M.operacaoUnaria(op, exp);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitMult_div(final Mult_divContext ctx) {
+        final String exp1 = data.getValue(ctx.expr(0));
+        final String op = ctx.getChild(1).getText();
+        final String exp2 = data.getValue(ctx.expr(1));
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitSoma_sub(final Soma_subContext ctx) {
+        final String exp1 = data.getValue(ctx.expr(0));
+        final String exp2 = data.getValue(ctx.expr(1));
+        final String op = ctx.getChild(1).getText();
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitFormato(final FormatoContext ctx) {
+        final String exp1 = data.getValue(ctx.expr(0));
+        final String fmt = data.getValue(ctx.expr(1));
+        final String resposta = M.formato(exp1, fmt);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitComparacao(final ComparacaoContext ctx) {
+        final String exp1 = data.getValue(ctx.expr(0));
+        final String exp2 = data.getValue(ctx.expr(1));
+        final String op = ctx.getChild(1).getText();
+        final String resposta = M.operacaoBin(exp1, op, exp2);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitNao_logico(final Nao_logicoContext ctx) {
+        final String exp = data.getValue(ctx.expr());
+        final String resposta = M.operacaoUnariaNao(exp);
         data.setValue(ctx, resposta);
     }
 
@@ -405,33 +652,56 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
-    public void exitEnquanto(final EnquantoContext ctx) {
+    public void exitOu_logico(final Ou_logicoContext ctx) {
+        final String exp1 = data.getValue(ctx.expr(0));
+        final String exp2 = data.getValue(ctx.expr(1));
+        final String resposta = M.operacaoBinOu(exp1, exp2);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitLambda(final LambdaContext ctx) {
+        final String param = data.getValue(ctx.dcl1());
+        final String corpo = data.getValue(ctx.inst());
+        final String resposta = M.lambda(param, corpo);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitTupla(final TuplaContext ctx) {
+        final String exp = data.getValue(ctx.expr2());
+        final int tamanho = ctx.expr2().expr().size();
+        final String resposta = M.tupla(tamanho, exp);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitParen(final ParenContext ctx) {
         final String exp = data.getValue(ctx.expr());
-        final String bloco = data.getValue(ctx.bloco());
-        final String resposta = M.enquanto(exp, bloco);
+        final String resposta = M.parenteses(exp);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitBloco(final BlocoContext ctx) {
-        final String exp = data.getValue(ctx.exprlist());
-        final String resposta = M.bloco(exp);
+    public void exitLista(final ListaContext ctx) {
+        final String exp = data.getValue(ctx.expr1());
+        final String resposta = M.lista(exp);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitEscreva(final EscrevaContext ctx) {
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.escreva(exp, true);
-        data.setValue(ctx, resposta);
+    public void enterIsto(final IstoContext ctx) {
+        data.setValue(ctx, " this ");
     }
 
     @Override
-    public void exitEveryRule(final ParserRuleContext ctx) {
-        if (data.getValue(ctx) == null) {
-            data.setValue(ctx, data.getValue(ctx.getChild(0)));
-        }
+    public void enterCuringa(final CuringaContext ctx) {
+        data.setValue(ctx, "_");
     }
+
+    /*
+     * Outros
+     */
 
     @Override
     public void exitExpr1(final Expr1Context ctx) {
@@ -444,34 +714,6 @@ public class Listener extends potigolBaseListener {
     public void exitExpr2(final Expr2Context ctx) {
         final List<String> resposta = data.getValues(ctx.expr());
         data.setValue(ctx, M.list2String(resposta));
-    }
-
-    @Override
-    public void exitExprlist(final ExprlistContext ctx) {
-        final List<String> lista = data.getValues(ctx.inst());
-        final String resposta = M.exprList(lista);
-        data.setValue(ctx, resposta);
-        data.getDeclaracoes().pop();
-    }
-
-    @Override
-    public void exitFaixa(final FaixaContext ctx) {
-        final String id = data.getValue(ctx.ID());
-        final List<String> exps = data.getValues(ctx.expr());
-        final String resposta = M.faixa(id, exps);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitFaixas(final FaixasContext ctx) {
-        final List<String> lista = data.getValues(ctx.faixa());
-        final String resposta = M.faixas(lista);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitId(final IdContext ctx) {
-        data.setValue(ctx, M.escapeID(ctx.getText()));
     }
 
     @Override
@@ -510,240 +752,35 @@ public class Listener extends potigolBaseListener {
     }
 
     @Override
-    public void exitImprima(final ImprimaContext ctx) {
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.escreva(exp, false);
+    public void exitTipo2(final Tipo2Context ctx) {
+        final List<String> lista = data.getValues(ctx.tipo());
+        final String resposta = M.list2String(lista);
         data.setValue(ctx, resposta);
     }
 
     @Override
-    public void exitInst(final InstContext ctx) {
-        final int linha = ctx.getStart().getLine();
-        final String inst = data.getValue(ctx.getChild(0));
-        final String resposta = M.inst(linha, inst);
+    public void enterExprlist(final ExprlistContext ctx) {
+        data.getDeclaracoes().push(new ArrayList<String>());
+    }
+
+    @Override
+    public void exitExprlist(final ExprlistContext ctx) {
+        final List<String> lista = data.getValues(ctx.inst());
+        final String resposta = M.exprList(lista);
         data.setValue(ctx, resposta);
+        data.getDeclaracoes().pop();
     }
 
     @Override
-    public void exitInteiro(final InteiroContext ctx) {
-        data.setValue(ctx, ctx.getText());
-    }
-
-    @Override
-    public void exitLista(final ListaContext ctx) {
-        final String exp = data.getValue(ctx.expr1());
-        final String resposta = M.lista(exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitMais_menos_unario(final Mais_menos_unarioContext ctx) {
-        final String exp = data.getValue(ctx.expr());
-        final String op = ctx.getChild(0).getText();
-        final String resposta = M.operacaoUnaria(op, exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitMult_div(final Mult_divContext ctx) {
-        final String exp1 = data.getValue(ctx.expr(0));
-        final String op = ctx.getChild(1).getText();
-        final String exp2 = data.getValue(ctx.expr(1));
-        final String resposta = M.operacaoBin(exp1, op, exp2);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitNao_logico(final Nao_logicoContext ctx) {
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.operacaoUnariaNao(exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitOu_logico(final Ou_logicoContext ctx) {
-        final String exp1 = data.getValue(ctx.expr(0));
-        final String exp2 = data.getValue(ctx.expr(1));
-        final String resposta = M.operacaoBinOu(exp1, exp2);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitPara_faca(final Para_facaContext ctx) {
-        final String faixas = data.getValue(ctx.faixas());
-        final String guarda = data.getOrElse(ctx.expr());
-        final String bloco = data.getValue(ctx.bloco());
-        final String resposta = M.paraFaca(faixas, guarda, bloco);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitPara_gere(final Para_gereContext ctx) {
-        final String faixas = data.getValue(ctx.faixas());
-        final String se = data.getOrElse(ctx.expr());
-        final String gere = data.getValue(ctx.exprlist());
-        final String resposta = M.paraGere(faixas, se, gere);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitParen(final ParenContext ctx) {
-        final String exp = data.getValue(ctx.expr());
-        final String resposta = M.parenteses(exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitProg(final ProgContext ctx) {
-        final List<String> items = new ArrayList<String>();
-        for (final InstContext item : ctx.inst()) {
-            items.add(data.getValue(item));
-        }
-        data.getSaida().append(M.saida(data.getWarnings(), items));
-
-        data.setValue(ctx, data.getSaida().toString());
-    }
-
-    @Override
-    public void exitReal(final RealContext ctx) {
-        data.setValue(ctx, ctx.getText());
-    }
-
-    @Override
-    public void exitRetorne(final RetorneContext ctx) {
-        String resp = data.getValue(ctx.expr());
-        data.setValue(ctx, resp);
-    }
-
-    @Override
-    public void exitSe(final SeContext ctx) {
-        final List<String> senaose = new ArrayList<String>();
-        for (final SenaoseContext c : ctx.senaose()) {
-            senaose.add(data.getValue(c));
-        }
-        final String cond = data.getValue(ctx.expr());
-        final String entao = data.getValue(ctx.entao());
-        final String senao = data.getOrElse(ctx.senao());
-        final String resposta = M.se(cond, entao, senaose, senao);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitEntao(final EntaoContext ctx) {
-        final String resposta = data.getValue(ctx.exprlist());
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitSenao(final SenaoContext ctx) {
-        final String resposta = data.getValue(ctx.exprlist());
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitSenaose(final SenaoseContext ctx) {
-        final String cond = data.getValue(ctx.expr());
-        final String entao = data.getValue(ctx.entao());
-        final String resposta = M.senaoSe(cond, entao);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitSoma_sub(final Soma_subContext ctx) {
-        final String exp1 = data.getValue(ctx.expr(0));
-        final String exp2 = data.getValue(ctx.expr(1));
-        final String op = ctx.getChild(1).getText();
-        final String resposta = M.operacaoBin(exp1, op, exp2);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitTexto(final TextoContext ctx) {
-        final String texto = ctx.getText();
-        final String resposta = M.texto(texto);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
-        final List<String> string = new ArrayList<String>();
-        string.add(ctx.BS().getText());
-        for (final TerminalNode node : ctx.MS()) {
-            string.add(node.getText());
-        }
-        string.add(ctx.ES().getText());
-
-        final List<String> interp = new ArrayList<String>();
-        for (final ExprContext exp : ctx.expr()) {
-            interp.add(data.getValue(exp));
-        }
-
-        final String resposta = M.interpolacao(string, interp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitDecl_uso(final Decl_usoContext ctx) {
-        final String uso = data.getValue(ctx.STRING());
-        final String resposta = M.uso(uso);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitTupla(final TuplaContext ctx) {
-        final String exp = data.getValue(ctx.expr2());
-        final int tamanho = ctx.expr2().expr().size();
-        final String resposta = M.tupla(tamanho, exp);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void exitValor_multiplo(final Valor_multiploContext ctx) {
-        final List<String> ids = M.string2List(data.getValue(ctx.id2()));
-        final String tipo = data.getOrElse(ctx.tipo());
-        final List<String> exps = M.string2List(data.getValue(ctx.expr2()));
-        final String resposta = M.valorMultiplo(ids, exps, tipo);
-        data.setValue(ctx, resposta);
-        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
-    }
-
-    @Override
-    public void exitValor_simples(final Valor_simplesContext ctx) {
-        final String id = data.getValue(ctx.id1());
-        final String tipo = data.getOrElse(ctx.tipo());
-        final String exp = data.getValue(ctx.expr());
-        final List<String> ids = M.string2List(id);
-        final String resposta = M.declValor(id, exp, tipo);
-        data.setValue(ctx, resposta);
-        data.verificarDuplicados(ids, ctx, tipo.isEmpty());
-    }
-
-    @Override
-    public void exitBooleano(final BooleanoContext ctx) {
-        final String bool = ctx.BOOLEANO().getText();
-        final String resposta = M.booleano(bool);
-        data.setValue(ctx, resposta);
-    }
-
-    @Override
-    public void visitTerminal(final TerminalNode node) {
-        final String resposta;
-        if (node.getSymbol().getType() == potigolLexer.ID) {
-            resposta = M.escapeID(node.getText());
+    public void exitDcl1(final Dcl1Context ctx) {
+        final ParseTree tree;
+        if (ctx.ID() != null) {
+            tree = ctx.ID();
+        } else if (ctx.expr2() != null) {
+            tree = ctx.expr2();
         } else {
-            resposta = node.getText();
+            tree = ctx.dcls();
         }
-        data.setValue(node, resposta);
+        data.setValue(ctx, data.getValue(tree));
     }
-
-    @Override
-    public void enterCuringa(potigolParser.CuringaContext ctx) {
-        data.setValue(ctx, "_");
-    }
-
-    @Override
-    public void enterIsto(potigolParser.IstoContext ctx) {
-        data.setValue(ctx, " this ");
-    }
-
 }

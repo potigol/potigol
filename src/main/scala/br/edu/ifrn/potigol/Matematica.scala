@@ -47,7 +47,7 @@ object Matematica {
   def log(a: Real): Real = Math.log(a)
   def log10(a: Real): Real = Math.log10(a)
   def aleatório(): Real = Math.random()
-  def aleatorio: Real = aleatório
+  def aleatorio: Real = aleatório()
   def aleatório(ultimo: Inteiro): Inteiro = aleatório(1, ultimo)
   def aleatorio(primeiro: Inteiro): Inteiro = aleatório(primeiro)
   def aleatório(primeiro: Inteiro, ultimo: Inteiro): Inteiro = {

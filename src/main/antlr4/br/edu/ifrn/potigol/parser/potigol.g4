@@ -1,6 +1,6 @@
 /*
  *  Potigol
- *  Copyright (C) 2015-2018  Leonardo Lucena
+ *  Copyright (C) 2015-2020  Leonardo Lucena
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -232,13 +232,16 @@ exprlist
 ID
     : (ALPHA|ACENTO) (ALPHA|ACENTO|DIGIT)* ;
 
-fragment ALPHA
+fragment
+ALPHA
     : 'a' .. 'z'
     | 'A' .. 'Z'
     | '_' ;
 
-fragment ACENTO
-    : '\u00a1' .. '\ufffc' ;
+fragment
+ACENTO
+    : '\u00a1' .. '\ufffc'
+    | '\u{1fffc}';
 
 INT
     : DIGIT+ ;
@@ -247,7 +250,8 @@ FLOAT
     : DIGIT+ '.' DIGIT+
     | '.' DIGIT+ ;
 
-fragment DIGIT
+fragment
+DIGIT
     : '0'..'9' ;
 
 STRING

@@ -43,7 +43,7 @@ object string {
      *     returns a string to substitute
      * @return the resulting string with replacements made
      */
-    def regexSub(re: Regex)(replace: (Regex.MatchData => String)): String = {
+    def regexSub(re: Regex)(replace: Regex.MatchData => String): String = {
       var offset = 0
       val out = new StringBuilder()
 
@@ -105,7 +105,7 @@ object string {
      *
      * @return an unquoted unicode string
      */
-    def unquoteC() = {
+    def unquoteC(): String = {
       regexSub(UNQUOTE_RE) { m =>
         val ch = m.group(1).charAt(0) match {
           // holy crap! this is terrible:
@@ -126,7 +126,7 @@ object string {
      */
     def unhexlify(): Array[Byte] = {
       val buffer = new Array[Byte]((wrapped.length + 1) / 2)
-      (wrapped.grouped(2).toSeq.zipWithIndex) foreach {
+      wrapped.grouped(2).toSeq.zipWithIndex foreach {
         case (substr, i) =>
           buffer(i) = Integer.parseInt(substr, 16).toByte
       }
@@ -154,6 +154,6 @@ object string {
     def hexlify: String = string.hexlify(wrapped, 0, wrapped.length)
   }
 
-  implicit def stringToConfiggyString(s: String) = new RichString(s)
-  implicit def byteArrayToConfiggyByteArray(b: Array[Byte]) = new RichByteArray(b)
+  implicit def stringToConfiggyString(s: String): RichString = new RichString(s)
+  implicit def byteArrayToConfiggyByteArray(b: Array[Byte]): RichByteArray = new RichByteArray(b)
 }

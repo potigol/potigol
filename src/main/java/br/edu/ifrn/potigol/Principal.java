@@ -49,7 +49,7 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    private static final String versao = "0.9.16";
+    private static final String versao = "1.0";
 
     private static final int saidaMinima = -1;
 
@@ -72,7 +72,7 @@ public class Principal {
     public static void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versao " + versao
-                    + " Copyright (C) 2015-2019 Leonardo Lucena" + "\n\n"
+                    + " Copyright (C) 2015-2020 Leonardo Lucena" + "\n\n"
                     + "Uso: potigol [-c] [-w] [-d] [arquivo.poti]\n");
         } else {
             final String arq = args[args.length - 1];
@@ -92,7 +92,7 @@ public class Principal {
                     final boolean color = argument(argList, "-c");
                     compilador.executar(saida, lerArquivo(arq), color, "", "");
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 System.err.println("Erro: Arquivo " + arq + " não encontrado.");
             }
         }
@@ -117,13 +117,12 @@ public class Principal {
 
     public static String lerArquivo(final String arq) throws IOException {
         final Path path = Paths.get(arq);
-        final List<String> linhas = Files.readAllLines(path,
-                StandardCharsets.UTF_8);
-        final StringBuffer conteudo = new StringBuffer();
+        final List<String> linhas = Files.readAllLines(path, StandardCharsets.UTF_8);
+        final StringBuilder conteudo = new StringBuilder();
         for (final String linha : linhas) {
             if (linha.trim().startsWith("use")) {
-                String s = linha.substring(3).replaceAll("\"", "").trim();
-                File uso = new File(s);
+                final String s = linha.substring(3).replaceAll("\"", "").trim();
+                final File uso = new File(s);
                 if (uso.exists() && uso.isFile()) {
                     conteudo.append(lerArquivo(s)).append('\n');
                 } else {
@@ -139,12 +138,12 @@ public class Principal {
     private Principal() {
     }
 
-    private static boolean argument(final List<String> list,
-            final String value) {
+    private static boolean argument(final List<String> list, final String value) {
         boolean resposta = false;
         for (final String a : list) {
             if (a.startsWith(value)) {
                 resposta = true;
+                break;
             }
         }
         return resposta;

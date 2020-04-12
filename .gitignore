@@ -25,17 +25,9 @@ project/plugins/project/
 .worksheet
 /bin/
 
-exemplos/lista1/prog6.poti
-exemplos/lista3/prog4b.poti
-exemplos/lista3/prog14.poti
-exemplos/lista3/prog3.poti
-exemplos/lista1/prog6.poti
-exemplos/lista3/prog6.poti
-jar-in-jar-loader.zip
-exemplos/lista3/prog8.poti
-exemplos/lista3/prog13.poti
+exemplos/*
+ear-in-jar-loader.zip
 teste1.potigol
-exemplos/lista3/prog5.poti
 src/br/edu/ifrn/potigol/Tela.scala
 src/jerimum/
 /lib/
