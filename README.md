@@ -3,7 +3,6 @@
 [![Join the chat at https://gitter.im/potigol/Potigol](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/potigol/Potigol?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow us](https://img.shields.io/twitter/follow/potigol.svg?style=social)](http://twitter.com/potigol)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b0637491b834a229351fab7fd897dfc)](https://www.codacy.com/app/leonardo-lucena-71/Potigol?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=potigol/Potigol&amp;utm_campaign=Badge_Grade)
-
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.53192.svg)](http://dx.doi.org/10.5281/zenodo.53192)
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#snapshot/6685842b-1cff-449d-a78a-2b74b0b2b446)
