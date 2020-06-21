@@ -41,7 +41,7 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 Editores de código para Potigol:
 
   - [x] [Editor Potigol](https://github.com/potigol/EditorPotigol) (já incluso na versão executável de Potigol)
-  - [x] [JCEditor](https://github.com/cristian-henrique/JCEditor)
+  - [x] [JCEditor](https://github.com/crhenr/JCEditor)
   - [x] [Plugin](https://github.com/potigol/language-potigol) para o [Atom](https://atom.io)
   - [x] [Plugin](https://github.com/nfischer/vim-potigol) para o [Vim](http://www.vim.org/)
   - [x] [Plugin (potigol/PotigolAce)](https://github.com/potigol/PotigolAce) para o Ace Editor
