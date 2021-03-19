@@ -67,7 +67,7 @@ class Eval(target: Option[File]) {
   /**
    * empty constructor for backwards compatibility
    */
-  def this() {
+  def this() = {
     this(None)
   }
 
@@ -120,7 +120,7 @@ class Eval(target: Option[File]) {
   /**
    * write the current checksum to a file
    */
-  def writeChecksum(checksum: String, file: File) {
+  def writeChecksum(checksum: String, file: File): Unit = {
     val writer = new FileWriter(file)
     writer.write("%s".format(checksum))
     writer.close()
@@ -214,7 +214,7 @@ class Eval(target: Option[File]) {
   /**
    * Compile an entire source file into the virtual classloader.
    */
-  def compile(code: String) {
+  def compile(code: String): Unit = {
     compiler(sourceForString(code))
   }
 
@@ -230,7 +230,7 @@ class Eval(target: Option[File]) {
    * Check if code is Eval-able.
    * @throws CompilerException if not Eval-able.
    */
-  def check(code: String) {
+  def check(code: String): Unit = {
     val id = uniqueId(sourceForString(code))
     val className = "Evaluator__" + id
     val wrappedCode = wrapCodeInClass(className, code)
@@ -241,7 +241,7 @@ class Eval(target: Option[File]) {
    * Check if files are Eval-able.
    * @throws CompilerException if not Eval-able.
    */
-  def check(files: File*) {
+  def check(files: File*): Unit = {
     val code = files.map { scala.io.Source.fromFile(_).mkString }.mkString("\n")
     check(code)
   }
@@ -250,7 +250,7 @@ class Eval(target: Option[File]) {
    * Check if stream is Eval-able.
    * @throws CompilerException if not Eval-able.
    */
-  def check(stream: InputStream) {
+  def check(stream: InputStream): Unit = {
     check(scala.io.Source.fromInputStream(stream).mkString)
   }
 
@@ -450,7 +450,7 @@ class Eval(target: Option[File]) {
       val settings: Settings = StringCompiler.this.settings
       val messages = new mutable.ListBuffer[List[String]]
 
-      def display(pos: Position, message: String, severity: Severity) {
+      def display(pos: Position, message: String, severity: Severity): Unit = {
         severity.count += 1
         val severityName = severity match {
           case ERROR => "error: "
@@ -474,11 +474,11 @@ class Eval(target: Option[File]) {
           })
       }
 
-      def displayPrompt {
+      def displayPrompt: Unit = {
         // no.
       }
 
-      override def reset {
+      override def reset: Unit = {
         super.reset
         messages.clear()
       }
@@ -492,7 +492,7 @@ class Eval(target: Option[File]) {
      */
     var classLoader = new AbstractFileClassLoader(target, this.getClass.getClassLoader)
 
-    def reset() {
+    def reset(): Unit = {
       targetDir match {
         case None =>
           target.asInstanceOf[VirtualDirectory].clear()
@@ -512,7 +512,7 @@ class Eval(target: Option[File]) {
       val enabled: Boolean =
         System.getProperty("eval.debug") != null
 
-      def printWithLineNumbers(code: String) {
+      def printWithLineNumbers(code: String): Unit ={
         printf("Code follows (%d bytes)\n", code.length)
 
         var numLines = 0
@@ -540,7 +540,7 @@ class Eval(target: Option[File]) {
     /**
      * Compile scala code. It can be found using the above class loader.
      */
-    def apply(code: String) {
+    def apply(code: String): Unit = {
       import scala.language.reflectiveCalls
       if (Debug.enabled)
         Debug.printWithLineNumbers(code)

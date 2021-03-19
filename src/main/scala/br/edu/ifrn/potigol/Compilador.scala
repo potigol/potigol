@@ -120,6 +120,6 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
   }
 }
 
-object Comp extends App {
+object Comp /*extends App*/ {
   new Compilador().executar("println(1+2)\nval a = readInt\nprintln(b)", "")
 }

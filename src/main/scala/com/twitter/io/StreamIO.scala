@@ -29,7 +29,7 @@ object StreamIO {
     inputStream:  InputStream,
     outputStream: OutputStream,
     bufferSize:   Int = 1024
-  ) {
+                ):Unit ={
     val buf = new Array[Byte](bufferSize)
     inputStream.read(buf, 0, buf.length) match {
       case -1 => ()

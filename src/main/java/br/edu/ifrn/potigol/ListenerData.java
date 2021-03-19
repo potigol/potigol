@@ -3,6 +3,7 @@ package br.edu.ifrn.potigol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -39,11 +40,7 @@ public class ListenerData {
     }
 
     public List<String> getValues(final List<? extends ParseTree> list) {
-        final List<String> valores = new ArrayList<>();
-        for (final ParseTree id : list) {
-            valores.add(this.getValue(id));
-        }
-        return valores;
+        return list.stream().map(this::getValue).collect(Collectors.toList());
     }
 
     public String getOrElse(final ParseTree node, final String defaultValue) {
@@ -76,9 +73,7 @@ public class ListenerData {
 
     public List<String> valores() {
         final List<String> lista = new ArrayList<>();
-        for (final List<String> declaracao : this.declaracoes) {
-            lista.addAll(declaracao);
-        }
+        this.declaracoes.forEach(lista::addAll);
         return lista;
     }
 

@@ -157,20 +157,20 @@ escolha
     : 'escolha' expr caso+ 'fim' ;
 
 caso
-    : 'caso' expr ('se' expr)? '=>' exprlist ;
+   // : 'caso' expr ('se' expr)? '=>' exprlist ;
 
- // : 'caso' padrao ('se' expr)? '=>' exprlist ;
+    : 'caso' padrao ('se' expr)? '=>' exprlist ;
 
 padrao
-    : '_'                                         # padrao_default
-    | ID                                          # padrao_id
+    : (ID | '_') (':' tipo)?                      # padrao_id
     | literal                                     # padrao_literal
-    | ID '(' padrao ')'                           # padrao_objeto
-    | padrao ('::' padrao)+                       # padrao_cons
-    | '(' padrao+ ')'                             # padrao_tupla
-    | '[' padrao? ']'                             # padrao_lista
-    | padrao ('|' padrao)+                        # padrao_ou
-    | padrao (',' padrao)+                        # padrao_virgula ;
+    | ID '(' padroes ')'                          # padrao_objeto
+    | ID ('::' ID)+                               # padrao_cons
+    | '[' padroes? ']'                            # padrao_lista
+    | '(' padroes ')'                             # padrao_tupla ;
+
+padroes
+    : padrao (',' padrao)* ;
 
 // Repeticao
 repeticao
@@ -219,7 +219,6 @@ qualid1
 qualid2
 	: qualid (',' qualid)+ ;
 
-
 tipo2
     : tipo (',' tipo)+ ;
 
@@ -240,8 +239,7 @@ ALPHA
 
 fragment
 ACENTO
-    : '\u00a1' .. '\ufffc'
-    | '\u{1fffc}';
+    : '\u00a1' .. '\ufffc' ;
 
 INT
     : DIGIT+ ;

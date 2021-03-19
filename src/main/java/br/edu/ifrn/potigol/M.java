@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public final class M {
-    private static final List<String> scalawords = Arrays.asList("type", "yield",
+    private static final List<String> scalaWords = Arrays.asList("type", "yield",
             "lazy", "override", "def", "with", "val", "var", "false", "true",
             "sealed", "abstract", "private", "trait", "object", "null", "if",
             "for", "while", "throw", "finally", "protected", "extends",
@@ -23,7 +23,7 @@ public final class M {
 
     public static String escapeID(final String ident) {
         final String resposta;
-        if (scalawords.contains(ident)) {
+        if (scalaWords.contains(ident)) {
             resposta = K.GRAVE + ident + K.GRAVE;
         } else {
             resposta = ident;
@@ -291,13 +291,14 @@ public final class M {
         final String resposta;
         if (tamanho == 1) {
             resposta = inicio;
-        } else if (tamanho == 2) {
-            final String fim = exps.get(1);
-            resposta = inicio + K.ATE + fim;
         } else {
             final String fim = exps.get(1);
-            final String passo = exps.get(2);
-            resposta = inicio + K.ATE + fim + K.PASSO + passo;
+            if (tamanho == 2) {
+                resposta = inicio + K.ATE + fim;
+            } else {
+                final String passo = exps.get(2);
+                resposta = inicio + K.ATE + fim + K.PASSO + passo;
+            }
         }
         return ident + K.LEFTARROW + resposta;
     }
@@ -326,7 +327,7 @@ public final class M {
     }
 
     public static String exprList(final List<String> lista) {
-        StringBuilder resposta = new StringBuilder(K.NEWLINE);
+        final StringBuilder resposta = new StringBuilder(K.NEWLINE);
         for (final String s : lista) {
             resposta.append(K.indent(s));
         }
@@ -486,5 +487,4 @@ public final class M {
         resposta.append(ident).append(" = ").append(val);
         return resposta.toString();
     }
-
 }

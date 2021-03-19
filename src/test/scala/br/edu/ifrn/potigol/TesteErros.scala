@@ -1,15 +1,14 @@
 package br.edu.ifrn.potigol
 
-import org.antlr.v4.runtime.CommonTokenStream
-import org.antlr.v4.runtime.tree.ParseTreeWalker
-import org.antlr.v4.runtime.CharStreams
-
 import br.edu.ifrn.potigol.Erros.texto
-import br.edu.ifrn.potigol.parser.{ potigolLexer, potigolParser }
+import br.edu.ifrn.potigol.parser.{potigolLexer, potigolParser}
+import org.antlr.v4.runtime.tree.ParseTreeWalker
+import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
-object TesteErros extends App {
+object TesteErros /*extends App*/ {
 
   case class Erro(erro: String, codigo: String)
+
   val erros = List(
     Erro("Valor não declarado",
       "escreva x"),
@@ -160,8 +159,12 @@ object TesteErros extends App {
     println("-----------------------")
     println(erro.codigo)
     println("-----------------------")
+    println(c.avaliar(listener.getSaida).toString)
+    println("-----------------------")
     println(texto(c.avaliar(listener.getSaida).toString))
   }
 
-  erros.drop(30).foreach { imprimir_erro }
+  erros.take(3).drop(0).foreach {
+    imprimir_erro
+  }
 }

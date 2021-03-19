@@ -50,6 +50,8 @@ object Potigolutil {
   type Matriz[T] = Lista[Lista[T]]
   type Cubo[T] = Lista[Lista[Lista[T]]]
   type Nada = Unit
+  type InteiroGrande = BigInt
+  val nulo: Null = null
 
   var $cor = false
 
@@ -89,6 +91,8 @@ object Potigolutil {
     def ultimo: T = _lista.last
     def injete(f: (T, T) => T): T = _lista.reduceLeft(f)
     def injete[A](neutro: A)(f: (A, T) => A): A = _lista.foldLeft(neutro)(f)
+    def reduza(f: (T, T) => T): T = injete(f)
+    def reduza[A](neutro: A)(f: (A, T) => A): A = injete(neutro)(f)
     def ache(p: T => Lógico): Option[T] = _lista.find(p)
     def contém: T => Lógico = contem
     def cabeça: T = cabeca
@@ -99,7 +103,7 @@ object Potigolutil {
     def posicão: T => Inteiro = posicao
     def para_lista: Lista[T] = Lista(_lista.toList)
     def lista: Lista[T] = para_lista
-    def mutavel: Vetor[T] = Vetor(_lista.to)
+    def mutavel: Vetor[T] = Vetor(_lista.to[MSeq] )
     def mutável: Vetor[T] = mutavel
     def imutável: Lista[T] = lista
     def imutavel: Lista[T] = lista
@@ -110,7 +114,9 @@ object Potigolutil {
 
   case class Lista[T](_lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
     def cauda: Lista[T] = Lista(_lista.tail)
-    def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted)
+    def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted(ord))
+    def ordene(menor_que: (T, T) => Lógico): Lista[T] = Lista(_lista.sortWith(menor_que))
+    def ordene[B](f: T => B)(implicit ord: Ordering[B]): Lista[T] = Lista(_lista.sortBy(f)(ord))
     def inverta: Lista[T] = Lista(_lista.reverse)
     @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Lista[T] = selecione
     def selecione(p: T => Lógico): Lista[T] = Lista(_lista.filter(p))
@@ -130,6 +136,7 @@ object Potigolutil {
     def atualize(indice: Int, valor: T): Lista[T] = {
       Lista(_lista.updated(indice, valor))
     }
+    def -(s: Lista[T]): Lista[T] = Lista(_lista.diff(s))
   }
 
   object Lista {
@@ -170,6 +177,8 @@ object Potigolutil {
     def cauda: Vetor[T] = Vetor(_lista.tail)
     def inverta: Vetor[T] = Vetor(_lista.reverse)
     def ordene(implicit ord: Ordering[T]): Vetor[T] = Vetor(_lista.sorted)
+    def ordene(menor_que: (T, T) => Lógico): Vetor[T] = Vetor(_lista.sortWith(menor_que))
+    def ordene[B](f: T => B)(implicit ord: Ordering[B]): Vetor[T] = Vetor(_lista.sortBy(f)(ord))
     @deprecated("Use 'selecione'", since094) def filtre: (T => Lógico) => Vetor[T] = selecione
     def selecione(p: T => Lógico): Vetor[T] = Vetor(_lista.filter(p))
     def mapeie[B: Manifest](f: T => B): Vetor[B] = Vetor(_lista.map(f))
@@ -269,6 +278,13 @@ object Potigolutil {
     def inteiro: Inteiro = x
     def real: Real = x.toDouble
     val qual_tipo = "Inteiro"
+  }
+
+  implicit class InteirosGrande(x: BigInt) {
+    def caractere: Caractere = x.toChar
+    def inteiro: Inteiro = x.intValue()
+    def real: Real = x.doubleValue()
+    val qual_tipo = "InteiroGrande"
   }
 
   implicit class Todos[T <: Any](x: T) {
@@ -385,7 +401,6 @@ object Potigolutil {
     def terceiro: T3 = t._3
     def quarto: T4 = t._4
     def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo})"
-
   }
 
   implicit class Tupla5[T1, T2, T3, T4, T5](t: (T1, T2, T3, T4, T5)) {
@@ -395,7 +410,6 @@ object Potigolutil {
     def quarto: T4 = t._4
     def quinto: T5 = t._5
     def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo})"
-
   }
 
   implicit class Tupla6[T1, T2, T3, T4, T5, T6](t: (T1, T2, T3, T4, T5, T6)) {
@@ -406,7 +420,6 @@ object Potigolutil {
     def quinto: T5 = t._5
     def sexto: T6 = t._6
     def qual_tipo: String = s"(${t._1.qual_tipo}, ${t._2.qual_tipo}, ${t._3.qual_tipo}, ${t._4.qual_tipo}, ${t._5.qual_tipo}, ${t._6.qual_tipo})"
-
   }
 
   implicit class Tupla7[T1, T2, T3, T4, T5, T6, T7](

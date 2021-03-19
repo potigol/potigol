@@ -33,6 +33,8 @@ package br.edu.ifrn.potigol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -59,17 +61,13 @@ public class Listener extends potigolBaseListener {
     @Override
     public void enterProg(final ProgContext ctx) {
         data.getSaida().append(M.prologo());
-        data.getDeclaracoes().push(new ArrayList<String>());
+        data.getDeclaracoes().push(new ArrayList<>());
     }
 
     @Override
     public void exitProg(final ProgContext ctx) {
-        final List<String> items = new ArrayList<>();
-        for (final InstContext item : ctx.inst()) {
-            items.add(data.getValue(item));
-        }
+        final List<String> items = data.getValues(ctx.inst());
         data.getSaida().append(M.saida(data.getWarnings(), items));
-
         data.setValue(ctx, data.getSaida().toString());
     }
 
@@ -101,7 +99,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void visitErrorNode(ErrorNode node) {
-        System.out.println("Erro: "+ node.toString()+", "+node.toStringTree()+","+node.getSourceInterval().a+","+node.getSourceInterval().b);
+    //    System.out.println("Erro: "+ node.toString()+", "+node.toStringTree()+","+node.getSourceInterval().a+","+node.getSourceInterval().b);
     }
 
     /*
@@ -124,15 +122,10 @@ public class Listener extends potigolBaseListener {
     public void exitTexto_interpolacao(final Texto_interpolacaoContext ctx) {
         final List<String> string = new ArrayList<>();
         string.add(ctx.BS().getText());
-        for (final TerminalNode node : ctx.MS()) {
-            string.add(node.getText());
-        }
+        ctx.MS().stream().map(TerminalNode::getText).forEach(string::add);
         string.add(ctx.ES().getText());
 
-        final List<String> interp = new ArrayList<>();
-        for (final ExprContext exp : ctx.expr()) {
-            interp.add(data.getValue(exp));
-        }
+        final List<String> interp = data.getValues(ctx.expr());
 
         final String resposta = M.interpolacao(string, interp);
         data.setValue(ctx, resposta);
@@ -167,10 +160,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitSe(final SeContext ctx) {
-        final List<String> senaose = new ArrayList<>();
-        for (final SenaoseContext c : ctx.senaose()) {
-            senaose.add(data.getValue(c));
-        }
+        final List<String> senaose = data.getValues(ctx.senaose());
         final String cond = data.getValue(ctx.expr());
         final String entao = data.getValue(ctx.entao());
         final String senao = data.getOrElse(ctx.senao());
@@ -200,10 +190,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitEscolha(final EscolhaContext ctx) {
-        final List<String> casos = new ArrayList<>();
-        for (final CasoContext caso : ctx.caso()) {
-            casos.add(data.getValue(caso));
-        }
+        final List<String> casos = data.getValues(ctx.caso());
         final String exp = data.getValue(ctx.expr());
         final String resposta = M.escolha(exp, casos);
         data.setValue(ctx, resposta);
@@ -211,22 +198,59 @@ public class Listener extends potigolBaseListener {
 
     @Override // TODO: Refatorar, casamento de padroes
     public void exitCaso(final CasoContext ctx) {
-        final String exp = data.getValue(ctx.expr(0));
+        final String exp = data.getValue(ctx.padrao());
+        final String cond = data.getOrElse(ctx.expr());
         String exps = data.getValue(ctx.exprlist());
-        int posicao = exp.indexOf("a$");
-        if (posicao >= 0) {
-            String resposta = exp.substring(posicao + 2);
-            posicao = resposta.indexOf('$');
-            resposta = resposta.substring(0, posicao);
-            // String resposta = exp.split("if")[0].split("::")[1].replaceAll("
-            // ",
-            // "").substring(2);
-            exps = K.VAL + resposta + K.IGUAL + "Lista(a$" + resposta + "$)"
-                    + K.SEMI + exps.substring(1);
-        }
-        final String cond = data.getOrElse(ctx.expr(1));
         final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
         data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitPadrao_id(Padrao_idContext ctx) {
+        final String id = data.getValue(ctx.getChild(0));
+        final String tipo = data.getOrElse(ctx.tipo(), "");
+        final String s = String.format("%s%s", id, tipo.isEmpty() ? "" : (": " + tipo));
+        data.setValue(ctx, s);
+    }
+
+    @Override
+    public void exitPadrao_literal(Padrao_literalContext ctx) {
+        data.setValue(ctx, ctx.literal().getText());
+    }
+
+    @Override
+    public void exitPadrao_objeto(Padrao_objetoContext ctx) {
+        final String id = data.getValue(ctx.ID());
+        final String padroes = data.getValue(ctx.padroes());
+        final String s = id +"(" + padroes + ")";
+        data.setValue(ctx, s);
+    }
+
+    @Override
+    public void exitPadrao_cons(Padrao_consContext ctx) {
+        final String ids = data.getValues(ctx.ID()).stream().reduce((a,b) -> a + "::"+b).get();
+        final String s = "Lista(" + ids +")";
+        data.setValue(ctx, s);
+    }
+
+    @Override
+    public void exitPadrao_lista(Padrao_listaContext ctx) {
+        final String padroes = data.getValue(ctx.padroes());
+        final String s = "Lista(List(" + padroes + "))";
+        data.setValue(ctx, s);
+    }
+
+    @Override
+    public void exitPadrao_tupla(Padrao_tuplaContext ctx) {
+        final String padroes = data.getValue(ctx.padroes());
+        final String s = "(" + padroes + ")";
+        data.setValue(ctx, s);
+    }
+
+    @Override
+    public void exitPadroes(PadroesContext ctx) {
+        final String s = data.getValues(ctx.padrao()).stream().reduce((a,b) -> a + ", " + b).get();
+        data.setValue(ctx, s);
     }
 
     /*
@@ -429,7 +453,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void enterMembros(final MembrosContext ctx) {
-        data.getDeclaracoes().push(new ArrayList<String>());
+        data.getDeclaracoes().push(new ArrayList<>());
     }
 
     @Override
@@ -583,13 +607,7 @@ public class Listener extends potigolBaseListener {
     public void exitCons(final ConsContext ctx) {
         final String head = data.getValue(ctx.expr(0));
         final String tail = data.getValue(ctx.expr(1));
-        final String resposta;
-        if (ctx.getParent().getRuleIndex() == potigolParser.RULE_caso) {
-            resposta = "Lista(collection.immutable.::( " + head + ", a$" + tail
-                    + "$))";
-        } else {
-            resposta = K.bloco(head + "::" + tail);
-        }
+        final String resposta = K.bloco(head + "::" + tail);
         data.setValue(ctx, resposta);
     }
 
@@ -685,7 +703,12 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitLista(final ListaContext ctx) {
         final String exp = data.getValue(ctx.expr1());
-        final String resposta = M.lista(exp);
+        final String resposta;
+        if (ctx.getParent().getRuleIndex()==potigolParser.RULE_escolha){
+            resposta = "List(" + exp + ")";
+        } else {
+             resposta = M.lista(exp);
+        }
         data.setValue(ctx, resposta);
     }
 
@@ -760,7 +783,7 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void enterExprlist(final ExprlistContext ctx) {
-        data.getDeclaracoes().push(new ArrayList<String>());
+        data.getDeclaracoes().push(new ArrayList<>());
     }
 
     @Override

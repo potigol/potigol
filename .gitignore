@@ -18,6 +18,9 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+project/project
+.antlr/
+
 
 # Scala IDE specific (Scala & Java development for Eclipse)
 .cache-main
@@ -35,3 +38,10 @@ src/jerimum/
 /.project
 /antlr-4.5-complete.jar
 /old/
+/.idea/*
+.bloop/
+/.vscode/
+/.metals/
+/gen/
+/null/
+
