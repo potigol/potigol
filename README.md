@@ -5,11 +5,15 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b0637491b834a229351fab7fd897dfc)](https://www.codacy.com/app/leonardo-lucena-71/Potigol?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=potigol/Potigol&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.53192.svg)](http://dx.doi.org/10.5281/zenodo.53192)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#snapshot/6685842b-1cff-449d-a78a-2b74b0b2b446)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/potigol/gitpod)
+
+ > Linguagem de Programação moderna para iniciantes
 
 
+## Documentação
+  - [Documentação](https://potigol.github.io)
+  - [Problemas de programação resolvidos usando a Linguagem Potigol](https://potigol.github.io/uoj-potigol) (Mais de 500 exemplos)
 
-Linguagem de Programação moderna para iniciantes
 
 ## Características
   - Sintaxe simples
@@ -40,10 +44,11 @@ Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
 Editores de código para Potigol:
 
-  - [x] [Editor Potigol](https://github.com/potigol/EditorPotigol) (já incluso na versão executável de Potigol)
-  - [x] [JCEditor](https://github.com/crhenr/JCEditor)
+  - [x] [Plugin (potigol/potigol-language)](https://marketplace.visualstudio.com/items?itemName=Potigol.potigol-language) para o [VSCode](https://code.visualstudio.com/)
   - [x] [Plugin](https://github.com/potigol/language-potigol) para o [Atom](https://atom.io)
   - [x] [Plugin](https://github.com/nfischer/vim-potigol) para o [Vim](http://www.vim.org/)
+  - [x] [Editor Potigol](https://github.com/potigol/EditorPotigol) (já incluso na versão executável de Potigol)
+  - [x] [JCEditor](https://github.com/crhenr/JCEditor)
   - [x] [Plugin (potigol/PotigolAce)](https://github.com/potigol/PotigolAce) para o Ace Editor
   - [x] [Plugin (nelson-ion/potigol_codemirror)](https://github.com/nelson-ion/potigol_codemirror) para o CodeMirror
 
