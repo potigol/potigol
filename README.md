@@ -6,6 +6,7 @@
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.53192.svg)](http://dx.doi.org/10.5281/zenodo.53192)
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/potigol/gitpod)
+[![IFRN](https://potigol.github.io/docs/logo_ifrn_40.png)](https://www.ifrn.edu.br)
 
  > Linguagem de Programação moderna para iniciantes
 
