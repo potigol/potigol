@@ -5,7 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b0637491b834a229351fab7fd897dfc)](https://www.codacy.com/app/leonardo-lucena-71/Potigol?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=potigol/Potigol&amp;utm_campaign=Badge_Grade)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.53192.svg)](http://dx.doi.org/10.5281/zenodo.53192)
 
- > <a href="hacktoberfest"><img src="https://hacktoberfest.digitalocean.com/_nuxt/img/logo-hacktoberfest-full.f42e3b1.svg" width=250></a>
+ > <a href="https://potigol.github.io/docs/hacktoberfest"><img src="https://hacktoberfest.digitalocean.com/_nuxt/img/logo-hacktoberfest-full.f42e3b1.svg" width=250></a>
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/potigol/gitpod)
 [![IFRN](https://potigol.github.io/docs/logo_ifrn_40.png)](https://www.ifrn.edu.br)
