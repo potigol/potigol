@@ -15,7 +15,7 @@
 
 ## Documentação
   - [Documentação](https://potigol.github.io)
-  - [Problemas de programação resolvidos usando a Linguagem Potigol](https://potigol.github.io/uoj-potigol) (Mais de 600 exemplos)
+  - [Problemas de programação resolvidos usando a Linguagem Potigol](https://potigol.github.io/uoj-potigol) (Mais de 700 exemplos)
 
 
 ## Características
