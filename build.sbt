@@ -1,12 +1,12 @@
 name := "potigol"
 organization := "potigol"
 
-version := "1.0-RC1"
+version := "1.0-RC2"
 
 scalaVersion := "2.12.12"
 
-javacOptions in Compile ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
-scalacOptions in Compile ++= Seq("-deprecation")
+Compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
+Compile / scalacOptions ++= Seq("-deprecation")
 
 mainClass in (Compile, packageBin) := Some("br.edu.ifrn.potigol.Principal")
 
@@ -28,10 +28,10 @@ libraryDependencies ++= Seq(
 enablePlugins(Antlr4Plugin)
 enablePlugins(GraalVMNativeImagePlugin)
 
-antlr4Version in Antlr4 := "4.9.1"
-antlr4PackageName in Antlr4 := Some("br.edu.ifrn.potigol.parser")
-antlr4GenListener in Antlr4 := true
-antlr4GenVisitor in Antlr4 := true
+Antlr4 / antlr4Version := "4.9.1"
+Antlr4 / antlr4PackageName := Some("br.edu.ifrn.potigol.parser")
+Antlr4 / antlr4GenListener := true
+Antlr4 / antlr4GenVisitor := true
 
 //EclipseKeys.withSource in ThisBuild := true
 //EclipseKeys.withJavadoc in ThisBuild := true
