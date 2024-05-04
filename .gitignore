@@ -45,3 +45,4 @@ src/jerimum/
 /gen/
 /null/
 
+.bsp/sbt.json

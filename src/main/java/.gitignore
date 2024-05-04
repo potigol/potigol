@@ -1,8 +1,2 @@
 /potigol.tokens
-/potigolBaseListener.java
-/potigolBaseVisitor.java
-/potigolLexer.java
 /potigolLexer.tokens
-/potigolListener.java
-/potigolParser.java
-/potigolVisitor.java

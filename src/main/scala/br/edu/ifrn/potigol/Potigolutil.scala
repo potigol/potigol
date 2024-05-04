@@ -52,6 +52,7 @@ object Potigolutil {
   type Nada = Unit
   type InteiroGrande = BigInt
   val nulo: Null = null
+  var eof: Logico = false
 
   var $cor = false
 
@@ -135,6 +136,9 @@ object Potigolutil {
     def zip(outra: Texto): Lista[(T, Caractere)] = Lista(this._lista.zip(outra))
     def atualize(indice: Int, valor: T): Lista[T] = {
       Lista(_lista.updated(indice, valor))
+    }
+    def atualize(indice: Int, valor: T => T): Lista[T] = {
+      Lista(_lista.updated(indice, valor(_lista(indice))));
     }
     def -(s: Lista[T]): Lista[T] = Lista(_lista.diff(s))
   }
@@ -316,7 +320,10 @@ object Potigolutil {
     if ($cor) corSim()
     val s = StdIn.readLine()
     if ($cor) corNao()
-    s
+    if (s == null) {
+      eof = verdadeiro
+      ""
+    } else s
   }
 
   def leia(separador: Texto): Lista[Texto] = Lista(leia()
@@ -340,7 +347,7 @@ object Potigolutil {
     l.pegue(n)
     //    Lista(((1 to n) map { _ => leia_int }).toList)
   }
-  def leia_inteiros(separador: Texto): Lista[Int] = {
+  def leia_inteiros(separador: Texto=" "): Lista[Int] = {
     val l = leia(separador)._lista
     Lista(l.map(_.inteiro))
   }
@@ -358,7 +365,7 @@ object Potigolutil {
     l.pegue(n)
     //    Lista(((1 to n) map { _ => leia_num }).toList)
   }
-  def leia_reais(separador: Texto): Lista[Real] = Lista(leia(separador)._lista.map { _.real })
+  def leia_reais(separador: Texto = " "): Lista[Real] = Lista(leia(separador)._lista.map { _.real })
   @deprecated("Use 'leia_reais'", since094) def leia_numeros(n: Inteiro): Lista[Real] = leia_reais(n)
   @deprecated("Use 'leia_reais'", since094) def leia_numeros(separador: Texto): Lista[Real] = leia_reais(separador)
   @deprecated("Use 'leia_real'", since094) def leia_num: Real = leia_real
