@@ -208,10 +208,12 @@ public final class M {
         return id.split(K.VIRGULA);
     }
 
-    public static String defFuncao(final String id, final String param,
-            final String tipo, final String corpo) {
-        return K.DEF + id + K.param(param) + K.tipo(tipo) + K.IGUAL
-                + K.bloco(corpo) + K.NEWLINE;
+    public static String defFuncao(final String assinatura, final String corpo) {
+        return assinatura + K.IGUAL + K.bloco(corpo) + K.NEWLINE;
+    }
+
+    public static String defAssinatura(final String id, final String param, final String tipo) {
+        return K.DEF + id + K.param(param) + K.tipo(tipo);
     }
 
     public static String dclFun(String id, String param, String tipo) {

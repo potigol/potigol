@@ -404,23 +404,28 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitDef_funcao(final Def_funcaoContext ctx) {
-        final String id = data.getValue(ctx.ID());
-        final String param = data.getValue(ctx.dcls());
-        final String tipo = data.getOrElse(ctx.tipo());
+        final String assinatura = data.getValue(ctx.assinatura());
         final String corpo = data.getValue(ctx.expr());
-        final String resposta = M.defFuncao(id, param, tipo, corpo);
+        final String resposta = M.defFuncao(assinatura, corpo);
         data.setValue(ctx, resposta);
     }
 
     @Override
     public void exitDef_funcao_corpo(final Def_funcao_corpoContext ctx) {
+        final String assinatura = data.getValue(ctx.assinatura());
+        final String corpo = data.getValue(ctx.exprlist());
+        final String retorno = data.getOrElse(ctx.retorne());
+        final String resposta = M.defFuncao(assinatura, corpo + retorno);
+        data.setValue(ctx, resposta);
+    }
+
+    @Override
+    public void exitAssinatura(AssinaturaContext ctx) {
         final String id = data.getValue(ctx.ID());
         final String param = data.getValue(ctx.dcls());
         final String tipo = data.getOrElse(ctx.tipo());
-        final String retorno = data.getOrElse(ctx.retorne());
-        final String corpo = data.getValue(ctx.exprlist());
-        final String resposta = M.defFuncao(id, param, tipo, corpo + retorno);
-        data.setValue(ctx, resposta);
+        final String assinatura = M.defAssinatura(id, param, tipo);
+        data.setValue(ctx, assinatura);
     }
 
     @Override

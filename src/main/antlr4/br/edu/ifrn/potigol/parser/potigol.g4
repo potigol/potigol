@@ -56,14 +56,17 @@ decl
     | decl_uso ;
 
 decl_valor
-    : id1 (':' tipo)? '=' expr                    # valor_simples
-    | id2 (':' tipo)? '=' expr2                   # valor_multiplo
+    : 'val'? id1 (':' tipo)? '=' expr             # valor_simples
+    | 'val'? id2 (':' tipo)? '=' expr2            # valor_multiplo
     | 'var' id1 (':' tipo)? (':='| '=') expr      # decl_var_simples
     | 'var' id2 (':' tipo)? (':='| '=') expr2     # decl_var_multipla ;
 
 decl_funcao
-    : ID '(' dcls ')' (':' tipo)? '=' expr        # def_funcao
-    | ID '(' dcls ')' (':' tipo)? exprlist retorne? 'fim'  # def_funcao_corpo ;
+    : assinatura '=' expr                         # def_funcao
+    | assinatura exprlist retorne? 'fim'          # def_funcao_corpo ;
+
+assinatura
+    : 'def'? ID '(' dcls ')' (':' tipo)?;
 
 decl_tipo
     : 'tipo' ID '=' tipo                            # alias
@@ -79,13 +82,13 @@ retorne
     : 'retorne' expr ;
 
 dcl
-    : id1 ':' tipo ;
+    : 'val'? id1 ':' tipo ;
 
 dcl_var
     : 'var' id1 ':' tipo ;
 
 dcl_fun
-    : ID '(' dcls ')' ':' tipo;
+    : 'def'? ID '(' dcls ')' ':' tipo;
 
 dcls
     : (dcl (',' dcl)* )? ;
@@ -157,12 +160,10 @@ escolha
     : 'escolha' expr caso+ 'fim' ;
 
 caso
-   // : 'caso' expr ('se' expr)? '=>' exprlist ;
-
     : 'caso' padrao ('se' expr)? '=>' exprlist ;
 
 padrao
-    : (ID | '_') (':' tipo)?                      # padrao_id
+    : ID (':' tipo)?                              # padrao_id
     | literal                                     # padrao_literal
     | ID '(' padroes ')'                          # padrao_objeto
     | ID ('::' ID)+                               # padrao_cons
