@@ -129,6 +129,7 @@ object Potigolutil {
     def descarte(a: Inteiro): Lista[T] = Lista(_lista.drop(a))
     def pegue(a: Inteiro): Lista[T] = Lista(_lista.take(a))
     def +(outra: Lista[T]): Lista[T] = Lista(_lista ::: outra._lista)
+    def :+[A >: T](a: A): Lista[A] = Lista(_lista :+ a)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: _lista)
     def remova(i: Inteiro): Lista[T] = Lista(_lista.take(i - 1) ::: _lista.drop(i))
     def insira(i: Inteiro, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
@@ -216,7 +217,7 @@ object Potigolutil {
     @deprecated("Use 'real'", since094) def para_numero: Real = real
     def maiusculo: Texto = _lista.toUpperCase()
     def minusculo: Texto = _lista.toLowerCase()
-    def divida(s: Texto = " "): Lista[Texto] = Lista(_lista.replaceAll("( |\\n)+", " ").split(s).toList)
+    def divida(s: Texto = " "): Lista[Texto] = Lista(_lista.replaceAll("([ \\n])+", " ").split(s).toList)
     def divida_quando(f: (Caractere, Caractere) => Lógico): Lista[Texto] = Lista(_lista.foldRight(List.empty[Lista[Caractere]]) { (a, b) =>
       if (b.isEmpty || f(a, b.head.head)) Lista(List(a)) :: b else (a :: b.head) :: b.tail
     }.map(_.junte()))
@@ -340,11 +341,16 @@ object Potigolutil {
 
   def leia_inteiro: Inteiro = leia().inteiro
   def leia_inteiros(n: Inteiro): Lista[Inteiro] = {
-    var l = Lista.vazia(0)
-    while (l.tamanho < n) {
-      l = l + leia_inteiros(" ")
+    @scala.annotation.tailrec
+    def loop(acc: Inteiro = 0, l: Lista[Inteiro] = Lista.vazia(0)): Lista[Inteiro] = {
+      if (acc == n) l.pegue(n)
+      else {
+        val nInteiro: Inteiro = leia_inteiro
+        loop(acc + 1, l.:+(nInteiro))
+      }
     }
-    l.pegue(n)
+    loop()
+
     //    Lista(((1 to n) map { _ => leia_int }).toList)
   }
   def leia_inteiros(separador: Texto=" "): Lista[Int] = {
@@ -358,11 +364,15 @@ object Potigolutil {
   def leia_real: Real = leia().real
   @deprecated("Use 'leia_real'", since094) def leia_numero: Real = leia_real
   def leia_reais(n: Inteiro): Lista[Real] = {
-    var l = Lista.vazia(0.0)
-    while (l.tamanho < n) {
-      l = l + leia_reais(" ")
+    @scala.annotation.tailrec
+    def loop(acc: Inteiro = 0, l: Lista[Real] = Lista.vazia(0.0)): Lista[Real] = {
+      if (acc == n) l.pegue(n)
+      else {
+        val nReal: Real = leia_real
+        loop(acc + 1, l.:+(nReal))
+      }
     }
-    l.pegue(n)
+    loop()
     //    Lista(((1 to n) map { _ => leia_num }).toList)
   }
   def leia_reais(separador: Texto = " "): Lista[Real] = Lista(leia(separador)._lista.map { _.real })

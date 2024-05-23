@@ -28,6 +28,9 @@ project/project
 .worksheet
 /bin/
 
+# IntelliJ specific
+.idea
+
 exemplos/*
 ear-in-jar-loader.zip
 teste1.potigol
