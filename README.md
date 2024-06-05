@@ -15,7 +15,7 @@
 
 ## Documentação
   - [Documentação](https://potigol.github.io)
-  - [Problemas de programação resolvidos usando a Linguagem Potigol](https://potigol.github.io/uoj-potigol) (Mais de 700 exemplos)
+  - [Problemas de programação resolvidos usando a Linguagem Potigol](https://potigol.github.io/uoj-potigol) (Mais de 800 exemplos)
 
 
 ## Características
@@ -61,7 +61,7 @@ Editores de código para Potigol:
 
 Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
 
-## Windows 7, 8 e 10
+## Windows 10 e 11
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
