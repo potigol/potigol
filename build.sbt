@@ -3,9 +3,10 @@ organization := "potigol"
 
 version := "1.0-RC2"
 
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.14"
 
-Compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint")
+// Compile para Java 21
+Compile / javacOptions ++= Seq("-source", "21", "-target", "21", "-Xlint")
 Compile / scalacOptions ++= Seq("-deprecation")
 
 mainClass in (Compile, packageBin) := Some("br.edu.ifrn.potigol.Principal")
@@ -18,11 +19,11 @@ libraryDependencies ++= Seq(
     exclude("org.abego.treelayout", "org.abego.treelayout.core").
     exclude("org.antlr", "ST4").
     exclude("org.glassfish", "javax.json"),
-  "org.antlr" % "antlr4-runtime" % "4.13.1" ,
-  "org.scala-lang" % "scala-library" % "2.12.12" ,
-  ("org.scala-lang" % "scala-compiler" % "2.12.12").
-    exclude("org.scala-lang.modules", "scala-xml_2.12"),
-  "org.scala-lang" % "scala-reflect" % "2.12.12"
+  "org.antlr" % "antlr4-runtime" % "4.13.1",
+  "org.scala-lang" % "scala-library" % "2.13.14",
+  ("org.scala-lang" % "scala-compiler" % "2.13.14").
+    exclude("org.scala-lang.modules", "scala-xml_2.13"),
+  "org.scala-lang" % "scala-reflect" % "2.13.14"
 )
 
 enablePlugins(Antlr4Plugin)
@@ -32,6 +33,9 @@ Antlr4 / antlr4Version := "4.13.1"
 Antlr4 / antlr4PackageName := Some("br.edu.ifrn.potigol.parser")
 Antlr4 / antlr4GenListener := true
 Antlr4 / antlr4GenVisitor := true
+
+// Para garantir compilação com Java 21, defina JAVA_HOME para o JDK 21 antes de rodar o sbt:
+// export JAVA_HOME=/caminho/do/jdk-21
 
 //EclipseKeys.withSource in ThisBuild := true
 //EclipseKeys.withJavadoc in ThisBuild := true
