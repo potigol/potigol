@@ -61,7 +61,7 @@ object Potigolutil {
       case true  => "verdadeiro"
       case _     => a
     }
-    def p(args: Any*): String = ctx.standardInterpolator(a => a, args.map(bool))
+    def p(args: Any*): String = StringContext.standardInterpolator(a => a, args.map(bool), ctx.parts)
   }
 
   // valores
@@ -77,7 +77,7 @@ object Potigolutil {
   def cubo[A](i: Inteiro, j: Inteiro, k: Inteiro)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
 
   trait Colecao[T] {
-    val _lista: Seq[T]
+    def _lista: scala.collection.Seq[T]
     def apply(a: Int): T = _lista(a)
     def length: Int = _lista.length
     override def toString: String = _lista.mkString("[", ", ", "]")

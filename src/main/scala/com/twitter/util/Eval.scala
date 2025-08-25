@@ -27,12 +27,11 @@ import java.util.jar.JarFile
 import scala.collection.mutable
 import scala.io.Source
 //import scala.collection.JavaConverters._
-import scala.collection.immutable.StringOps
 //import scala.reflect.api.Position
 import scala.reflect.internal.util.{ BatchSourceFile, Position }
 import scala.reflect.internal.util.AbstractFileClassLoader
 import scala.tools.nsc.io.{ AbstractFile, VirtualDirectory }
-import scala.tools.nsc.reporters.{ Reporter, AbstractReporter}
+import scala.tools.nsc.reporters.Reporter
 import scala.tools.nsc.{ Global, Settings }
 import scala.util.matching.Regex
 
@@ -401,7 +400,7 @@ class Eval(target: Option[File]) {
       apply(code, maximumRecursionDepth)
 
     def apply(code: String, maxDepth: Int): String = {
-      val lines = new StringOps(code).lines.map { line: String =>
+      val lines = code.linesIterator.map { line: String =>
         val tokens = line.trim.split(' ')
         if (tokens.length == 2 && tokens(0).equals("#include")) {
           val path = tokens(1)
@@ -446,12 +445,23 @@ class Eval(target: Option[File]) {
     settings.bootclasspath.value = pathList.mkString(File.pathSeparator)
     settings.classpath.value = (pathList ::: impliedClassPath).mkString(File.pathSeparator)
 
-    object reporter extends AbstractReporter {
+    object reporter extends Reporter {
       val settings: Settings = StringCompiler.this.settings
       val messages = new mutable.ListBuffer[List[String]]
-
-      def display(pos: Position, message: String, severity: Severity): Unit = {
-        severity.count += 1
+      
+      private var _errorCount = 0
+      private var _warningCount = 0
+      
+      override def hasErrors: Boolean = _errorCount > 0
+      override def hasWarnings: Boolean = _warningCount > 0
+      
+      override def info0(pos: Position, msg: String, severity: Severity, force: Boolean): Unit = {
+        severity match {
+          case ERROR => _errorCount += 1
+          case WARNING => _warningCount += 1
+          case _ =>
+        }
+        
         val severityName = severity match {
           case ERROR => "error: "
           case WARNING => "warning: "
@@ -464,7 +474,7 @@ class Eval(target: Option[File]) {
           } catch {
             case _: Throwable => ""
           }
-        messages += (severityName + lineMessage + ": " + message) ::
+        messages += (severityName + lineMessage + ": " + msg) ::
           (if (pos.isDefined) {
             pos.finalPosition.lineContent.stripLineEnd ::
               (" " * (pos.column - 1) + "^") ::
@@ -474,12 +484,10 @@ class Eval(target: Option[File]) {
           })
       }
 
-      def displayPrompt: Unit = {
-        // no.
-      }
-
-      override def reset: Unit = {
-        super.reset
+      override def reset(): Unit = {
+        super.reset()
+        _errorCount = 0
+        _warningCount = 0
         messages.clear()
       }
     }
@@ -516,7 +524,7 @@ class Eval(target: Option[File]) {
         printf("Code follows (%d bytes)\n", code.length)
 
         var numLines = 0
-        new StringOps(code).lines.foreach { line: String =>
+        code.linesIterator.foreach { line: String =>
           numLines += 1
           println(numLines.toString.padTo(5, ' ') + "| " + line)
         }
@@ -551,7 +559,7 @@ class Eval(target: Option[File]) {
       // ...and 1/2 this line:
       compiler.compileSources(sourceFiles)
 
-      if (reporter.hasErrors || reporter.WARNING.count > 0) {
+      if (reporter.hasErrors || reporter.hasWarnings) {
         throw new CompilerException(reporter.messages.toList)
       }
     }
