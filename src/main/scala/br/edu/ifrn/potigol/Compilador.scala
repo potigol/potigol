@@ -115,7 +115,7 @@ class Compilador(val debug: Boolean = false, wait: Boolean = false) {
     println()
     for { (linha, n) <- linhas.zipWithIndex } {
       val numero = n + 1 + inicio
-      println(s"${numero.formatted("%4d")} | $linha")
+      println(f"$numero%4d | $linha")
     }
   }
 }
