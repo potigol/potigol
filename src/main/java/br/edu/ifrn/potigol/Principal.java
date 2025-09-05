@@ -49,7 +49,7 @@ import br.edu.ifrn.potigol.parser.potigolLexer;
 import br.edu.ifrn.potigol.parser.potigolParser;
 
 public class Principal {
-    private static final String versao = "1.0-RC1";
+    private static final String versao = "1.0-RC2";
 
     private static final int saidaMinima = -1;
 
@@ -72,7 +72,7 @@ public class Principal {
     public static void main(final String... args) {
         if (args.length == 0) {
             System.out.println("Potigol versao " + versao
-                    + " Copyright (C) 2015-2021 Leonardo Lucena" + "\n\n"
+                    + " Copyright (C) 2015-2025 Leonardo Lucena" + "\n\n"
                     + "Uso: potigol [-c] [-w] [-d] [arquivo.poti]\n");
         } else {
             final String arq = args[args.length - 1];

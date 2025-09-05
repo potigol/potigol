@@ -3,12 +3,15 @@
 ## Resumo das Alterações Realizadas
 
 ### 1. Arquivo: build.sbt
+
 - ✅ Já estava configurado para Java 21
 - Compile para Java 21 com argumentos `-source 21 -target 21`
 - Scala 2.13.14 (compatível com Java 21)
 
 ### 2. Arquivo: src/main/scala/com/twitter/util/Eval.scala
+
 **Problemas corrigidos:**
+
 - ❌ `AbstractReporter` removido no Scala 2.13 
 - ✅ Substituído por `Reporter` e implementação customizada
 - ❌ APIs depreciadas de `StringOps`
@@ -17,6 +20,7 @@
 - ✅ Implementação compatível com nova API de Reporter
 
 **Alterações específicas:**
+
 ```scala
 // Antes
 import scala.tools.nsc.reporters.{ Reporter, AbstractReporter}
@@ -40,13 +44,16 @@ object reporter extends Reporter {
 ```
 
 ### 3. Arquivo: src/main/scala/br/edu/ifrn/potigol/Potigolutil.scala
+
 **Problemas corrigidos:**
+
 - ❌ Incompatibilidade de tipos entre `Seq[T]` imutável e `MSeq[T]` mutável
 - ✅ Alterado trait para usar `scala.collection.Seq[T]` (tipo base)
 - ❌ Método `standardInterpolator` depreciado
 - ✅ Substituído por `StringContext.standardInterpolator`
 
 **Alterações específicas:**
+
 ```scala
 // Antes
 trait Colecao[T] {
@@ -64,11 +71,14 @@ def p(args: Any*): String = StringContext.standardInterpolator(a => a, args.map(
 ```
 
 ### 4. Arquivo: src/main/scala/br/edu/ifrn/potigol/Compilador.scala
+
 **Problemas corrigidos:**
+
 - ❌ Método `formatted` depreciado
 - ✅ Substituído por interpolação `f""`
 
 **Alterações específicas:**
+
 ```scala
 // Antes
 println(s"${numero.formatted("%4d")} | $linha")
@@ -78,12 +88,14 @@ println(f"$numero%4d | $linha")
 ```
 
 ## Resultado
+
 ✅ **Compilação bem-sucedida** com Scala 2.13.14 e Java 21
 ✅ **JAR gerado** com sucesso usando `sbt assembly`
 ✅ **Testes passaram** sem erros
 ✅ **Aplicação funcional** no Java 21
 
 ## Comandos de Verificação
+
 ```bash
 # Compilar o projeto
 sbt compile
@@ -102,6 +114,7 @@ java -version
 ```
 
 ## Notas Adicionais
+
 - Os warnings do ANTLR4 sobre "this escape" são normais e não afetam a funcionalidade
 - Os warnings sobre métodos depreciados foram mantidos onde não afetam a funcionalidade crítica
 - O projeto agora é totalmente compatível com Java 21 mantendo compatibilidade com versões anteriores
