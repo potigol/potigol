@@ -50,7 +50,9 @@ object Erros {
   private[this] object Erro {
     val naoDeclarado: Regex = "not found: value (\\S+).*".r
     val parametroAusente: Regex = "not enough arguments for method (\\S+)\\:.+Unspecified value parameter (\\S).*".r
-    val parametroMais: Regex = "too many arguments for method (\\S+)\\:(.+)\\Z.*".r
+    val parametrosAusentes: Regex = "not enough arguments for method (\\S+)\\:.+Unspecified value parameters (.+)\\..*".r
+    val parametroMais: Regex = "too many arguments \\(.+expected (.+)\\) for method (\\S+)\\:.+\\Z.*".r
+    val parametroZero: Regex = "no arguments allowed for nullary method (\\S+)\\:.*".r
     val tipoIndefinido: Regex = "not found: type (\\S+).*".r
     val tipoDiferente: Regex = "type mismatch.+required: (?:\\S*\\.)?([^| .]+) .*".r
     val parametroTipo: Regex = "(?:type|class) (\\S+) takes type parameters .*".r
@@ -73,8 +75,11 @@ object Erros {
       s"Tipo errado.\nEu estava esperando um valor do tipo '$a'."
     def faltaParametro(a: String, b: String): String =
       s"A função '$a' precisa de mais parâmetros.\nVocê esqueceu de fornecer o parâmetro '$b'."
+    def faltaParametros(a: String, b: String): String =
+      s"A função '$a' precisa de mais parâmetros.\nVocê esqueceu de fornecer os parâmetros ${b.split(", ").mkString("'", "', '","'")}."
     def parametrosMais(n: Int): String =
       s"Você forneceu mais parâmetros do que o necessário.\nColoque apenas $n parâmetro(s)."
+    def parametroZero(a: String): String = s"A função '$a' não tem parâmetros."
     def semParametros(a: String): String = s"um valor $a não deve ter parametros."
   }
 
@@ -86,10 +91,12 @@ object Erros {
     erro match {
       case Erro.naoDeclarado(a) => Msg.valorNaoDeclarado(a)
       case Erro.parametroAusente(a, b) => Msg.faltaParametro(a, b)
+      case Erro.parametrosAusentes(a, b) => Msg.faltaParametros(a, b)
       case Erro.parametroMais("apply", b) => Msg.parametrosMais(contar(b))
-      case Erro.parametroMais(a, b) if contar(b) == 0 => s"A função '$a' não precisa de parâmetro."
-      case Erro.parametroMais(a, b) if contar(b) == 1 => s"A função '$a' precisa de apenas 1 parâmetro."
-      case Erro.parametroMais(a, b) => s"A função '$a' precisa de apenas ${contar(b)} parâmetros."
+      case Erro.parametroMais("0", a) => s"A função '$a' não precisa de parâmetro."
+      case Erro.parametroMais("1", a) => s"A função '$a' precisa de apenas 1 parâmetro."
+      case Erro.parametroMais(b, a) => s"A função '$a' precisa de apenas $b parâmetros."
+      case Erro.parametroZero(a) => Msg.parametroZero(a)
       case Erro.tipoIndefinido(a) => s"O tipo '$a' não existe.\nNão seria 'Inteiro', 'Real' ou 'Texto'?"
       case Erro.tipoDiferente(C.Int) => Msg.tipoErrado(C.Inteiro)
       case Erro.tipoDiferente(C.Double) => Msg.tipoErrado(C.Real)
@@ -116,7 +123,7 @@ object Erros {
       case Erro.semParametros(C.Boolean) => Msg.semParametros(C.Logico)
       case Erro.semParametros(a) => Msg.semParametros(a)
       case Erro.divisaoTipoErrado() => Msg.tipoErrado(C.Real)
-      case _ => erro
+      case _ => "ERRO: " + erro
     }
   }
   def traduzir(texto: String): String = {
