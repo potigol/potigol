@@ -343,13 +343,15 @@ object Potigolutil {
   private[this] def corSim(): Nada = print("\u001b[32m")
   private[this] def corNao(): Nada = print("\u001b[37m")
   def leia(): Texto = {
-    if ($cor) corSim()
-    val s = StdIn.readLine()
-    if ($cor) corNao()
-    if (s == null) {
-      eof = verdadeiro
-      ""
-    } else s
+    if (! eof) {
+      if ($cor) corSim()
+      val s = StdIn.readLine()
+      if ($cor) corNao()
+      if (s == null) {
+        eof = verdadeiro
+        ""
+      } else s
+    } else ""
   }
 
   def leia(separador: Texto): Lista[Texto] = Lista(leia()
@@ -373,7 +375,7 @@ object Potigolutil {
     l.pegue(n)
     //    Lista(((1 to n) map { _ => leia_int }).toList)
   }
-  def leia_inteiros(separador: Texto=" "): Lista[Inteiro] = {
+  def leia_inteiros(separador: Texto = " "): Lista[Inteiro] = {
     val l = leia(separador)._lista
     Lista(l.map(_.inteiro))
   }
