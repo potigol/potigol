@@ -36,7 +36,6 @@ import scala.io.StdIn
 import scala.util.{ Failure, Success, Try }
 
 object Potigolutil {
-  private[this] val since094 = "0.9.4"
   // Tipos
   type Texto = String
   type Inteiro = Int
@@ -61,7 +60,8 @@ object Potigolutil {
       case true  => "verdadeiro"
       case _     => a
     }
-    def p(args: Any*): String = StringContext.standardInterpolator(a => a, args.map(bool), ctx.parts)
+
+    def p(args: Any*): String = StringContext.standardInterpolator(a => a, args.map(bool), ctx.parts) // Scala 2.12 ctx.standardInterpolator(a => a, args.map(bool)) 
   }
 
   // valores
@@ -77,7 +77,7 @@ object Potigolutil {
   def cubo[A](i: Inteiro, j: Inteiro, k: Inteiro)(valor: => A): Cubo[A] = Cubo.apply(i, j, k, valor)
 
   trait Colecao[T] {
-    def _lista: scala.collection.Seq[T]
+    val _lista: scala.collection.Seq[T]
     def apply(a: Int): T = _lista(a)
     def length: Int = _lista.length
     override def toString: String = _lista.mkString("[", ", ", "]")
@@ -103,7 +103,7 @@ object Potigolutil {
     def posicão: T => Inteiro = posicao
     def para_lista: Lista[T] = Lista(_lista.toList)
     def lista: Lista[T] = para_lista
-    def mutavel: Vetor[T] = Vetor(_lista.to(scala.collection.mutable.Seq))
+    def mutavel: Vetor[T] = Vetor(_lista.to(scala.collection.mutable.Seq)) //Scala 2.12 Vetor(_lista.to[scala.collection.mutable.Seq] )
     def mutável: Vetor[T] = mutavel
     def imutável: Lista[T] = lista
     def imutavel: Lista[T] = lista
@@ -112,7 +112,7 @@ object Potigolutil {
     })
   }
 
-  case class Lista[T](_lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
+  class Lista[T](val _lista: List[T]) extends IndexedSeq[T] with Colecao[T] {
     def cauda: Lista[T] = Lista(_lista.tail)
     def ordene(implicit ord: Ordering[T]): Lista[T] = Lista(_lista.sorted(ord))
     def ordene(menor_que: (T, T) => Lógico): Lista[T] = Lista(_lista.sortWith(menor_que))
@@ -127,7 +127,7 @@ object Potigolutil {
     @deprecated("Use 'descarte'", "0.9.4") def passe: Inteiro => Lista[T] = descarte
     def descarte(a: Inteiro): Lista[T] = Lista(_lista.drop(a))
     def pegue(a: Inteiro): Lista[T] = Lista(_lista.take(a))
-    def +(outra: Lista[T]): Lista[T] = Lista(_lista ::: outra._lista)
+    def +(outra: Lista[T]): Lista[T] = Lista(this._lista ::: outra._lista)
     def ::[A >: T](a: A): Lista[A] = Lista(a :: _lista)
     def remova(i: Inteiro): Lista[T] = Lista(_lista.take(i - 1) ::: _lista.drop(i))
     def insira(i: Inteiro, valor: T): Lista[T] = Lista(_lista.take(i - 1) ::: valor :: _lista.drop(i - 1))
@@ -140,13 +140,40 @@ object Potigolutil {
       Lista(_lista.updated(indice, valor(_lista(indice))));
     }
     def -(s: Lista[T]): Lista[T] = Lista(_lista.diff(s))
+    override def toString = _lista.mkString("[", ", ", "]")
+  }
+
+  case object Vazia extends Lista[Nothing](Nil) {
+    override def toString = "[]"
   }
 
   object Lista {
-    def apply[A]: (Inteiro, => A) => Lista[A] = imutavel
-    def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
+    def apply[A](list: List[A]): Lista[A] = {
+      if (list.isEmpty) Vazia.asInstanceOf[Lista[A]]
+      else new Lista(list)
+    }
+
+    def apply[A](dimensao1: Int, valor: => A): Lista[A] = {
+      new Lista(List.fill(dimensao1)(valor))
+    }
+
+    def apply[A](dimensao1: Int, dimensao2: Int, valor: => A): Lista[Lista[A]] = {
+      Lista(dimensao1, Lista(dimensao2, valor))
+    }
+
+    def apply[A](dimensao1: Int, dimensao2: Int, dimensao3: Int, valor: => A): Lista[Lista[Lista[A]]] = {
+      Lista(dimensao1, Lista(dimensao2, Lista(dimensao3, valor)))
+    }
+
+    def unapplySeq[A](lista: Lista[A]): Option[Seq[A]] = {
+      Some(lista.lista.toSeq)
+    } 
+
     def imutavel[A](x: Inteiro, valor: => A): Lista[A] = Lista(List.fill(x)(valor))
-    def vazia[A](x: A): Lista[A] = Lista(List.empty[A])
+    def mutavel[A](x: Inteiro, valor: => A): Vetor[A] = Lista(List.fill(x)(valor)).mutavel
+    def vazia[A](a: A): Lista[A] = Vazia.asInstanceOf[Lista[A]]
+    def vazia[A]: Lista[A] = Vazia.asInstanceOf[Lista[A]]
+
     def imutável[A]: (Inteiro, => A) => Lista[A] = imutavel
     def mutável[A]: (Inteiro, => A) => Vetor[A] = mutavel
   }
@@ -339,14 +366,14 @@ object Potigolutil {
 
   def leia_inteiro: Inteiro = leia().inteiro
   def leia_inteiros(n: Inteiro): Lista[Inteiro] = {
-    var l = Lista.vazia(0)
+    var l: Lista[Inteiro] = Lista.vazia(0) // Vazia
     while (l.tamanho < n) {
       l = l + leia_inteiros(" ")
     }
     l.pegue(n)
     //    Lista(((1 to n) map { _ => leia_int }).toList)
   }
-  def leia_inteiros(separador: Texto=" "): Lista[Int] = {
+  def leia_inteiros(separador: Texto=" "): Lista[Inteiro] = {
     val l = leia(separador)._lista
     Lista(l.map(_.inteiro))
   }
@@ -357,7 +384,7 @@ object Potigolutil {
   def leia_real: Real = leia().real
   @deprecated("Use 'leia_real'", "0.9.4") def leia_numero: Real = leia_real
   def leia_reais(n: Inteiro): Lista[Real] = {
-    var l = Lista.vazia(0.0)
+    var l: Lista[Real] = Lista.vazia(0.0) // Vazia
     while (l.tamanho < n) {
       l = l + leia_reais(" ")
     }
