@@ -199,6 +199,11 @@ public class Listener extends potigolBaseListener {
         final String exp = data.getValue(ctx.padrao());
         final String cond = data.getOrElse(ctx.expr());
         String exps = data.getValue(ctx.exprlist());
+        if (exp.contains("@")) {
+            String var = exp.substring(0, exp.indexOf("@"));
+            var = var.substring(var.lastIndexOf(",")+1).trim();
+            exps = exps.replaceAll(var, "Lista(" + var + ".toList)");
+        }
         final String resposta = "case " + exp + K.guarda(cond) + K.ARROW + exps;
         data.setValue(ctx, resposta);
     }
@@ -226,15 +231,15 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitPadrao_cons(Padrao_consContext ctx) {
-        final String ids = data.getValues(ctx.ID()).stream().reduce((a,b) -> a + "::"+b).get();
-        final String s = "Lista(" + ids +")";
+        final String ids = data.getValues(ctx.padrao()).stream().reduce((a,b) -> a + ", " + b).get();
+        final String s = "Lista(" + ids + " @ _* )";
         data.setValue(ctx, s);
     }
 
     @Override
     public void exitPadrao_lista(Padrao_listaContext ctx) {
         final String padroes = data.getValue(ctx.padroes());
-        final String s = "Lista(List(" + padroes + "))";
+        final String s = (padroes == null) ? "Lista()" : "Lista(" + padroes + ")";
         data.setValue(ctx, s);
     }
 
@@ -282,9 +287,15 @@ public class Listener extends potigolBaseListener {
 
     @Override
     public void exitFaixa(final FaixaContext ctx) {
+        final String padrao = data.getValue(ctx.padrao());
         final String id = data.getValue(ctx.ID());
         final List<String> exps = data.getValues(ctx.expr());
-        final String resposta = M.faixa(id, exps);
+        final String resposta;
+        if (padrao == null) {
+            resposta = M.faixa(id, exps);
+        } else {
+            resposta = M.faixa(padrao, exps);
+        }
         data.setValue(ctx, resposta);
     }
 
@@ -707,11 +718,11 @@ public class Listener extends potigolBaseListener {
     public void exitLista(final ListaContext ctx) {
         final String exp = data.getValue(ctx.expr1());
         final String resposta;
-        if (ctx.getParent().getRuleIndex()==potigolParser.RULE_escolha){
-            resposta = "List(" + exp + ")";
-        } else {
+      //  if (ctx.getParent().getRuleIndex()==potigolParser.RULE_escolha){
+      //      resposta = "List(" + exp + ")";
+      //  } else {
              resposta = M.lista(exp);
-        }
+      //  }
         data.setValue(ctx, resposta);
     }
 

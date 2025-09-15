@@ -163,10 +163,10 @@ caso
     : 'caso' padrao ('se' expr)? '=>' exprlist ;
 
 padrao
-    : ID (':' tipo)?                              # padrao_id
+    : (ID | '_') (':' tipo)?                      # padrao_id
     | literal                                     # padrao_literal
     | ID '(' padroes ')'                          # padrao_objeto
-    | ID ('::' ID)+                               # padrao_cons
+    | padrao ('::' padrao)+                       # padrao_cons
     | '[' padroes? ']'                            # padrao_lista
     | '(' padroes ')'                             # padrao_tupla ;
 
@@ -189,7 +189,7 @@ enquanto
     : 'enquanto' expr bloco ;
 
 faixa
-    : ID 'em' expr
+    : padrao 'em' expr
     | ID 'de' expr ('ate'|'at\u00e9') expr ('passo' expr)? ;
 
 faixas
