@@ -27,15 +27,12 @@
 ## Como usar:
   - Baixe a versão mais recente do Potigol https://github.com/potigol/Potigol/releases
   - Descompacte o arquivo
-  - Para executar o Editor de Código digite no prompt do terminal
-  
-  ````java -jar epotigol.jar````
 
   - Para executar um programa em Potigol digite no prompt do terminal
 
   ````java -jar potigol.jar arquivo.poti````
 
-  - No Windows basta usar ````epotigol```` ou ````potigol arquivo.poti````.
+  - No Windows basta usar ````potigol arquivo.poti````.
   
 Exemplos: https://github.com/potigol/Potigol/wiki/jogos
 
@@ -57,43 +54,13 @@ Editores de código para Potigol:
 
 Veja o passo a passo de como instalar o Potigol em sistemas Windows e Linux
 
-## Windows 10 e 11
-
-  - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
-  - Descompacte o arquivo e copie a pasta Potigol para c:\potigol
-  - Envie um atalho de "epotigol.jar" para a área de trabalho
-  - Altere o nome do atalho para "Editor Potigol"
-  - Em propriedades, altere o ícone. Escolha o ícone em cores que está na pasta do Potigol.
-  - Envie um atalho de C:\Windows\System32\cmd.exe para a área de trabalho.
-  - Em propriedade altere:
-  
- >   Destino: %windir%\system32\cmd.exe /E:ON /K C:\potigol\configpotigol.bat
-
- > Iniciar em: [Vazio]
-
- > Alterar ícone. Escolha o icone em preto e branco.
-
-  - Usando o botão direito do mouse escolha a opção "Fixar na Tela Inicial".
-
 ## LINUX
 
   - Baixe a versão mais nova do Potigol: https://github.com/potigol/Potigol/releases
   - Copie a pasta Potigol para o local adequado
-  - Insira as linhas abaixo no final do arquivo /etc/bash.bashrc
+  - Insira a linhas abaixo no final do arquivo /etc/bash.bashrc
 
 >   ````alias potigol='java -jar [caminho até a pasta do potigol]/potigol.jar'````
-
->   ````alias epotigol='java -jar [caminho até a pasta do potigol]/epotigol.jar'````
-
-  - Crie o arquivo '~/Área de Trabalho/potigol_lancador.desktop'
-    
-````
-[Desktop Entry]
-Name=Potigol
-Type=Application
-Exec=java -jar [caminho até a pasta do potigol]/epotigol.jar
-Icon=[caminho até a pasta do potigol]/potigol.png
-````
 
 ## Compilação
 
