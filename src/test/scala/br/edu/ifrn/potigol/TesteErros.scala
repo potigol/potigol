@@ -164,7 +164,7 @@ object TesteErros extends App {
     println(texto(c.avaliar(listener.getSaida).toString))
   }
 
-  erros.take(5).drop(0).foreach {
+  erros.take(10).drop(0).foreach {
     imprimir_erro
   }
 }
