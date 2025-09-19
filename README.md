@@ -4,7 +4,7 @@
 [![Follow us](https://img.shields.io/twitter/follow/potigol.svg?style=social)](http://twitter.com/potigol)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.53192.svg)](https://doi.org/10.5281/zenodo.53192)
 
-[![Execute direto no GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/potigol/potigol-codespace?quickstart=1)
+**IDE online**👉 [![Execute direto no GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/potigol/potigol-codespace?quickstart=1)
 
  > Linguagem de Programação moderna para iniciantes
 
