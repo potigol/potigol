@@ -5,7 +5,7 @@ import br.edu.ifrn.potigol.parser.{potigolLexer, potigolParser}
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream}
 
-object TesteErros /*extends App*/ {
+object TesteErros extends App {
 
   case class Erro(erro: String, codigo: String)
 
@@ -164,7 +164,7 @@ object TesteErros /*extends App*/ {
     println(texto(c.avaliar(listener.getSaida).toString))
   }
 
-  erros.take(3).drop(0).foreach {
+  erros.take(10).drop(0).foreach {
     imprimir_erro
   }
 }

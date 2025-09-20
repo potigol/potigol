@@ -4,8 +4,8 @@ ThisBuild / organization := "potigol"
 ThisBuild / version      := "1.0-RC2"
 ThisBuild / scalaVersion := "2.13.16"
 
-// Compilar visando Java 21
-Compile / javacOptions  ++= Seq("--release", "21", "-Xlint")
+// Compilar visando Java 17 (devido à limitação do ambiente)
+Compile / javacOptions  ++= Seq("--release", "17", "-Xlint")
 Compile / scalacOptions ++= Seq("-deprecation")
 
 // Main class para JAR e para o assembly
@@ -29,7 +29,8 @@ libraryDependencies ++= Seq(
 )
 
 // Plugins
-enablePlugins(Antlr4Plugin, GraalVMNativeImagePlugin)
+enablePlugins(Antlr4Plugin)
+// enablePlugins(Antlr4Plugin, GraalVMNativeImagePlugin)
 
 // Configuração do ANTLR4
 Antlr4 / antlr4Version      := "4.13.2"
