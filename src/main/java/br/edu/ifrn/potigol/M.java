@@ -401,7 +401,9 @@ public final class M {
         for (final String item : items) {
             resposta.append(item);
         }
-        resposta.append(K.NEWLINE).append("\"\"").append(K.NEWLINE);
+        // bug issue #46
+        // essa linha que gera as aspas no final do arquivo
+        //resposta.append(K.NEWLINE).append("\"\"").append(K.NEWLINE);
         return organizar(resposta.toString());
     }
 
