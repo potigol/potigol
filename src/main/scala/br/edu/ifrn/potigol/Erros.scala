@@ -65,6 +65,7 @@ object Erros {
     val metodoNaoExiste: Regex = "value (\\S+) is not a member of (?:\\S*\\.)?(\\S+) .*".r
     val semParametros: Regex = "(.+) does not take parameters.*".r
     val divisaoTipoErrado: Regex = "overloaded method value.*".r
+    val nuloEmTipoBasico: Regex = "an expression of type Null is ineligible for implicit conversion.*".r
   }
 
   private[this] object Msg {
@@ -123,6 +124,8 @@ object Erros {
       case Erro.semParametros(C.Boolean) => Msg.semParametros(C.Logico)
       case Erro.semParametros(a) => Msg.semParametros(a)
       case Erro.divisaoTipoErrado() => Msg.tipoErrado(C.Real)
+      case Erro.nuloEmTipoBasico() =>
+        "Valores do tipo 'Inteiro', 'Real', 'Lógico' ou 'Caractere' não podem ser 'nulo'."
       case _ => "ERRO: " + erro
     }
   }
