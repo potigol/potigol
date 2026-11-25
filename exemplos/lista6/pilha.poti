@@ -1,0 +1,85 @@
+# Pilha (LIFO): o último a entrar é o primeiro a sair.
+#
+# Implementada como uma lista encadeada: cada nó guarda o valor e aponta
+# para o nó de baixo ('nulo' no fundo da pilha). A pilha guarda só o nó
+# do topo, então empilhar e desempilhar são O(1).
+#
+# Pilha[T] é genérica: T é o tipo dos elementos.
+
+tipo Nó[T]
+  valor: T
+  var abaixo: Nó[T]
+fim
+
+tipo Pilha[T]
+  var topo_nó: Nó[T]
+  var quantidade: Inteiro
+
+  empilhe(x: T)                         # O(1)
+    topo_nó := Nó(x, topo_nó)
+    quantidade := quantidade + 1
+  fim
+
+  desempilhe(): T                       # O(1) - não use em pilha vazia
+    removido = topo_nó
+    topo_nó := removido.abaixo
+    quantidade := quantidade - 1
+    removido.valor
+  fim
+
+  topo() = topo_nó.valor                # O(1) - não use em pilha vazia
+  vazia() = topo_nó == nulo             # O(1)
+  tamanho() = quantidade                # O(1)
+
+  # Os elementos do topo ao fundo, para mostrar a pilha. O(n)
+  lista(): Lista[T]
+    var resultado: Lista[T] := []
+    var atual := topo_nó
+    enquanto atual <> nulo faça
+      resultado := atual.valor :: resultado
+      atual := atual.abaixo
+    fim
+    resultado.inverta
+  fim
+fim
+
+pilha_vazia[T](): Pilha[T] = Pilha(nulo, 0)
+
+# Pilha de inteiros
+p: Pilha[Inteiro] = pilha_vazia()
+p.empilhe(10)
+p.empilhe(20)
+p.empilhe(30)
+escreva "Pilha: {p.lista()} - topo: {p.topo()}, tamanho: {p.tamanho()}"
+escreva "Desempilhado: {p.desempilhe()}"
+escreva "Novo topo: {p.topo()}"
+
+# A mesma Pilha, agora com textos
+livros: Pilha[Texto] = pilha_vazia()
+livros.empilhe("Iracema")
+livros.empilhe("Dom Casmurro")
+escreva "Livro no topo: {livros.topo()}"
+
+# Aplicação: verificar se parênteses e colchetes estão balanceados
+abre(c: Caractere) = c == '(' ou c == '['
+fecha(c: Caractere) = c == ')' ou c == ']'
+par(a, f: Caractere) = (a == '(' e f == ')') ou (a == '[' e f == ']')
+
+balanceado(texto: Texto): Lógico
+  pilha: Pilha[Caractere] = pilha_vazia()
+  var ok := verdadeiro
+  para c em texto.lista faça
+    se abre(c) então
+      pilha.empilhe(c)
+    senãose fecha(c) então
+      se pilha.vazia() ou não par(pilha.desempilhe(), c) então
+        ok := falso
+      fim
+    fim
+  fim
+  ok e pilha.vazia()
+fim
+
+para expressao em ["(1 + 2) * [3 - 4]", "((1 + 2)", "[(1 + 2])"] faça
+  escreva "{expressao} -> balanceado? {balanceado(expressao)}"
+fim
