@@ -433,35 +433,56 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitAssinatura(AssinaturaContext ctx) {
         final String id = data.getValue(ctx.ID());
+        final String tparams = data.getOrElse(ctx.tipo_params());
         final String param = data.getValue(ctx.dcls());
         final String tipo = data.getOrElse(ctx.tipo());
-        final String assinatura = M.defAssinatura(id, param, tipo);
+        final String assinatura = M.defAssinatura(id, tparams, param, tipo);
         data.setValue(ctx, assinatura);
+    }
+
+    @Override
+    public void exitTipo_params(final Tipo_paramsContext ctx) {
+        final List<String> params = data.getValues(ctx.ID());
+        final String resposta = M.tipoParams(params);
+        data.setValue(ctx, resposta);
+    }
+
+    private List<String> supertipos(final SupertiposContext ctx) {
+        final List<String> sup = new ArrayList<>();
+        if (ctx == null) {
+            sup.add("");
+        } else {
+            sup.addAll(data.getValues(ctx.tipo()));
+        }
+        return sup;
     }
 
     @Override
     public void exitAlias(final AliasContext ctx) {
         final String id = ctx.ID().getText();
+        final String tparams = data.getOrElse(ctx.tipo_params());
         final String tipo = data.getValue(ctx.tipo());
-        final String resposta = M.aliasTipo(id, tipo);
+        final String resposta = M.aliasTipo(id, tparams, tipo);
         data.setValue(ctx, resposta);
     }
 
     @Override
     public void exitClasse(final ClasseContext ctx) {
         final String id = ctx.ID().getText();
-        final List<String> sup = M.string2List(data.getOrElse(ctx.id1()));
+        final String tparams = data.getOrElse(ctx.tipo_params());
+        final List<String> sup = supertipos(ctx.supertipos());
         final String membros = data.getValue(ctx.membros());
-        final String resposta = M.classe(id, sup, membros);
+        final String resposta = M.classe(id, tparams, sup, membros);
         data.setValue(ctx, resposta);
     }
 
     @Override
     public void exitInterface(final InterfaceContext ctx) {
         final String id = ctx.ID().getText();
-        final List<String> sup = M.string2List(data.getOrElse(ctx.id1()));
+        final String tparams = data.getOrElse(ctx.tipo_params());
+        final List<String> sup = supertipos(ctx.supertipos());
         final String membros = data.getValue(ctx.membros());
-        final String resposta = M.abstrato(id, sup, membros);
+        final String resposta = M.abstrato(id, tparams, sup, membros);
         data.setValue(ctx, resposta);
     }
 
@@ -543,9 +564,10 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitDcl_fun(final Dcl_funContext ctx) {
         final String id = data.getValue(ctx.ID());
+        final String tparams = data.getOrElse(ctx.tipo_params());
         final String param = data.getValue(ctx.dcls());
         final String tipo = data.getValue(ctx.tipo());
-        final String resposta = M.dclFun(id, param, tipo);
+        final String resposta = M.dclFun(id, tparams, param, tipo);
         data.setValue(ctx, resposta);
     }
 
@@ -559,7 +581,7 @@ public class Listener extends potigolBaseListener {
     @Override
     public void exitTipo_generico(final Tipo_genericoContext ctx) {
         final String id = data.getValue(ctx.ID());
-        final String tipo = data.getValue(ctx.tipo());
+        final String tipo = M.list2String(data.getValues(ctx.tipo()));
         final String resposta = M.tipoGenerico(id, tipo);
         data.setValue(ctx, resposta);
     }

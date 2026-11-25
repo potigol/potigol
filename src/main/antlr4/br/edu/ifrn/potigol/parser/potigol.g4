@@ -66,12 +66,18 @@ decl_funcao
     | assinatura exprlist retorne? 'fim'          # def_funcao_corpo ;
 
 assinatura
-    : 'def'? ID '(' dcls ')' (':' tipo)?;
+    : 'def'? ID tipo_params? '(' dcls ')' (':' tipo)?;
 
 decl_tipo
-    : 'tipo' ID '=' tipo                            # alias
-    | 'tipo' ID (':' id1)? membros 'fim'            # classe
-    | 'tipo' 'abstrato' ID (':' id1)? membros 'fim' # interface ;
+    : 'tipo' ID tipo_params? '=' tipo                                   # alias
+    | 'tipo' ID tipo_params? (':' supertipos)? membros 'fim'            # classe
+    | 'tipo' 'abstrato' ID tipo_params? (':' supertipos)? membros 'fim' # interface ;
+
+tipo_params
+    : '[' ID (',' ID)* ']' ;
+
+supertipos
+    : tipo (',' tipo)* ;
 
 membros : (dcl | dcl_var | dcl_fun | decl_funcao | decl_valor)* ;
 
@@ -88,7 +94,7 @@ dcl_var
     : 'var' id1 ':' tipo ;
 
 dcl_fun
-    : 'def'? ID '(' dcls ')' ':' tipo;
+    : 'def'? ID tipo_params? '(' dcls ')' ':' tipo;
 
 dcls
     : (dcl (',' dcl)* )? ;
@@ -99,7 +105,7 @@ dcl1
     | '(' dcls ')' ;
 
 tipo
-    : ID '[' tipo ']'                             # tipo_generico
+    : ID '[' tipo (',' tipo)* ']'                 # tipo_generico
     | ID                                          # tipo_simples
     | '(' tipo2 ')'                               # tipo_tupla
     | <assoc=right> tipo '=>' tipo                # tipo_funcao ;

@@ -1,0 +1,112 @@
+# Deque (fila de duas pontas): insere e remove no início e no fim em O(1).
+#
+# Implementado como uma lista duplamente encadeada: cada nó guarda o
+# valor e aponta para o nó anterior e para o próximo ('nulo' quando
+# não existe). O deque guarda o primeiro e o último nó, então as duas
+# pontas são acessadas diretamente.
+#
+# Deque[T] é genérico: T é o tipo dos elementos.
+
+tipo Nó[T]
+  valor: T
+  var anterior: Nó[T]
+  var próximo: Nó[T]
+fim
+
+tipo Deque[T]
+  var primeiro_nó: Nó[T]
+  var último_nó: Nó[T]
+  var quantidade: Inteiro
+
+  insira_início(x: T)                          # O(1)
+    novo = Nó(x, nulo, primeiro_nó)
+    se primeiro_nó == nulo então
+      último_nó := novo                        # deque estava vazio
+    senão
+      primeiro_nó.anterior := novo
+    fim
+    primeiro_nó := novo
+    quantidade := quantidade + 1
+  fim
+
+  insira_fim(x: T)                             # O(1)
+    novo = Nó(x, último_nó, nulo)
+    se último_nó == nulo então
+      primeiro_nó := novo                      # deque estava vazio
+    senão
+      último_nó.próximo := novo
+    fim
+    último_nó := novo
+    quantidade := quantidade + 1
+  fim
+
+  remova_início(): T                           # O(1) - não use em deque vazio
+    removido = primeiro_nó
+    primeiro_nó := removido.próximo
+    se primeiro_nó == nulo então
+      último_nó := nulo                        # deque ficou vazio
+    senão
+      primeiro_nó.anterior := nulo
+    fim
+    quantidade := quantidade - 1
+    removido.valor
+  fim
+
+  remova_fim(): T                              # O(1) - não use em deque vazio
+    removido = último_nó
+    último_nó := removido.anterior
+    se último_nó == nulo então
+      primeiro_nó := nulo                      # deque ficou vazio
+    senão
+      último_nó.próximo := nulo
+    fim
+    quantidade := quantidade - 1
+    removido.valor
+  fim
+
+  primeiro() = primeiro_nó.valor               # O(1) - não use em deque vazio
+  último() = último_nó.valor                   # O(1) - não use em deque vazio
+  vazio() = quantidade == 0                    # O(1)
+  tamanho() = quantidade                       # O(1)
+
+  # Os elementos do primeiro ao último, para mostrar o deque. O(n)
+  lista(): Lista[T]
+    var resultado: Lista[T] := []
+    var atual := último_nó
+    enquanto atual <> nulo faça
+      resultado := atual.valor :: resultado
+      atual := atual.anterior
+    fim
+    resultado
+  fim
+fim
+
+deque_vazio[T](): Deque[T] = Deque(nulo, nulo, 0)
+
+d: Deque[Inteiro] = deque_vazio()
+d.insira_fim(2)
+d.insira_fim(3)
+d.insira_início(1)
+escreva "Deque: {d.lista()}"
+escreva "Primeiro: {d.primeiro()}, último: {d.último()}"
+escreva "Removido do início: {d.remova_início()}"
+escreva "Removido do fim: {d.remova_fim()}"
+escreva "Deque: {d.lista()} (tamanho {d.tamanho()})"
+
+# Aplicação: verificar se uma frase é um palíndromo,
+# comparando as duas pontas do deque até sobrar no máximo uma letra
+palíndromo(frase: Texto): Lógico
+  letras: Deque[Caractere] = deque_vazio()
+  para c em frase.minúsculo.lista se c <> ' ' faça
+    letras.insira_fim(c)
+  fim
+  var resposta := verdadeiro
+  enquanto resposta e letras.tamanho() > 1 faça
+    resposta := letras.remova_início() == letras.remova_fim()
+  fim
+  resposta
+fim
+
+para frase em ["arara", "Socorram me subi no onibus em Marrocos", "potigol"] faça
+  escreva "{frase} -> palíndromo? {palíndromo(frase)}"
+fim

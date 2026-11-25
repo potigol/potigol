@@ -1,0 +1,87 @@
+# Fila (FIFO): o primeiro a entrar é o primeiro a sair.
+#
+# Implementada como uma lista encadeada: cada nó guarda o valor e aponta
+# para o próximo da fila ('nulo' no último). A fila guarda o primeiro nó
+# (de onde se remove) e o último (onde se insere), então enfileirar e
+# desenfileirar são O(1).
+#
+# Fila[T] é genérica: T é o tipo dos elementos.
+
+tipo Nó[T]
+  valor: T
+  var próximo: Nó[T]
+fim
+
+tipo Fila[T]
+  var primeiro_nó: Nó[T]
+  var último_nó: Nó[T]
+  var quantidade: Inteiro
+
+  enfileire(x: T)                          # O(1)
+    novo = Nó(x, nulo)
+    se último_nó == nulo então
+      primeiro_nó := novo                  # fila estava vazia
+    senão
+      último_nó.próximo := novo
+    fim
+    último_nó := novo
+    quantidade := quantidade + 1
+  fim
+
+  desenfileire(): T                        # O(1) - não use em fila vazia
+    removido = primeiro_nó
+    primeiro_nó := removido.próximo
+    se primeiro_nó == nulo então
+      último_nó := nulo                    # fila ficou vazia
+    fim
+    quantidade := quantidade - 1
+    removido.valor
+  fim
+
+  frente() = primeiro_nó.valor             # O(1) - não use em fila vazia
+  vazia() = quantidade == 0                # O(1)
+  tamanho() = quantidade                   # O(1)
+
+  # Os elementos da frente para o fim, para mostrar a fila. O(n)
+  lista(): Lista[T]
+    var resultado: Lista[T] := []
+    var atual := primeiro_nó
+    enquanto atual <> nulo faça
+      resultado := atual.valor :: resultado
+      atual := atual.próximo
+    fim
+    resultado.inverta
+  fim
+
+  # Método genérico: cria uma Fila[U] aplicando f a cada elemento. O(n)
+  mapeie[U](f: T => U): Fila[U]
+    nova: Fila[U] = Fila(nulo, nulo, 0)
+    var atual := primeiro_nó
+    enquanto atual <> nulo faça
+      nova.enfileire(f(atual.valor))
+      atual := atual.próximo
+    fim
+    nova
+  fim
+fim
+
+fila_vazia[T](): Fila[T] = Fila(nulo, nulo, 0)
+
+# Aplicação: simulação de atendimento
+fila: Fila[Texto] = fila_vazia()
+para nome em ["Ana", "Bruno", "Carla"] faça
+  fila.enfileire(nome)
+  escreva "{nome} entrou na fila. Pessoas esperando: {fila.tamanho()}"
+fim
+
+enquanto não fila.vazia() faça
+  escreva "Atendendo: {fila.desenfileire()}"
+fim
+
+# Fila de inteiros transformada em fila de textos com o método genérico
+senhas: Fila[Inteiro] = fila_vazia()
+para n de 101 até 103 faça
+  senhas.enfileire(n)
+fim
+avisos = senhas.mapeie(n => "Senha {n}, dirija-se ao guichê")
+escreva avisos.lista()
