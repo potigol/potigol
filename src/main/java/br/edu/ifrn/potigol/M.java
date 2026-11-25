@@ -118,8 +118,16 @@ public final class M {
         return K.formato(exp1, fmt);
     }
 
-    public static String aliasTipo(final String id, final String tipo) {
-        return K.TYPE + escapeID(id) + K.IGUAL + tipo;
+    public static String aliasTipo(final String id, final String tparams,
+            final String tipo) {
+        return K.TYPE + escapeID(id) + tparams + K.IGUAL + tipo;
+    }
+
+    /**
+     * Parâmetros de tipo de uma declaração genérica: [T] ou [A, B].
+     */
+    public static String tipoParams(final List<String> params) {
+        return "[" + String.join(", ", params) + "]";
     }
 
     public static String bloco(final String exp) {
@@ -212,12 +220,14 @@ public final class M {
         return assinatura + K.IGUAL + K.bloco(corpo) + K.NEWLINE;
     }
 
-    public static String defAssinatura(final String id, final String param, final String tipo) {
-        return K.DEF + id + K.param(param) + K.tipo(tipo);
+    public static String defAssinatura(final String id, final String tparams,
+            final String param, final String tipo) {
+        return K.DEF + id + tparams + K.param(param) + K.tipo(tipo);
     }
 
-    public static String dclFun(String id, String param, String tipo) {
-        return K.DEF + id + K.param(param) + K.tipo(tipo) + K.NEWLINE;
+    public static String dclFun(final String id, final String tparams,
+            final String param, final String tipo) {
+        return K.DEF + id + tparams + K.param(param) + K.tipo(tipo) + K.NEWLINE;
     }
 
     public static String declVariavel(final String id, final String exp,
@@ -416,8 +426,8 @@ public final class M {
         return K.NEWLINE + decl;
     }
 
-    public static String classe(final String ident, final List<String> sup,
-            final String membros) {
+    public static String classe(final String ident, final String tparams,
+            final List<String> sup, final String membros) {
         if (!sup.isEmpty()) {
             sup.set(0, K.EXTENDS + sup.get(0));
         }
@@ -425,13 +435,17 @@ public final class M {
             sup.set(i, K.WITH + sup.get(i));
         }
         String resposta = "case class " +
-                M.escapeID(ident) + membros;
+                M.escapeID(ident) + tparams + membros;
         return resposta.replace("){",
                 ") " + String.join(" ", sup) + "{");
     }
 
-    public static String abstrato(String ident, List<String> sup,
-            String membros) {
+    /*
+     * O primeiro "(" de membros vira o "{" do corpo do trait. Por isso os
+     * parâmetros de tipo ([T]) e os supertipos não podem conter parênteses.
+     */
+    public static String abstrato(String ident, String tparams,
+            List<String> sup, String membros) {
         if (!sup.isEmpty()) {
             sup.set(0, K.EXTENDS + sup.get(0));
         }
@@ -439,7 +453,7 @@ public final class M {
             sup.set(i, K.WITH + sup.get(i));
         }
         String resposta = "trait " +
-                M.escapeID(ident) + String.join(" ", sup) +
+                M.escapeID(ident) + tparams + String.join(" ", sup) +
                 membros;
         return resposta.replaceFirst("\\(", "{")
                 .replaceFirst("\\)\\{", "\n");
