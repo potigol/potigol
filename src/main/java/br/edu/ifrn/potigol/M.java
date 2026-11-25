@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 public final class M {
     private static final List<String> scalaWords = Arrays.asList("type", "yield",
@@ -436,8 +437,10 @@ public final class M {
         }
         String resposta = "case class " +
                 M.escapeID(ident) + tparams + membros;
-        return resposta.replace("){",
-                ") " + String.join(" ", sup) + "{");
+        // Só a primeira ocorrência: o fim do construtor. As demais podem ser
+        // laços dentro de métodos, como "while (...){".
+        return resposta.replaceFirst("\\)\\{", Matcher.quoteReplacement(
+                ") " + String.join(" ", sup) + "{"));
     }
 
     /*
